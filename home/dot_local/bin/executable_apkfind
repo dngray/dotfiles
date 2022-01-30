@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Find package with binary
+apkfind() {
+    wget -q --no-check-certificate -O - https://pkgs.alpinelinux.org/contents\?filename\="$1" |
+        sed -e 's/<[^>]*>//g' -e '1,89d' -e '/Copy/d' |
+        xargs -n 4;
+}
+
+apkfind "$1"

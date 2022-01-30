@@ -1,0 +1,242 @@
+{{- if (eq .chezmoi.osRelease.id "arch") -}}
+#!/bin/bash
+
+set -eufo pipefail
+
+{{ $pacman := list
+     "adwaita-icon-theme"
+     "alacritty"
+     "alsa-utils"
+     "android-tools"
+     "android-udev"
+     "apparmor"
+     "aspell"
+     "aspell-en"
+     "bash-completion"
+     "bc"
+     "base-devel"
+     "bind-tools"
+     "bleachbit"
+     "bluez-utils"
+     "btrfs-progs"
+     "ca-certificates"
+     "cdrdao"
+     "cdrtools"
+     "chezmoi"
+     "cryptsetup"
+     "cups"
+     "cups-filters"
+     "cups-pdf"
+     "dhcpcd"
+     "diffutils"
+     "dunst"
+     "dvd+rw-tools"
+     "efibootmgr"
+     "efitools"
+     "ethtool"
+     "firefox"
+     "foomatic-db"
+     "foomatic-db-engine"
+     "fzf"
+     "gimp"
+     "git"
+     "gnome-font-viewer"
+     "gnome-keyring"
+     "gnome-themes-extra"
+     "go"
+     "go-tools"
+     "gvfs-mtp"
+     "htop"
+     "hunspell-en"
+     "i7z"
+     "inkscape"
+     "iputils"
+     "jq"
+     "keepassxc"
+     "lftp"
+     "libnotify"
+     "libreoffice-fresh"
+     "linux-firmware"
+     "linux-hardened"
+     "linux-hardened-headers"
+     "lsb-release"
+     "lsof"
+     "lvm2"
+     "man"
+     "man-pages"
+     "mc"
+     "mlocate"
+     "mpv"
+     "neovim"
+     "neovim-qt"
+     "network-manager-applet"
+     "networkmanager"
+     "networkmanager-openvpn"
+     "nmap"
+     "nodejs"
+     "noto-fonts"
+     "noto-fonts-cjk"
+     "noto-fonts-emoji"
+     "noto-fonts-extra"
+     "ntfs-3g"
+     "openbsd-netcat"
+     "openssh"
+     "openvpn"
+     "os-prober"
+     "p7zip"
+     "pacman-contrib"
+     "parted"
+     "pavucontrol"
+     "perl-image-exiftool"
+     "pipewire"
+     "pipewire-pulse"
+     "polkit-gnome"
+     "pwgen"
+     "python-jedi"
+     "python-keyring"
+     "python-lxml"
+     "python-pip"
+     "python-pylint"
+     "python-pynvim"
+     "python-wheel"
+     "qbittorrent"
+     "qt5ct"
+     "ripgrep"
+     "rsync"
+     "samba"
+     "sane"
+     "sbsigntools"
+     "scour"
+     "smartmontools"
+     "sudo"
+     "sxiv"
+     "thunar"
+     "thunar-archive-plugin"
+     "thunar-volman"
+     "tmux"
+     "tree"
+     "ttf-dejavu"
+     "unrar"
+     "unzip"
+     "weechat"
+     "wget"
+     "whois"
+     "xarchiver"
+     "yarn"
+     "zathura"
+     "zathura-cb"
+     "zathura-djvu"
+     "zathura-pdf-mupdf"
+     "zathura-ps"
+     "zip"
+     "zsh" -}}
+
+{{ $pacman_workstation := list
+     "amd-ucode"
+     "xf86-video-amdgpu" -}}
+
+{{ $pacman_laptop := list
+    "intel-ucode"
+    "nvme-cli"
+    "tlp-rdw"
+    "wpa_supplicant"
+    "xf86-video-intel" -}}
+
+{{ $pacman_mail := list
+    "calcurse"
+    "isync"
+    "khard"
+    "lynx"
+    "moreutils"
+    "msmtp"
+    "neomutt"
+    "notmuch-runtime"
+    "pandoc"
+    "pass"
+    "vdirsyncer" -}}
+
+{{ $pacman_2 := list
+    "thunderbird" -}}
+
+{{ $pacman_1 := list
+    "dnsmasq"
+    "ebtables"
+    "element-desktop"
+    "libvirt"
+    "newsboat"
+    "qemu"
+    "signify"
+    "syncthing"
+    "texlive-most"
+    "virt-manager" -}}
+
+{{ $pacman_yubikey := list
+    "ccid"
+    "pcsclite"
+    "yubikey-manager" -}}
+
+{{ $yay_1 := list
+    "android-sdk-build-tools"
+    "virtio-win" -}}
+
+{{ $pacman_x11 := list
+     "hsetroot"
+     "i3-wm"
+     "i3lock"
+     "i3status"
+     "maim"
+     "picom"
+     "redshift"
+     "rofi"
+     "rofi-emoji"
+     "xf86-video-vesa"
+     "xorg-server"
+     "xorg-xinit"
+     "xorg-xrandr"
+     "xsel" -}}
+
+{{ $pacman_wayland := list
+     "gammastep"
+     "grim"
+     "i3status"
+     "mako"
+     "python-i3ipc"
+     "qt5-wayland"
+     "sway"
+     "swayidle"
+     "swaylock"
+     "wl-clipboard"
+     "wofi"
+     "xorg-server-xwayland" -}}
+
+{{ $pacman_bios := list
+     "grub" -}}
+
+{{ $yay := list
+     "adwaita-qt"
+     "imapfilter"
+     "speedtest-cli-git"
+     "tor-browser"
+     "yay"
+     "yt-dlp" -}}
+
+{{ $yay_UEFI := list
+     "dracut-git"
+     "dracut-hook-uefi" -}}
+
+{{- if (vault (printf "kv/users/%s/runPM" .vaultid1)).data.data.runPacman }}
+sudo pacman -Syu -<<EOF
+{{    range ($pacman | sortAlpha | uniq) -}}
+{{ . }}
+{{    end -}}
+EOF
+{{- end }}
+
+{{- if (vault (printf "kv/users/%s/runPM" .vaultid1)).data.data.runYay }}
+yay -Syu -<<EOF
+{{   range ($yay | sortAlpha | uniq) -}}
+{{ . }}
+{{   end -}}
+EOF
+{{ end }}
+{{- end }}

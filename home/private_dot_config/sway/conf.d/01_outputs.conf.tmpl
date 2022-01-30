@@ -1,0 +1,27 @@
+# SwayWM outputs configuration. For detailed information type "man sway"
+
+# Default wallpaper
+# output * bg $wallpaper fill
+
+output * bg #000000 solid_color
+
+{{- if (eq .chezmoi.hostname "iceberg") }}
+# Devices, get list by: swaymsg -t get_outputs
+set $display_laptop eDP-1
+set $display_external DP-1
+
+# Disable main laptop screen
+bindsym $mod+F7 output $display_laptop disable
+bindsym $mod+F8 output $display_laptop enable
+
+# Both monitors
+output $display_laptop scale 2
+output $display_laptop resolution 3840x2160 position 0,0
+# output $display_external scale 1
+# output $display_external resolution 2560x1600 position -2560,0
+
+# External only
+# output $display_laptop disable
+# output $display_external scale 1
+# output $display_external resolution 2560x1600 position 2560,0
+{{- end }}

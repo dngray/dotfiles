@@ -1,0 +1,14 @@
+# vim: filetype=sh
+# .bashrc.d/gpg
+
+## Recommended by GPG agent to resolve issues with not being able to use gpg2.
+GPG_TTY=$(tty)
+export GPG_TTY
+
+## gpg config with Yubikey
+## https://opensource.com/article/19/4/gpg-subkeys-ssh
+SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+export SSH_AUTH_SOCK
+
+gpgconf --launch gpg-agent
+gpg-connect-agent updatestartuptty /bye >/dev/null

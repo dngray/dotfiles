@@ -1,0 +1,51 @@
+{{- /* Final profile paths for each installation version */ -}}
+{{- $defaultPath := "default" -}}
+{{- $directPath := "direct" -}}
+{{- $directNoRFPpath := "direct-no-rfp" -}}
+{{- $noRFPpath := "default-no-rfp" -}}
+
+{{- /* IDs for each installation version */ -}}
+{{- $releaseId := "0" -}}
+{{- $nightlyId := "0" -}}
+{{- if eq .chezmoi.os "windows" -}}
+{{-   $releaseId = mozillaInstallHash "C:\\Program Files\\Mozilla Firefox" -}}{{- /* "308046B0AF4A39CB" */ -}}
+{{-   $nightlyId = mozillaInstallHash "C:\\Program Files\\Firefox Nightly" -}}{{- /* "6F193CCC56814779" */ -}}
+{{- else if eq .chezmoi.os "darwin" -}}
+{{-   $releaseId = mozillaInstallHash "/Applications/Firefox.app/Contents/MacOS" -}}{{- /* "2656FF1E876E9973" */ -}}
+{{-   $nightlyId = mozillaInstallHash "/Applications/Firefox Nightly.app/Contents/MacOS" -}}{{- /* "31210A081F86E80E" */ -}}
+{{- else if eq .chezmoi.os "linux" -}}
+{{-   $releaseId = mozillaInstallHash "/usr/lib/firefox" -}}{{- /* "4F96D1932A9F858E" */ -}}
+{{-   $nightlyId = mozillaInstallHash "/opt/firefox-nightly" -}}{{- /* "6BA5C87ECB35E12F" */ -}}
+{{-   if eq .chezmoi.osRelease.id "fedora" -}}
+{{-     $releaseId = mozillaInstallHash "/app/lib/firefox" -}}{{- /* "CF146F38BCAB2D21" */ -}}
+{{-   end -}}
+{{- end -}}
+
+[General]
+StartWithLastProfile=1
+Version=2
+
+[Profile0]
+Name=default
+IsRelative=1
+Path={{- $defaultPath }}
+Default=1
+
+[Profile1]
+Name=direct
+IsRelative=1
+Path={{- $directPath }}
+
+[Profile2]
+Name=direct-no-rfp
+IsRelative=1
+Path={{- $directNoRFPpath }}
+
+[Profile3]
+Name=default-no-rfp
+IsRelative=1
+Path={{- $noRFPpath }}
+
+[Install{{- $releaseId -}}]
+Default={{- $defaultPath }}
+Locked=1

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+{{-  if eq .chezmoi.hostname "icefloe" "iceberg" "ocean" }}
+# lftp into phone
+primitive_ftp() { lftp sftp://user:DUMMY@192.0.2.25:1234 -e 'set sftp:connect-program "ssh -a -x -o KexAlgorithms=diffie-hellman-group-exchange-sha256 -o MACs=hmac-sha2-512,hmac-sha2-256 -i ~/.ssh/id_rsa"'; }
+{{- end }}

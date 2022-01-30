@@ -1,0 +1,4 @@
+# ZSH .zprofile For detailed information type "man zsh"
+# https://zsh.sourceforge.io/Doc/Release/Files.html#Files
+
+[[ -e ~/.profile ]] && emulate sh -c 'source ~/.profile'

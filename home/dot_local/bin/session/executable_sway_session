@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# https://github.com/swaywm/sway/wiki/Running-programs-natively-under-wayland
+
+export GDK_BACKEND=wayland
+export CLUTTER_BACKEND=wayland
+export XDG_SESSION_TYPE=wayland
+export SDL_VIDEODRIVER=wayland
+export MOZ_ENABLE_WAYLAND=1
+
+export QT_QPA_PLATFORMTHEME=qt5ct
+export QT_QPA_PLATFORM=wayland-egl
+export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+
+# Start DBUS
+dbus-update-activation-environment --systemd DISPLAY
+
+# Start Gnome Keyring
+#eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets) # Let ssh be managed by pinentry
+
+if grep -Fxq "Xft.dpi: 220" ~/.Xresources
+then
+    sed -i 's/Xft.dpi: 220/Xft.dpi: 96/g' ~/.Xresources
+else
+    echo "DPI is already 96"
+fi
+
+exec sway

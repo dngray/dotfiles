@@ -1,0 +1,30 @@
+text/plain; $EDITOR %s ;
+text/html; openfile %s ; nametemplate=%s.html
+text/html; lynx -assume_charset=%{charset} -display_charset=utf-8 -dump %s; nametemplate=%s.html; copiousoutput;
+image/*; openfile %s ;
+video/*; setsid mpv --quiet %s &; copiousoutput
+audio/*; mpv %s ;
+application/pdf; openfile %s ;
+application/pgp-encrypted; gpg -d '%s'; copiousoutput;
+application/pgp-keys; gpg --import '%s'; copiousoutput;
+
+application/pdf ; zathura %s &> /dev/null ; description="PDF Document" ; test=test -n "$DISPLAY" ; nametemplate=%s.pdf
+application/pdf ; pdftotext %s -          ; description="PDF Document" ; nametemplate=%s.pdf     ; copiousoutput
+image/pdf                ; imv %s &> /dev/null ; description="PDF Image"   ; test=test "$DISPLAY" ; nametemplate=%s.pdf
+image/gif                ; imv %s &> /dev/null ; description="GIF Image"   ; test=test "$DISPLAY" ; nametemplate=%s.gif
+image/jpeg               ; imv %s &> /dev/null ; description="JPEG Image"  ; test=test "$DISPLAY" ; nametemplate=%s.jpeg
+image/pjpeg              ; imv %s &> /dev/null ; description="JPEG Image"  ; test=test "$DISPLAY" ; nametemplate=%s.jpeg
+image/tiff               ; imv %s &> /dev/null ; description="TIFF Image"  ; test=test "$DISPLAY" ; nametemplate=%s.tiff
+image/x-portable-bitmap  ; imv %s &> /dev/null ; description="PBM Image"   ; test=test "$DISPLAY" ; nametemplate=%s.pbm
+image/x-portable-graymap ; imv %s &> /dev/null ; description="PGM Image"   ; test=test "$DISPLAY" ; nametemplate=%s.pgm
+image/x-portable-pixmap  ; imv %s &> /dev/null ; description="PPM Image"   ; test=test "$DISPLAY" ; nametemplate=%s.ppm
+image/x-xbitmap          ; imv %s &> /dev/null ; description="XBM Image"   ; test=test "$DISPLAY" ; nametemplate=%s.xbm
+image/x-xpixmap          ; imv %s &> /dev/null ; description="XPM Image"   ; test=test "$DISPLAY" ; nametemplate=%s.xpm
+image/bmp                ; imv %s &> /dev/null ; description="BMP Image"   ; test=test "$DISPLAY" ; nametemplate=%s.bmp
+image/x-bmp              ; imv %s &> /dev/null ; description="BMP Image"   ; test=test "$DISPLAY" ; nametemplate=%s.bmp
+image/x-ms-bmp           ; imv %s &> /dev/null ; description="BMP Image"   ; test=test "$DISPLAY" ; nametemplate=%s.bmp
+image/x-rgb              ; imv %s &> /dev/null ; description="RGB Image"   ; test=test "$DISPLAY" ; nametemplate=%s.rgb
+image/targa              ; imv %s &> /dev/null ; description="TARGA Image" ; test=test "$DISPLAY" ; nametemplate=%s.tga
+image/fits               ; imv %s &> /dev/null ; description="FITS Image"  ; test=test "$DISPLAY" ; nametemplate=%s.fits
+image/png                ; imv %s &> /dev/null ; description="PNG Image"   ; test=test "$DISPLAY" ; nametemplate=%s.png
+image/pm                 ; imv %s &> /dev/null ; description="PM Image"    ; test=test "$DISPLAY" ; nametemplate=%s.pm

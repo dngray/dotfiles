@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# Usage
+
+# scan preview <type> <filename>
+# scan full <type> <filename>
+
+runScan() {
+    scanimage -vp \
+              --device-name=hp \
+              --resolution "$1" \
+              --mode "$2" \
+              --format=tiff \
+              --output-file "$3"
+}
+
+if [ "$1" = "preview" ]; then
+    case "$2" in
+      gray)
+        echo  "Scanning preview grayscale"
+        runScan 100 "Gray" "$3"
+        ;;
+      color)
+        echo  "Scanning preview color"
+        runScan 100 "Color" "$3"
+        ;;
+      lineart)
+        echo  "Scanning preview lineart"
+        runScan 100 "Lineart" "$3"
+        ;;
+      *)
+        echo  "unknown option in preview"
+        ;;
+    esac
+elif [ "$1" = "full" ]; then
+    case "$2" in
+      gray)
+        echo  "Scanning full grayscale"
+        runScan 300 "Gray" "$3"
+        ;;
+      color)
+        echo  "Scanning full color"
+        runScan 300 "Color" "$3"
+        ;;
+      lineart)
+        echo  "Scanning full lineart"
+        runScan 300 "Lineart" "$3"
+        ;;
+      *)
+        echo  "unknown option in full"
+        ;;
+    esac
+else
+    echo "Neither preview or full selected"
+fi

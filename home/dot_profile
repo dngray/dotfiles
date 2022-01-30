@@ -1,0 +1,12 @@
+# vim: filetype=sh
+# .profile
+
+# run sway session stuff if login on tty1
+if [ -z "$DISPLAY" ] && [ "$(tty)" = /dev/tty1 ]; then
+    exec "$HOME"/.local/bin/scripts/session/sway_session
+fi
+
+# run graphical session stuff if login on tty2
+if [ -z "$DISPLAY" ] && [ "$(tty)" = /dev/tty2 ]; then
+    exec startx
+fi

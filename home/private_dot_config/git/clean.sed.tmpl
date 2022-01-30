@@ -1,0 +1,3 @@
+{{- if .private -}}
+{{- (vault (printf "kv/users/%s/clean" .vaultid2)).data.data.clean -}}
+{{- end }}

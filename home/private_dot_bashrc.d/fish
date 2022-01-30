@@ -1,0 +1,13 @@
+# vim: filetype=sh
+#
+## Start fish shell for my terminals
+## We can use `lchsh` to change the shell, however, because fish cannot read
+## shell files it will also disable loading of /etc/profile and what is worse
+## even /etc/profile.d/. Thanks to that we are missing a lot of environment
+## variables like XDG_DATA_DIR injected by Flatpaks to get the Flatpak Desktop
+## files.
+
+## This is a workaround to have fish in terminal but not for the system
+## loading.
+
+[ ! -z "$PS1" ] && [ -x /usr/bin/fish ] && exec /usr/bin/fish

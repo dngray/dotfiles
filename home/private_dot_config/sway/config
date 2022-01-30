@@ -1,0 +1,56 @@
+# SwayWM global configuration. For detailed information type "man sway"
+# Read `man 5 sway` for a complete reference.
+
+# Main definitions
+
+# Logo key. Use Mod1 for Alt.
+set $mod Mod1
+# Home row direction keys, like vim
+set $left h
+set $down j
+set $up k
+set $right l
+# Your preferred terminal emulator
+set $term alacritty
+# Default wallpaper
+set $wallpaper /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png
+# Default lockscreen background
+set $lockscreenbg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png
+
+## Colors
+# Selenized dark colorscheme for i3
+set $bg #103c48
+set $black #184956
+set $br_black #2d5b69
+set $white #72898f
+set $fg #adbcbc
+set $br_white #cad8d9
+
+set $red #fa5750
+set $green #75b938
+set $yellow #dbb32d
+set $blue #4695f7
+set $magenta #f275be
+set $cyan #41c7b9
+set $orange #ed8649
+set $violet #af88eb
+
+set $br_red #ff665c
+set $br_green #84c747
+set $br_yellow #ebc13d
+set $br_blue #58a3ff
+set $br_magenta #ff84cd
+set $br_cyan #53d6c7
+set $br_orange #fd9456
+set $br_violet #bd96fa
+
+# start a terminal
+bindsym $mod+Return exec $term
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+
+# exit sway (logs you out of your Wayland session)
+bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+
+include ~/.config/sway/conf.d/*.conf

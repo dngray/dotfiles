@@ -1,0 +1,31 @@
+# /etc/dracut.conf.d/dracut-defaults.conf
+# https://gist.github.com/Neurognostic/259f1ba1e568b31f0732a4a18f399f9e
+#
+hostonly=no
+hostonly_cmdline=no
+use_fstab=yes
+compress=lz4
+show_modules=yes
+
+# https://bugs.archlinux.org/task/69424
+omit_dracutmodules+=" brltty "
+
+uefi=yes
+early_microcode=yes
+uefi_splash_image="/usr/share/systemd/bootctl/splash-arch.bmp"
+uefi_stub="/usr/lib/systemd/boot/efi/linuxx64.efi.stub"
+uefi_secureboot_cert="/etc/efi-keys/keys/db/DB.crt"
+uefi_secureboot_key="/etc/efi-keys/keys/db/DB.key"
+CMDLINE=(
+	rw
+	rd.auto=1
+	rd.luksoptions=discard
+	root=/dev/{{ .chezmoi.hostname }}VG/root
+	resume=/dev/{{ .chezmoi.hostname }}VG/swap
+	rootflags=subvol=@
+	mem_encrypt=off
+	apparmor=1
+	security=apparmor
+)
+kernel_cmdline="${CMDLINE[*]}"
+unset CMDLINE

@@ -1,0 +1,65 @@
+{{- $primary := index (vault (printf "kv/users/%s/mail" .vaultid1)).data.data.mail 0 -}}
+{{- if (eq $primary.enabled true) -}}
+
+IMAPStore {{ $primary.accountName }}-remote
+Host {{ $primary.imapHost }}
+Port  {{ $primary.imapPort }}
+User {{ $primary.username }}
+PassCmd "pass {{ $primary.accountName }}"
+SSLType IMAPS
+{{- if (eq .chezmoi.osRelease.id "debian" "ubuntu") }}
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+{{- else }}
+CertificateFile /etc/pki/tls/certs/ca-bundle.crt
+{{- end }}
+
+MaildirStore {{ $primary.accountName }}-local
+Subfolders Verbatim
+Path ~/.local/share/mail/{{ $primary.accountName }}/
+Inbox ~/.local/share/mail/{{ $primary.accountName }}/INBOX
+Flatten .
+
+Channel {{ $primary.accountName }}
+Expunge Both
+Far :{{ $primary.accountName }}-remote:
+Near :{{ $primary.accountName }}-local:
+Patterns * !"[Gmail]/All Mail"
+Create Both
+SyncState *
+MaxMessages 0
+# End profile
+{{- end -}}
+
+{{-  if .private -}}
+{{- $secondary := index (vault (printf "kv/users/%s/mail" .vaultid2)).data.data.mail 0 }}
+{{- if (eq $secondary.enabled true) }}
+
+IMAPStore {{ $secondary.accountName }}-remote
+Host {{ $secondary.imapHost }}
+Port  {{ $secondary.imapPort }}
+User {{ $secondary.username }}
+PassCmd "pass {{ $secondary.accountName }}"
+SSLType IMAPS
+{{- if (eq .chezmoi.osRelease.id "debian" "ubuntu") }}
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+{{- else }}
+CertificateFile /etc/pki/tls/certs/ca-bundle.crt
+{{- end }}
+
+MaildirStore {{ $secondary.accountName }}-local
+Subfolders Verbatim
+Path ~/.local/share/mail/{{ $secondary.accountName }}/
+Inbox ~/.local/share/mail/{{ $secondary.accountName }}/INBOX
+Flatten .
+
+Channel {{ $secondary.accountName }}
+Expunge Both
+Far :{{ $secondary.accountName }}-remote:
+Near :{{ $secondary.accountName }}-local:
+Patterns * !"[Gmail]/All Mail"
+Create Both
+SyncState *
+MaxMessages 0
+# End profile
+{{- end -}}
+{{- end -}}

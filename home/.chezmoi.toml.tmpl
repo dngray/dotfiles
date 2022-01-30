@@ -1,0 +1,108 @@
+{{/* boolean feature tags */}}
+{{- $headless := false -}} {{/* true if this machine does not have a screen and keyboard */}}
+{{- $ephemeral := false -}}{{/* true if this machine is ephemeral, e.g. a cloud or VM instance */}}
+{{- $personal := false -}} {{/* true if this machine should have personal secrets from LastPass */}}
+{{- $x11 := false -}}
+{{- $mutt := false -}}
+{{- $wayland := false -}}
+{{- $private := false -}}
+{{- $v_available := (output "sh" "-c" "ping -c 1 vault.den.home.arpa > /dev/null && printf true || printf false") }}
+{{- $dpi := 96 -}}
+{{- $lvmuuid := (output "sh" "-c" "lsblk -o FSTYPE,UUID | awk '/^crypto_LUKS/ { printf $NF; exit }'") -}}
+{{- $rootuuid := (output "sh" "-c" "findmnt / -nro UUID | tr -d '\n'" ) -}}
+{{- $espuuid := (output "sh" "-c" "findmnt /boot -o UUID -nr | tr -d '\n'" ) -}}
+{{- $swapuuid := (output "sh" "-c" "lsblk -o FSTYPE,UUID | awk '/^swap/ { printf $NF; exit }'") -}}
+{{- $vaultID1 := "" -}}
+{{- $vaultID2 := "" -}}
+{{- $currVaultID := "" -}}
+{{- $sysUID := (output "id" "-u") | trim -}}
+{{- $longitude := "" -}}
+{{- $latitude := "" -}}
+{{- $place := "" -}}
+{{- $shortPlace := "" -}}
+{{- $hostname := .chezmoi.hostname -}}
+
+{{/* detect GitHub codespaces, VSCode remote containers, Docker containers, and Vagrant boxes */}}
+{{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS_IPC") (eq .chezmoi.username "root" "vagrant" "vscode") -}}
+{{-   $headless = true -}}
+{{-   $ephemeral = true -}}
+{{- end -}}
+
+{{- $cpu := "" -}}
+{{-  if eq (output "awk" "/^vendor_id[[:blank:]]:/ { printf $NF; exit }" "/proc/cpuinfo") "GenuineIntel" -}}
+{{-    $cpu = "intel" -}}
+{{-  else if eq (output "awk" "/^vendor_id[[:blank:]]:/ { printf $NF; exit }" "/proc/cpuinfo") "AuthenticAMD" -}}
+{{-    $cpu = "amd" -}}
+{{-  end -}}
+
+{{- if not $ephemeral -}}
+{{-   if or (eq $hostname "icefloe" "snowfield" "cavern" "iceberg") -}}
+{{-     $headless = false -}}
+{{-     $wayland = true -}}
+{{-     $personal = true -}}
+{{-   else if stdinIsATTY -}}
+{{-     if hasKey . "headless" -}}
+{{-       $headless = .headless -}}
+{{-     else -}}
+{{-       $headless = promptBool "headless" -}}
+{{-     end -}}
+{{-     if hasKey . "ephemeral" -}}
+{{-       $ephemeral = .ephemeral -}}
+{{-     else -}}
+{{-       $ephemeral = promptBool "ephemeral" -}}
+{{-     end -}}
+{{-   else -}}
+{{-     $headless = true -}}
+{{-     $wayland = false -}}
+{{-     $ephemeral = true -}}
+{{-   end -}}
+{{- end -}}
+
+{{- if $personal -}}
+{{-   if eq $v_available "true" -}}
+{{-     if eq $hostname "snowfield" "cavern" -}}
+{{-       $vaultID1 = "1001" -}}
+{{-       $currVaultID = $vaultID1 -}}
+{{-     else if eq $hostname "iceberg" -}}
+{{-       $vaultID1 = "1000" -}}
+{{-       $mutt = true -}}
+{{-       $currVaultID = $vaultID1 -}}
+{{-     else if eq $hostname "icefloe" -}}
+{{-       $vaultID1 = "1000" -}}
+{{-       $vaultID2 = "1002" -}}
+{{-       $mutt = true -}}
+{{-       $currVaultID = $vaultID2 -}}
+{{-     end }}
+{{-  if eq $currVaultID "1002" -}}
+{{     $private = "true" -}}
+{{-  end -}}
+{{-     $longitude = (vault "kv/shared/location").data.data.longitude -}}
+{{-     $latitude = (vault "kv/shared/location").data.data.latitude -}}
+{{-     $place = (vault "kv/shared/location").data.data.place -}}
+{{-     $shortPlace = (vault "kv/shared/location").data.data.shortPlace -}}
+{{-   end -}}
+{{- end -}}
+
+[data]
+  headless = {{ $headless }}
+  ephemeral = {{ $ephemeral }}
+  personal = {{ $personal }}
+  {{- if not $headless }}
+  currvaultID = {{ $currVaultID | quote }}
+  v_availible = {{ $v_available }}
+  vaultID1 = {{ $vaultID1 | quote }}
+  private = {{ $private }}
+  {{- if $private }}
+  vaultID2 = {{ $vaultID2 | quote }}
+  {{- end }}
+  mutt = {{ $mutt }}
+  latitude = {{ $latitude | quote }}
+  longitude = {{ $longitude | quote }}
+  place = {{ $place | quote }}
+  shortplace = {{ $shortPlace | quote }}
+  sysUID = {{ $sysUID | quote }}
+  dpi = {{ $dpi }}
+  cpu = {{ $cpu | quote }}
+  wayland = {{ $wayland }}
+  x11 = {{ $x11 }}
+  {{- end }}

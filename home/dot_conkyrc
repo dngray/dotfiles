@@ -1,0 +1,130 @@
+#Make it play nice with XFCE - This works.
+own_window yes
+own_window_transparent yes
+own_window_argb_visual yes
+own_window_type normal
+own_window_class Conky
+own_window_type override
+#own_window_class conky-semi
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+
+
+# Use double buffering (reduces flicker, may not work for everyone)
+double_buffer yes
+
+# fiddle with window
+use_spacer right
+use_xft yes
+
+# Update interval in seconds
+update_interval 1.0
+
+maximum_width 200
+
+# Minimum size of text area
+minimum_size 300
+
+# Draw shades?
+draw_shades no
+
+# Text stuff
+draw_outline no # amplifies text if yes
+draw_borders no
+font Deja Vu Sans Mono
+uppercase no # set to yes if you want all text to be in uppercase
+
+# Stippled borders?
+#stippled_borders 0
+
+# border width
+border_width 15
+
+#------Colors-----
+# Default colors and also border colors, grey90 == #e5e5e5
+#other default colors solarized here: https://github.com/sellout/emacs-color-theme-solarized/blob/master/README.md
+#http://ethanschoonover.com/solarized/img/solarized-palette.png
+
+default_color 839496
+#073642 for dark text
+#fdf6e3 for light text
+
+
+#own_window_colour 333333
+#--fdf6e3 is light color
+#--002b36 is dark
+own_window_transparent no
+own_window_argb_value 200
+
+
+# Text alignment, other possible values are commented
+#alignment top_left
+alignment top_right
+#alignment bottom_left
+#alignment bottom_right
+#alignment middle_right
+
+# Gap between borders of screen and text
+gap_x 20
+gap_y 20
+
+# number of cpu samples to average
+# set to 1 to disable averaging
+cpu_avg_samples 2
+
+text_buffer_size 1024
+
+# stuff after ‘TEXT’ will be formatted on screen
+
+TEXT
+$color${font Deja Vu Sans Mono:size=9}
+#${color 268bd2}HOSTNAME: $color $nodename
+#${color 268bd2}SYSNAME: $color $sysname $kernel
+#${color b58900}UPTIME: $color ${uptime}
+#${execi 1 date}
+#${color dc322f}BATTERY:
+#${color 93a1a1}${battery} -  $color${battery_time}
+#${battery_bar 6 BAT0}
+${color d33682}CPU $color
+#${freq}MHz${alignr}Load: ${loadavg}
+#${loadgraph 20,200 e5e5e5 b58900}
+${color 93a1a1}CPU total:${color} ${cpu cpu0}% ${color}${alignr}
+${cpugraph 0 20,200 b58900 d33682}
+${color 93a1a1}CPU 1: ${color} ${alignr}${color 93a1a1}CPU 2:
+${freq 1}MHz (${cpu cpu1}%)  ${color}${alignr}${freq 2} MHz(${cpu cpu2}%)
+${cpugraph 1 20,80 cb4b16 cb4b16}${alignr}${cpugraph 2 20,80 6c71c4 6c71c4}
+
+ ${color 93a1a1}NAME${alignr}PID CPU% MEM%
+ ${color dc322f}${top name 1}${alignr}${top pid 1} ${top cpu 1} ${top mem 1}
+ ${color cb4b16}${top name 2}${alignr}${top pid 2} ${top cpu 2} ${top mem 2}
+ ${color b58900}${top name 3}${alignr}${top pid 3} ${top cpu 3} ${top mem 3}
+ ${color 839496}${top name 4}${alignr}${top pid 4} ${top cpu 4} ${top mem 4}
+ ${color 657b83}${top name 5}${alignr}${top pid 5} ${top cpu 5} ${top mem 5}
+
+${color 859900}MEMORY / DISK $color
+${color 93a1a1}Total: ${color}${memmax} ${alignr} ${color 93a1a1}Free: ${color}${memfree}
+${color 93a1a1}RAM: $color$memperc% ${alignr}${color 93a1a1}Swap: $color$swapperc%
+${memgraph 20,80 268bd2 859900} ${alignr} ${swapbar 20,80}
+/root: ${fs_used_perc /}% ${fs_bar 6 /}$color
+/home: ${fs_used_perc /home}% ${fs_bar 6 /home}$color
+/media/usb: ${fs_used_perc /media/usb}% ${fs_bar 6 /}$color
+/mnt/sdb1: ${fs_used_perc /mnt/sdb1}% ${fs_bar 6 /}$color
+#/boot: ${fs_used_perc /boot}% ${fs_bar 6 /boot}$color
+
+#${color 2aa198}Network (${addr eth0}) $color
+#Down: $color${downspeed eth0} ${alignr}Up: ${upspeed eth0}
+#${downspeedgraph eth0 20,80 e5e5e5 2aa198} ${alignr}${upspeedgraph eth0
+#20,80 e5e5e5 2aa198}$color
+#${color 93a1a1}Total: $color${totaldown eth0} ${alignr}${color 93a1a1}Total: $color${totalup eth0}
+#${color 93a1a1}Inbound: $color${tcp_portmon 1 32767 count} ${color 93a1a1}Outbound: $color${tcp_portmon 32768
+#61000 count}${alignr}${color 93a1a1} Total: $color${tcp_portmon 1 65535 count}
+
+#${color 2aa198}WIFI (${addr wlan0} on ${wireless_essid wlan0}) $color
+#Strength: ${wireless_link_bar 6 wlan0}
+#Down: $color${downspeed wlan0} ${alignr}Up: ${upspeed wlan0}
+#${downspeedgraph wlan0 20,80 e5e5e5 2aa198} ${alignr}${upspeedgraph wlan0
+#20,80 e5e5e5 2aa198}$color
+#${color 93a1a1}Total: $color${totaldown wlan0} ${alignr}${color 93a1a1}Total: $color${totalup wlan0}
+#${color 93a1a1}Inbound: $color${tcp_portmon 1 32767 count} ${color 93a1a1}Outbound: $color${tcp_portmon 32768
+#61000 count}${alignr}${color 93a1a1}Total: $color${tcp_portmon 1 65535 count}
+
+${alignc}${exec cal}

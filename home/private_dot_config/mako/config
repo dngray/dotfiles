@@ -1,0 +1,16 @@
+#font=MesloLGS Nerd Font Mono
+max-visible=-1
+layer=overlay
+#background-color=#282828
+#border-color=#bdae93
+#text-color=#bcbabeff
+text-color=#dddddd
+anchor=top-center
+icon-path=path:/usr/share/icons
+border-radius=5
+#max-icon-size=32
+width=500
+height=200
+
+[urgency=high]
+text-color=#fcd1d1

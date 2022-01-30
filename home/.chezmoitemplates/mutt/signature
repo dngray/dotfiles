@@ -1,0 +1,8 @@
+{{- $user := index (vault (printf "kv/users/%s/mail" .currvaultid)).data.data.mail .accIdx }}
+{{- $user.realName }}
+{{- if eq (hasKey $user "shortID") true  }}
+{{-   " " }}{{ $user.shortID }}
+{{- end }}
+{{- if eq (hasKey $user "mastodon") true  }}
+{{    $user.mastodon }}
+{{- end -}}

@@ -1,0 +1,55 @@
+# .bashrc.d/aliases
+
+alias ls='ls --color=auto'
+alias ll='ls -alF'
+alias dir='ls -lah'
+alias la='ls -A'
+alias l='ls -CF'
+alias nmu='TZ=UTC neomutt'
+alias mkdir='mkdir -p'
+alias h="history|grep "
+alias f="find . |grep "
+alias p="ps aux |grep "
+alias grep="grep --color=auto"
+alias fgrep="fgrep --color=auto"
+alias egrep="egrep --color=auto"
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
+alias diff='diff --color=auto'
+alias dmesg='dmesg --color=always'
+alias cdr='cd `pwd -P`' # cd from a symlink into a real dir
+alias ev='evince'
+alias fc-list-family='fc-list :outline -f "%{family}\n"'
+alias enabledUnits='systemctl list-unit-files --state=enabled'
+alias runningUnits='systemctl list-units --type=service --state=running'
+alias activeUnits='systemctl list-units --type=service --state=active'
+alias fv='flatpak run io.neovim.nvim'
+alias mpv='flatpak run io.mpv.Mpv'
+alias firefox='flatpak run org.mozilla.firefox'
+{{- if (eq .chezmoi.username "1") }}
+alias yubiUnlock="gpg-connect-agent 'scd checkpin 1' /bye"
+{{- else if (eq .chezmoi.username "2") }}
+alias yubiUnlock="gpg-connect-agent 'scd checkpin 2' /bye"
+{{- end }}
+{{ if or (eq .private true) (eq .currvaultid "1001") }}
+# RDP
+{{-   $rdp := index (vault (printf "kv/users/%s/rdp" .currvaultid)).data.data.rdp -}}
+{{-   range $rdp }}
+alias {{ .name }}='xfreerdp /u:{{ .username }} /v:{{.ip }} /dynamic-resolution'
+{{-   end }}
+
+# smb
+{{-   $smb := index (vault (printf "kv/users/%s/smb" .currvaultid)).data.data.smb -}}
+{{-   range $smb }}
+alias smb{{ .name }}='smbclient //{{ .address }}/{{ .username }}'
+{{-   end }}
+
+# Containers
+{{- $containers := "" }}
+{{- $containers = index (vault (printf "kv/users/%s/containers" .currvaultid)).data.data.containers }}
+{{- range $containers }}
+alias open{{ .CmdAlias }}="sudo cryptsetup luksOpen {{ .Location }}/{{ .DmName }} {{ .DmName }}; sudo mount -t {{ .FsType }} /dev/mapper/{{ .DmName }} {{ .MountPoint }}/{{ .DmName }}"
+alias close{{ .CmdAlias }}="sudo umount {{ .MountPoint }}/{{ .DmName }}; sudo cryptsetup luksClose {{ .DmName }}"
+{{- end }}
+{{- end }}

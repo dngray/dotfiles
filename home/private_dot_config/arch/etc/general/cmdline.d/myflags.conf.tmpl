@@ -1,0 +1,14 @@
+# /etc/cmdline.d/myflags.conf
+rd.vconsole.font=ter-120n
+rd.info
+rd.lvm=1
+rd.lvm.vg={{ .chezmoi.hostname }}VG
+rd.lvm.lv={{ .chezmoi.hostname }}VG/root
+rd.luks.uuid={{ .lvmuuid }}
+root=/dev/{{ .chezmoi.hostname }}VG/root
+resume=/dev/{{ .chezmoi.hostname }}VG/swap
+rootflags=subvol=@
+rd.luksoptions=discard
+mem_encrypt=off
+apparmor=1
+security=apparmor

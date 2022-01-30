@@ -1,0 +1,4 @@
+# Enable me to use Gnome Keyring SSH agent for applications started by Sway.
+# This is a must have to reasonably be able to use virt-manager with remote
+# connection but not only that.
+SSH_AUTH_SOCK=/run/user/{{ .sysuid }}/gnupg/S.gpg-agent.ssh

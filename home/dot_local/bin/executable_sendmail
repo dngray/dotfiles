@@ -1,0 +1,3 @@
+#!/bin/sh
+
+MIMEmbellish | msmtp -a "$@"

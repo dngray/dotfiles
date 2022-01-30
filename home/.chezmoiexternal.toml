@@ -1,0 +1,125 @@
+#[".oh-my-zsh"]
+#    type = "archive"
+#    url = "https://github.com/ohmyzsh/ohmyzsh/archive/master.tar.gz"
+#    exact = true
+#    stripComponents = 1
+#    refreshPeriod = "168h"
+
+[".local/share/fonts/Meslo"] # https://www.nerdfonts.com/font-downloads
+    type = "archive"
+    url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Meslo.zip"
+    #exact = true
+    #stripComponents = 1
+    refreshPeriod = "168h"
+
+[".config/nvim/autoload/plug.vim"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+    refreshPeriod = "168h"
+
+[".var/app/io.neovim.nvim/config/nvim/autoload/plug.vim"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+    refreshPeriod = "168h"
+
+[".config/nvim/colors/selenized.vim"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/jan-warchol/selenized/master/editors/vim/colors/selenized.vim"
+    refreshPeriod = "168h"
+
+[".config/nvim/colors/selenized_bw.vim"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/jan-warchol/selenized/master/editors/vim/colors/selenized_bw.vim"
+    refreshPeriod = "168h"
+
+[".config/nvim/colors/solarized8.vim"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/lifepillar/vim-solarized8/master/colors/solarized8.vim"
+    refreshPeriod = "168h"
+
+[".config/nvim/colors/solarized8_flat.vim"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/lifepillar/vim-solarized8/master/colors/solarized8_flat.vim"
+    refreshPeriod = "168h"
+
+[".config/nvim/colors/solarized8_high.vim"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/lifepillar/vim-solarized8/master/colors/solarized8_high.vim"
+    refreshPeriod = "168h"
+
+[".config/nvim/colors/solarized8_low.vim"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/lifepillar/vim-solarized8/master/colors/solarized8_low.vim"
+    refreshPeriod = "168h"
+
+[".var/app/io.neovim.nvim/config/nvim/colors/selenized.vim"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/jan-warchol/selenized/master/editors/vim/colors/selenized.vim"
+    refreshPeriod = "168h"
+
+[".var/app/io.neovim.nvim/config/nvim/colors/selenized_bw.vim"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/jan-warchol/selenized/master/editors/vim/colors/selenized_bw.vim"
+    refreshPeriod = "168h"
+
+[".var/app/io.neovim.nvim/config/nvim/colors/solarized8.vim"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/lifepillar/vim-solarized8/master/colors/solarized8.vim"
+    refreshPeriod = "168h"
+
+[".var/app/io.neovim.nvim/config/nvim/colors/solarized8_flat.vim"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/lifepillar/vim-solarized8/master/colors/solarized8_flat.vim"
+    refreshPeriod = "168h"
+
+[".var/app/io.neovim.nvim/config/nvim/colors/solarized8_high.vim"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/lifepillar/vim-solarized8/master/colors/solarized8_high.vim"
+    refreshPeriod = "168h"
+
+[".var/app/io.neovim.nvim/config/nvim/colors/solarized8_low.vim"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/lifepillar/vim-solarized8/master/colors/solarized8_low.vim"
+    refreshPeriod = "168h"
+
+[".config/dircolors-solarized/dircolors.256dark"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.256dark"
+    refreshPeriod = "168h"
+
+[".config/dircolors-solarized/dircolors.ansi-dark"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-dark"
+    refreshPeriod = "168h"
+
+[".config/dircolors-solarized/dircolors.ansi-light"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-light"
+    refreshPeriod = "168h"
+
+[".config/dircolors-solarized/dircolors.ansi-universal"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/seebi/dircolors-solarized/master/dircolors.ansi-universal"
+    refreshPeriod = "168h"
+
+#[".config/ohmyzsh/custom/plugins/solarized-man/solarized-man.plugin.zsh"]
+#    type = "file"
+#    url = "https://raw.githubusercontent.com/zlsun/solarized-man/master/solarized-man.plugin.zsh"
+#    refreshPeriod = "168h"
+
+[".config/xdg-solarized/colors.ini"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/Dieterbe/xdg-solarized/master/colors.ini"
+    refreshPeriod = "168h"
+
+[".tmux/plugins/tpm"]
+    type = "archive"
+    url = "https://github.com/tmux-plugins/tpm/archive/refs/heads/master.zip"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
+
+[".tmux/plugins/tmux-sensible/sensible.tmux"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/tmux-plugins/tmux-sensible/master/sensible.tmux"
+    refreshPeriod = "168h"

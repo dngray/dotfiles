@@ -1,0 +1,16 @@
+# vim: filetype=sh
+# .bashrc.d/pathmunge
+
+# Create pathmunge to avoid path duplications
+pathmunge () {
+    case ":${PATH}:" in
+        *:"$1":*)
+            ;;
+        *)
+            if [ "$2" = "after" ] ; then
+                PATH=$PATH:$1
+            else
+                PATH=$1:$PATH
+            fi
+    esac
+}

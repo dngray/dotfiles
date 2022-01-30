@@ -1,0 +1,12 @@
+{
+  "policies": {
+    "DisableAppUpdate": true,
+    "DontCheckDefaultBrowser": true,
+    "Certificates": {
+      "ImportEnterpriseRoots": true,
+      "Install": [
+        "~/.var/app/org.mozilla.firefox/.mozilla/certificates/home.arpa_Root_CA.pem"
+      ]
+    }
+  }
+}

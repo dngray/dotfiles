@@ -1,0 +1,126 @@
+#####################################
+# AStyle Code Formatting Options File
+#####################################
+
+# Make recursive
+#recursive
+
+# Don't changed the last modified date stamp
+preserve-date
+
+# Linux based line endings
+lineend=linux
+
+#####################################
+#   Indentation Options
+#####################################
+
+# Indents contain 4 spaces
+indent=spaces=4
+
+# Attach brackets to the line that is set
+attach-namespaces
+
+# Indent code inside a class
+indent-classes
+
+# Indent code inside a switch
+indent-switches
+
+# Indent code inside a case
+indent-cases
+
+# Indent inside brackets
+# indent-brackets
+
+# Indent inside blocks
+# indent-blocks
+
+# Indent inside name spaces
+# indent-namespace
+
+# Indent Labels
+indent-labels
+
+# Indent Multiline Preprocesser code
+indent-preprocessor
+
+# Indents out C++ Comments
+indent-col1-comments
+
+# Indenting Continous statements
+# eg. array = { a,
+#               b,
+#               c};
+#max-instatement-indent=40
+#min-conditional-indent=40
+
+#####################################
+#   Padding Options
+#####################################
+
+# Pad line before while, if with a white space
+#break-blocks
+
+# Treat closing header blocks as new blocks. eg. else is new block
+#break-blocks=all
+
+# Place padding around operators
+pad-oper
+
+# Pad parenthesis
+# pad-paren
+
+# Pad parenthesis on the outside
+# pad-paren-out
+
+# Pad parenthesis on the inside
+# pad-paren-in
+
+# Pad code around if, while, etc statements
+# pad-header
+
+# Unpad parenthesis, remove padding from inside and outside
+unpad-paren
+
+# Delete empty lines
+#delete-empty-lines
+
+# Fill empty line with the whitespace from the previous line
+# fill-empty-lines
+
+#####################################
+#   Formatting Options
+#####################################
+
+# Put closing bracket for else, catch etc on a new line
+# break-closing-brackets
+
+# Break else ifs onto multiple lines
+# break-elseifs
+
+# Add brackets to unbracketed lines
+add-brackets
+
+# Add one line brackets to bracketted statements
+# add-one-line-brackets
+
+# Don't break one line blocks
+keep-one-line-blocks
+
+# Keep statments on one line
+keep-one-line-statements
+
+# Convert tabs to spaces
+convert-tabs
+
+# Align the pointer type with name
+align-pointer=name
+
+# Align the reference type with name
+#align-reference=name
+
+# Commenting C Code
+# Note: Should be picked up by file extension so
+#       don't set this for reuse purposes
+#mode=c

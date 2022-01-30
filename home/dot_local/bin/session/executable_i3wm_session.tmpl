@@ -1,0 +1,34 @@
+#!/bin/sh
+
+export QT_QPA_PLATFORMTHEME=qt5ct
+
+export TERMINAL="termite"
+
+# Start Gnome Polkit
+exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+
+# Start DBUS
+dbus-update-activation-environment --systemd DISPLAY
+
+# Start Gnome Keyring
+#eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets) # Let ssh be managed by pinentry
+
+# Set a wallpaper
+#exec feh --randomize --bg-fill ~/Pictures/*
+
+{{ if (eq .chezmoi.hostname "iceberg") }}
+export GDK_SCALE=2
+export GDK_DPI_SCALE=0.5
+
+export QT_AUTO_SCREEN_SCALE_FACTOR=0
+export QT_SCREEN_SCALE_FACTORS="2;2"
+if grep -Fxq "Xft.dpi: 96" ~/.Xresources
+then
+    sed -i 's/Xft.dpi: 96/Xft.dpi: 220/g' ~/.Xresources
+else
+    echo "DPI is already 220"
+fi
+{{- end }}
+
+exec i3

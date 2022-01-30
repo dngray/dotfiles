@@ -1,0 +1,13 @@
+#!/bin/sh
+
+include_path="$XDG_CONFIG_HOME/i3/conf.d/"
+i3_global_config="$XDG_CONFIG_HOME/i3/global.conf"
+i3_config="$XDG_CONFIG_HOME/i3/config"
+
+rm -f "$i3_config"
+cat "${i3_global_config}" >> "${i3_config}"
+
+for f in "${include_path}"*.conf
+do
+    cat "${f}" >> "${i3_config}"
+done

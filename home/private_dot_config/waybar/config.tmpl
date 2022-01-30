@@ -1,0 +1,198 @@
+{
+    "layer": "top",
+    "modules-left": [
+        "sway/workspaces",
+        "sway/mode",
+        "custom/modules-separator"
+    ],
+
+    "modules-center": [
+        "clock",
+        "custom/modules-separator",
+        "clock#time"
+        /*"custom/modules-separator",
+        "custom/weather"*/
+    ],
+
+    "modules-right": [
+        /*"pulseaudio",
+        "custom/modules-separator",
+        "pulseaudio#sources",
+        "custom/modules-separator",*/
+        "memory",
+        "custom/modules-separator",
+        "cpu#load",
+        "custom/modules-separator",
+        "cpu",
+        "custom/modules-separator",
+        "disk",
+        "custom/modules-separator",
+        "temperature",
+        "custom/modules-separator",
+        "network",
+        /*"custom/modules-separator",*/
+        /*"custom/uptime",*/
+        /* "custom/modules-separator", */
+        /* "battery", */
+        "custom/modules-separator",
+        "tray"
+    ],
+
+    "custom/modules-separator": {
+        "format": "",
+        "tooltip": false
+    },
+
+    "sway/mode": {
+        "format": " {}",
+        "max-length": 50
+    },
+
+    "sway/window": {
+        "format": "{}",
+        "max-length": 50
+    },
+
+    "sway/workspaces": {
+        "format": "{name}"
+    },
+
+    "clock#time": {
+        "format": " {:%I:%M%p}",
+        "tooltip-format": "{:%H:%M}"
+    },
+
+    "clock": {
+    "tooltip-format": "<big>  Current Week: {:%V}</big>\n\n<tt><big>{calendar}</big></tt>",
+        "format": " {:%A, %d %B %Y}"
+    },
+
+    "pulseaudio#sources": {
+        "format": "{format_source}",
+        "format-source": " {volume}%",
+        "format-source-muted": " {volume}%",
+        "on-click": "pavucontrol -t 4",
+        "on-click-right": "pactl set-source-mute @DEFAULT_SOURCE@ toggle"
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-bluetooth": " {icon} {volume}%",
+        "format-bluetooth-muted": "{volume}% ﱝ ",
+        "format-muted": "{volume}% ﱝ",
+        "format-icons": {
+            // My lineout port is where the headset is plugged in
+            "analog-output-lineout": "",
+            "headphones": "",
+            "hdmi": " ",
+            "headset": "",
+            "default": [
+                "奔",
+                "墳"
+            ]
+        },
+        "scroll-step": 1,
+        "on-click": "pavucontrol -t 3",
+        "on-click-middle": "bluetoothctl disconnect 28:9A:4B:20:49:93",
+        "on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+    },
+
+    "memory": {
+        "interval": 5,
+        "format": " {used:0.1f}G/{total:0.1f}G",
+        "tooltip": false,
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
+    },
+
+    "cpu#load": {
+        "interval": 5,
+        "format": "﬙  {load}",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
+    },
+
+    "cpu": {
+        "interval": 5,
+        "format": "﬙ {usage}%",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
+    },
+
+    "battery": {
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-icons": [
+            "",
+            "",
+            "",
+            "",
+            ""
+        ]
+    },
+
+    "disk": {
+        "interval": 5,
+        "format": " {percentage_free}%",
+        "path": "/"
+    },
+
+    "network": {
+        "interval": 10,
+        "format-wifi": " {essid} ({signalStrength}%)",
+        "format-ethernet": " {ifname}",
+        "format-linked": " {ifname} (No IP)",
+        "format-disconnected": "⚠ Disconnected",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "tooltip-format-ethernet": "‏{bandwidthUpBits}‏ ﰵ ‏{bandwidthDownBits}‏ ﰬ"
+    },
+
+    "temperature": {
+    {{- if eq .cpu "amd" }}
+        "hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
+        //"hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:18.3/hwmon",
+        //"input-filename": "temp1_input",
+    {{- else if eq .cpu "intel" }}
+        "hwmon-path": "/sys/devices/platform/coretemp.0/hwmon/hwmon9/temp1_input",
+    {{- end }}
+        "critical-threshold": 80,
+        "format-critical": "{icon} {temperatureC}°C",
+        "format": "{icon} {temperatureC}°C",
+        "format-icons": ["", "", "", "", ""]
+    },
+
+    "custom/uptime": {
+        "format": "神 {}",
+        "return-type": "json",
+        "interval": 60,
+        "exec": "~/.local/bin/waybar-uptime"
+    },
+
+    "tray": {
+        "icon-size": 25,
+        "spacing": 10
+    },
+
+    "custom/weather": {
+        "return-type": "json",
+        "exec": "~/.local/bin/waybar-weather",
+        "interval": 600
+    },
+
+    "wlr/taskbar": {
+        "format": "{icon}",
+        "icon-size": 25,
+        "on-click": "activate",
+        "on-click-middle": "close"
+    }
+}

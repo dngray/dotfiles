@@ -1,0 +1,77 @@
+#
+# This is an implementation of the Riseup OpenPGP Best Practices
+# https://help.riseup.net/en/security/message-security/openpgp/best-practices
+#
+# Copied from https://tails.boum.org/contribute/design/#index45h3
+# https://git-tails.immerda.ch/tails/plain/config/chroot_local-includes/etc/skel/.gnupg/gpg.conf
+# https://gitweb.torproject.org/torbirdy.git/tree/gpg.conf
+
+#-----------------------------
+# default key
+#-----------------------------
+
+# The default key to sign with. If this option is not used, the default key is
+# the first key found in the secret keyring
+
+{{- if .personal }}
+default-key {{ (vault (printf "kv/users/%s/pgp" .vaultid1)).data.data.defaultKey }}
+{{- end }}
+
+#-----------------------------
+# behavior
+#-----------------------------
+
+# Disable inclusion of the version string in ASCII armored output
+no-emit-version
+
+# Disable comment string in clear text signatures and ASCII armored messages
+no-comments
+
+# Display long key IDs
+keyid-format 0xlong
+
+# List all keys (or the specified ones) along with their fingerprints
+with-fingerprint
+
+# Display the calculated validity of user IDs during key listings
+list-options show-uid-validity,show-keyring,show-sig-expire
+verify-options show-uid-validity
+
+# Try to use the GnuPG-Agent. With this option, GnuPG first tries to connect to
+# the agent before it asks for a passphrase.
+use-agent
+
+# Suppress the initial copyright message.
+no-greeting
+
+# Bypass all translations and assume that the OS uses native UTF-8 encoding.
+display-charset utf-8
+
+#-----------------------------
+# keyserver
+#-----------------------------
+
+# When searching for a key with --search-keys, include keys that are marked on
+# the keyserver as revoked
+keyserver-options include-revoked
+
+
+#-----------------------------
+# algorithm and ciphers
+#-----------------------------
+
+# list of personal digest preferences. When multiple digests are supported by
+# all recipients, choose the strongest one
+personal-cipher-preferences AES256 AES192 AES CAST5
+
+# list of personal digest preferences. When multiple ciphers are supported by
+# all recipients, choose the strongest one
+personal-digest-preferences SHA512 SHA384 SHA256 SHA224
+
+# message digest algorithm used when signing a key
+cert-digest-algo SHA512
+
+# This preference list is used for new keys and becomes the default for
+# "setpref" in the edit menu
+default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB BZIP2 ZIP Uncompressed
+

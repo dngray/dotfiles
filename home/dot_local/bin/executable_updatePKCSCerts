@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+downloadCerts=(http://cacerts.thawte.com/ThawteRSACA2018.crt)
+
+wget -c "${downloadCerts[@]}"
+
+for f in *.crt; do
+    fbasename=${f%.crt}
+    sudo openssl x509 -inform der -in "$f" -trustout -out /usr/local/share/ca-certificates/"$f"
+done
+
+sudo update-ca-certificates -f
+
+find ~ -name pkcs11.txt -printf '%h\0' |
+    while IFS= read -rd '' pkcs11Files; do
+    if grep -Fxq "name=p11-kit-trust PKCS#11 Module" "$pkcs11Files"/pkcs11.txt
+    then
+        echo "Not adding device to $pkcs11Files/pkcs11.txt"
+    else
+        echo "Adding device to $pkcs11Files/pkcs11.txt"
+        cat <<EOF >> "$pkcs11Files"/pkcs11.txt
+
+library=/usr/lib/x86_64-linux-gnu/pkcs11/p11-kit-trust.so
+name=p11-kit-trust PKCS#11 Module
+NSS=trustOrder=100
+EOF
+    fi
+done

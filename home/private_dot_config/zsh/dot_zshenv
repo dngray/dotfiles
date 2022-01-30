@@ -1,0 +1,4 @@
+# ZSH .zshenv For detailed information type "man zsh"
+# https://zsh.sourceforge.io/Doc/Release/Files.html#Files
+
+[[ -e ~/.env ]] && emulate sh -c 'source ~/.env'

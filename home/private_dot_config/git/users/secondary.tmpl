@@ -1,0 +1,5 @@
+{{- template "git/user" dict "uid" .vaultid2 "accountNumber" 0 }}
+[filter "clean"]
+	clean = sed --file=$XDG_CONFIG_HOME/git/clean.sed
+	smudge = sed --file=$XDG_CONFIG_HOME/git/smudge.sed
+	required

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+xrandr --output eDP1 --scale 1x1 --auto --pos 5120x0 --primary \
+       --output DP1 --same-as eDP1 --scale 1.5x1.35 --auto --pos 0x0
+
+# ~/.fehbg

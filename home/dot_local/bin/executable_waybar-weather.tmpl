@@ -1,0 +1,12 @@
+#!/bin/sh
+
+location='{{ .shortplace }}'
+base_url='https:/wttr.in/'
+base_cmd='curl -s'
+temp=$($base_cmd $base_url~$location?format="%t+%c")
+humidity=$($base_cmd $base_url~$location?format="Humidity:+%h")
+wind=$($base_cmd $base_url~$location?format="Wind:+%w")
+pressure=$($base_cmd $base_url~$location?format="Pressure:+%P")
+moonphase=$($base_cmd $base_url~$location?format="Moonphase:+%m")
+sunset=$($base_cmd $base_url~$location?format="Dusk:+%s")
+echo '{"text": "'$temp'","tooltip": "'$humidity\\n$wind\\n$pressure\\n$moonphase\\n$sunset'"}'

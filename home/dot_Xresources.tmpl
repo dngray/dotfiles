@@ -1,0 +1,121 @@
+! xft fonts
+!----------------------------------------------------------------------
+! The first font in the list is the main font.
+! Choose your favourite here.
+!
+! Other (fallback) fonts are used whenever a
+! character isn''t found in the first font. Then
+! the others are tried in order.
+!
+! The font size is set in the first font. The size
+! and other settings in the fallback fonts are
+! mostly ignored.
+!
+! Turn antialias and hinting on or off to your
+! liking.
+!
+! Turning off antialias makes sharper letters, but
+! they have jagged stepped diagonals. Turn it on
+! for curvyness.
+
+! See man 5 fonts.conf for info on hinting etc.
+!
+! none     0
+! slight   1
+! medium   2
+! full     3
+Xft.dpi: {{ .dpi }}
+Xft.autohint: 0
+Xft.lcdfilter:  lcddefault
+Xft.hintstyle:  hintfull
+Xft.hinting: 1
+Xft.antialias: 1
+Xft.rgba: rgb
+
+! urxvt
+!---------------------------------------------------------------------
+! https://github.com/powerline/fonts/issues/176
+! Font and term type
+! • Use minspace=false on monospace fonts
+URxvt.termName: xterm-256color
+URxvt.letterSpace: 0
+
+#define font1         DejaVu Sans Mono
+#define font2         Nimbus Mono L
+#define font3         Noto Mono
+#define font4         Standard Symbols L
+
+
+URxvt*font:           xft:font1:size=12:minspace=False, \
+                      xft:font2:size=12:minspace=False, \
+                      xft:font3:size=12:minspace=False, \
+                      xft:font4:size=12 \
+
+URxvt*boldFont:       xft:font1:bold:size=12:minspace=False, \
+                      xft:font2:bold:size=12:minspace=False, \
+                      xft:font3:bold:size=12:minspace=False, \
+                      xft:font4:size=12
+
+URxvt*italicFont:     xft:font1:italic:size=12:minspace=False, \
+                      xft:font2:italic:size=12:minspace=False, \
+                      xft:font3:italic:size=12:minspace=False, \
+                      xft:font4:size=12
+
+URxvt*boldItalicFont: xft:font1:bold:italic:size=12:minspace=False, \
+                      xft:font2:bold:italic:size=12:minspace=False, \
+                      xft:font3:bold:italic:size=12:minspace=False, \
+                      xft:font4:size=12
+
+! Scrollbar stuff
+URxvt*scrollBar_right:true
+URxvt*scrollstyle:plain
+URxvt*thickness: 5
+
+!---------------------------------------------------------
+! Requires https://www.archlinux.org/packages/?name=urxvt-perls
+
+! clickable urls
+URxvt.url-launcher: /usr/bin/xdg-open
+URxvt.matcher.button: 1
+
+! open and list recent URLs
+URxvt.keysym.C-Delete: perl:matcher:last
+URxvt.keysym.M-Delete: perl:matcher:list
+
+! copy paste stuff
+URxvt.perl-ext-common:      default,clipboard,url-select,keyboard-select
+URxvt.url-select.launcher:  firefox
+URxvt.url-select.underline: true
+URxvt.keysym.M-u:           perl:url-select:select_next
+URxvt.keysym.M-Escape:      perl:keyboard-select:activate
+URxvt.keysym.M-s:           perl:keyboard-select:search
+
+!---------------------------------------------------------
+! Scroll stuff
+
+! do not scroll with output
+URxvt*scrollTtyOutput: false
+
+! scroll in relation to buffer (with mouse scroll or Shift+Page Up)
+URxvt*scrollWithBuffer: true
+
+! scroll back to the bottom on keypress
+URxvt*scrollTtyKeypress: true
+
+! Scrollback buffer in secondary screen (eg in less)
+URxvt.secondaryScreen: 1
+URxvt.secondaryScroll: 0
+
+! history limit
+URxvt.saveLines: 10000
+
+! urxvt keypad rebindings
+URxvt.keysym.Home: \033[1~
+URxvt.keysym.End: \033[4~
+URxvt.keysym.KP_Home: \033[1~
+URxvt.keysym.KP_End:  \033[4~
+
+!---------------------------------------------------------
+! Color scheme for the X Window System
+!
+#include ".config/selenized/terminals/urxvt/selenized-dark.xdefaults"

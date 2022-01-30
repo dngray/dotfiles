@@ -1,0 +1,18 @@
+# Static information about the filesystems.
+# See fstab(5) for details.
+
+# <file system> <dir> <type> <options> <dump> <pass>
+# /dev/mapper/{{ .chezmoi.hostname }}VG-root
+UUID={{ .rootuuid }}	/         	btrfs     	rw,relatime,ssd,space_cache,subvolid=256,subvol=/@,subvol=@	0 0
+
+# /dev/mapper/{{ .chezmoi.hostname }}VG-root
+UUID={{ .rootuuid }}	/home     	btrfs     	rw,relatime,ssd,space_cache,subvolid=257,subvol=/@home,subvol=@home	0 0
+
+# /dev/mapper/{{ .chezmoi.hostname }}VG-root
+UUID={{ .rootuuid }}	/snapshots	btrfs     	rw,relatime,ssd,space_cache,subvolid=258,subvol=/@snapshots,subvol=@snapshots	0 0
+
+# /dev/mapper/{{ .chezmoi.hostname }}VG-swap
+UUID={{ .swapuuid }}	none		swap     	defaults,pri=-2 0 0
+
+# Linux ESP partition
+UUID={{ .espuuid }}      	/boot      	vfat      	rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,utf8,errors=remount-ro	0 2

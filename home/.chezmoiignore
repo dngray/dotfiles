@@ -1,0 +1,78 @@
+{{- if not .mutt }}
+.config/khard/khard.conf
+.config/msmtp/config
+.config/mutt/accounts/acc1.muttrc
+.config/mutt/muttrc
+.config/mutt/signatures/acc1.signature
+.config/mutt/signatures/acc1_html.signature
+.config/notmuch/acc1/config
+.config/notmuch/acch/config
+.config/vdirsyncer/config
+.local/bin/mailsync
+.local/bin/openfile
+.mbsyncrc
+
+{{-   if not .private -}}
+.config/mutt/accounts/acc2.muttrc
+.config/mutt/signatures/acc2.signature
+.config/mutt/signatures/acc2_html.signature
+.config/notmuch/acc2/config
+{{-   end }}
+{{- end }}
+
+{{-  if not .private -}}
+.config/git/clean.sed
+.config/git/smudge.sed
+.config/git/users/secondary
+.local/bin/ptime
+.local/share/applications/im.riot.Riot_*
+{{- end }}
+
+{{- if not .wayland }}
+.config/alacritty/*
+.config/gammastep/config.ini
+.config/mako/config
+.config/sway/**
+.config/waybar/*
+.config/wofi/*
+{{- end }}
+
+{{- if not .x11 }}
+.Xresources
+.config/dunst/dunstrc
+.config/i3/**
+.config/picom/picom.conf
+.config/redshift/redshift.conf
+.config/rofi/**
+.xinitrc
+{{- end }}
+
+{{- if not .headless }}
+.config/Element/**
+.config/GIMP/**
+.config/gtk-2.0/*
+.config/gtk-3.0/*
+.config/kitty/kitty.conf
+.config/mpv/mpv.conf
+.config/qutebrowser
+.config/termite/config
+.config/tridactyl/tridactylrc
+{{- end }}
+
+{{- if ne .chezmoi.osRelease.id "arch" -}}
+{{-   if not .headless }}
+.config/arch/**
+.config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml
+{{-  end }}
+{{- end }}
+
+{{- if ne .chezmoi.osRelease.id "fedora" -}}
+{{-   if not .headless }}
+.config/fedora/**
+.config/environment.d/*
+{{-  end }}
+{{- end }}
+
+{{ if ne .chezmoi.os "windows" }}
+.config/win10/*
+{{- end }}

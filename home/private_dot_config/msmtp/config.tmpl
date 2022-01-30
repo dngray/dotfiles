@@ -1,0 +1,36 @@
+defaults
+auth on
+tls	on
+tls_starttls off
+{{- if (eq .chezmoi.osRelease.id "debian" "ubuntu") }}
+tls_trust_file	/etc/ssl/certs/ca-certificates.crt
+{{- else }}
+tls_trust_file	/etc/pki/tls/certs/ca-bundle.crt
+{{- end }}
+#logfile	~/.config/msmtp/msmtp.log
+
+{{-  range $v, $primary := (vault (printf "kv/users/%s/mail" .vaultid1)).data.data.mail }}
+{{-  $aliases := ($primary.alias) }}
+{{-    if .enabled }}
+account {{ .accountName }}
+host {{ .smtpHost }}
+port {{ .smtpPort }}
+from {{ (index ($aliases) 0) }}
+user {{ .username }}
+passwordeval "pass {{ .accountName }}"
+{{-    end -}}
+{{-  end -}}
+
+{{- if .private -}}
+{{-   range $v, $secondary := (vault (printf "kv/users/%s/mail" .vaultid2)).data.data.mail }}
+{{-   $aliases := ($secondary.alias) }}
+{{      if .enabled }}
+account {{ .accountName }}
+host {{ .smtpHost }}
+port {{ .smtpPort }}
+from {{ (index ($aliases) 0) }}
+user {{ .username }}
+passwordeval "pass {{ .accountName }}"
+{{-     end }}
+{{-   end -}}
+{{- end }}

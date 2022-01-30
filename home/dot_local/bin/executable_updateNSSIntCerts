@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+sudo apt-get install libnss3-tools
+
+downloadCerts=(http://cacerts.thawte.com/ThawteRSACA2018.crt
+               http://cacerts.geotrust.com/GeoTrustRSACA2018.crt)
+
+wget -c "${downloadCerts[@]}"
+
+for f in *.crt; do
+    fbasename=${f%.crt}
+    openssl x509 -inform der -outform pem -in "$f" -out "$fbasename".pem
+    find ~ -name cert9.db -printf '%h\0' |
+    while IFS= read -rd '' certDir; do
+        certutil -A -n "${fbasename}" -t "TCu,Cuw,Tuw" -i "${fbasename}".pem -d sql:"$certDir"
+    done
+done

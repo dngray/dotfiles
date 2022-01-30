@@ -1,0 +1,967 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2018-03-16 12:44-0400\n"
+"PO-Revision-Date: 2018-03-16 12:46-0400\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+
+#: ArrowsCreator-0.4.py:224
+msgid "# plug-in menu launcher (string), imagebar menu path (string),"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:225
+msgid " default_->_style (int), index of the discarded pattern (int):"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:226
+msgid "Arrows crea_tor ..."
+msgstr ""
+
+#: ArrowsCreator-0.4.py:227
+msgid "/E_xtensions/Plugins-Python/Tools"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:252
+msgid "ArrowsCreator configuration"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:259
+msgid "  Please configure here, the file '%s' is not there."
+msgstr ""
+
+#: ArrowsCreator-0.4.py:260
+msgid ""
+"\n"
+"The first two entries are the menu placement on the image menu-bar where"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:261
+msgid ""
+" you want it.\n"
+"Button OK produces the file; after this window will no longer"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:262
+msgid ""
+" appear if it's there.\n"
+"\n"
+"  If you restores its config file from the"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:263
+msgid ""
+" trash-can or changes with a text editor, proceed like any plug-in before "
+msgstr ""
+
+#: ArrowsCreator-0.4.py:264
+msgid ""
+"restarting GIMP for a new menu placement.\n"
+"But a way to reconfiguration is"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:265
+msgid " to remove the previous '..._config.txt' before starting GIMP.\n"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:266
+msgid "  This is ArrowsCreator-0.4 for GIMP version between 2.8.14 and 3."
+msgstr ""
+
+#: ArrowsCreator-0.4.py:273
+msgid "menu path = <image>"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:273
+msgid "plug-in name = "
+msgstr ""
+
+#: ArrowsCreator-0.4.py:274
+msgid "Pattern index for the head FOREGROUND_FILL = "
+msgstr ""
+
+#: ArrowsCreator-0.4.py:274
+msgid "default arrow style number = "
+msgstr ""
+
+#: ArrowsCreator-0.4.py:277
+msgid "Change or/and choose an accelerator key "
+msgstr ""
+
+#: ArrowsCreator-0.4.py:278
+msgid ""
+"by inserting one or \n"
+"displacing an '_' before the accelerated letter."
+msgstr ""
+
+#: ArrowsCreator-0.4.py:279
+msgid "Edit this partial menu path to your liking."
+msgstr ""
+
+#: ArrowsCreator-0.4.py:280
+msgid "Choose the beginning arrow style."
+msgstr ""
+
+#: ArrowsCreator-0.4.py:281
+msgid ""
+"Choose which pattern index to reserve for the head foreground colour-fill."
+msgstr ""
+
+#: ArrowsCreator-0.4.py:303
+msgid "OK"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:305
+msgid "If instead this window is cancel the "
+msgstr ""
+
+#: ArrowsCreator-0.4.py:306
+msgid "default will be used."
+msgstr ""
+
+#: ArrowsCreator-0.4.py:329
+msgid ""
+"FROM pre-registration of ArrowsCreator:\n"
+"note that (2, 8, 14) <= GIMP < "
+msgstr ""
+
+#: ArrowsCreator-0.4.py:330
+msgid ""
+"(3, 0, 0) is needed for the expected brush behaviour, among other things."
+msgstr ""
+
+#: ArrowsCreator-0.4.py:331
+msgid ""
+"\n"
+"Your version read as %s . Should replace '%s' "
+msgstr ""
+
+#: ArrowsCreator-0.4.py:332
+msgid ""
+"with ArrowsCreator-0.2.2 or update GIMP if less than 3.\n"
+"If you want"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:333
+msgid " to try register it with GIMP anyway, click on Yes."
+msgstr ""
+
+#: ArrowsCreator-0.4.py:334
+msgid "What pygimp version?"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:354
+msgid ""
+"WARNING: your PDB version is '%s', so different from the pygimp one '%s'"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:355
+msgid " and a miss-match!"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:365
+msgid "ERROR: an 'arrows creator' instance is already running!"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:381 ArrowsModule.py:526 ArrowsModule.py:785
+#: ArrowsModule.py:804 ArrowsModule.py:868 ArrowsModule.py:1765
+msgid "AC_vectors"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:410
+msgid "AC buffer"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:413 ArrowsModule.py:518 ArrowsModule.py:628
+msgid "AC_group"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:417 ArrowsModule.py:1837
+msgid "AC_element"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:434
+msgid ""
+"MEASURING ARROW in %s: \n"
+"\n"
+" Nr    Size"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:435
+msgid "    Direction (clockwise +)\n"
+msgstr ""
+
+#: ArrowsCreator-0.4.py:447
+msgid "Draw interactive arrows based on a path with two anchors."
+msgstr ""
+
+#: ArrowsCreator-0.4.py:448
+msgid ""
+"\n"
+"From: "
+msgstr ""
+
+#: ArrowsModule.py:48
+msgid "No"
+msgstr ""
+
+#: ArrowsModule.py:48
+msgid "Yes"
+msgstr ""
+
+#: ArrowsModule.py:82
+msgid "<b>Element %d%s, arrow %d:</b> "
+msgstr ""
+
+#: ArrowsModule.py:85
+msgid "<b>Path installation</b>, arrow inactive: "
+msgstr ""
+
+#: ArrowsModule.py:96
+msgid "Angle of trailing edge (%s)\n"
+msgstr ""
+
+#: ArrowsModule.py:97
+msgid "from arrow direction"
+msgstr ""
+
+#: ArrowsModule.py:98
+msgid "Tail circle (radius, PX)\n"
+msgstr ""
+
+#: ArrowsModule.py:99
+msgid "Gradient in shaft\n"
+msgstr ""
+
+#: ArrowsModule.py:119
+msgid "AC group-layer"
+msgstr ""
+
+#: ArrowsModule.py:119
+msgid "image"
+msgstr ""
+
+#: ArrowsModule.py:119
+msgid "layer at least"
+msgstr ""
+
+#: ArrowsModule.py:120
+msgid "path at least"
+msgstr ""
+
+#: ArrowsModule.py:136
+msgid "ArrowsCreator-0.4"
+msgstr ""
+
+#: ArrowsModule.py:140
+msgid "Arrows plug-in for GIMP"
+msgstr ""
+
+#: ArrowsModule.py:182 ArrowsModule.py:443 ArrowsModule.py:451
+#: ArrowsModule.py:454 ArrowsModule.py:465 ArrowsModule.py:469
+#: ArrowsModule.py:645 ArrowsModule.py:1894
+msgid "AC_arrow #"
+msgstr ""
+
+#: ArrowsModule.py:195
+msgid "Arrowing size (PX)"
+msgstr ""
+
+#: ArrowsModule.py:198
+msgid "GIMP's pattern index: "
+msgstr ""
+
+#: ArrowsModule.py:199
+msgid ", causes a foreground colour-fill (default), The rest is for an active "
+msgstr ""
+
+#: ArrowsModule.py:200
+msgid "pattern-arrow-head-fill (GIMP keyboard 'Shift+Ctrl+P')."
+msgstr ""
+
+#: ArrowsModule.py:208
+msgid "distance from arrow point to side corner; arrow head "
+msgstr ""
+
+#: ArrowsModule.py:209
+msgid "side 0 means no head"
+msgstr ""
+
+#: ArrowsModule.py:213
+msgid "Arrowing angle (%s)"
+msgstr ""
+
+#: ArrowsModule.py:222
+msgid "angle of a head wing distance in relation"
+msgstr ""
+
+#: ArrowsModule.py:223
+msgid ""
+"\n"
+"to head direction"
+msgstr ""
+
+#: ArrowsModule.py:227
+msgid "Brush size (radius,PX)"
+msgstr ""
+
+#: ArrowsModule.py:230
+msgid "GIMP's brush here, it's about the arrow-shaft.\n"
+msgstr ""
+
+#: ArrowsModule.py:231
+msgid "Choose your brush with GIMP 'Shift+Ctrl+B'."
+msgstr ""
+
+#: ArrowsModule.py:240
+msgid "control the shaft thickness."
+msgstr ""
+
+#: ArrowsModule.py:244
+msgid "Gradient in shaft"
+msgstr ""
+
+#: ArrowsModule.py:246
+msgid "Tail circle (radius,PX)"
+msgstr ""
+
+#: ArrowsModule.py:257
+msgid "the adjustment purpose and prompt change according "
+msgstr ""
+
+#: ArrowsModule.py:258
+msgid "to the arrow state"
+msgstr ""
+
+#: ArrowsModule.py:267
+msgid "Assegai style"
+msgstr ""
+
+#: ArrowsModule.py:268
+msgid "Square cut shaft"
+msgstr ""
+
+#: ArrowsModule.py:269
+msgid "Measuring arrow"
+msgstr ""
+
+#: ArrowsModule.py:270
+msgid "Notched arrow"
+msgstr ""
+
+#: ArrowsModule.py:272
+msgid "Swept wings with disk joint"
+msgstr ""
+
+#: ArrowsModule.py:274
+msgid "Labelling arrow"
+msgstr ""
+
+#: ArrowsModule.py:275
+msgid "Stroke path and path head"
+msgstr ""
+
+#: ArrowsModule.py:288
+msgid "choice of arrow style"
+msgstr ""
+
+#: ArrowsModule.py:293
+msgid "Invert"
+msgstr ""
+
+#: ArrowsModule.py:296
+msgid "inverse arrow direction"
+msgstr ""
+
+#: ArrowsModule.py:301
+msgid "Redraw the above arrow"
+msgstr ""
+
+#: ArrowsModule.py:304
+msgid "After you finished dragging the path of an active arrow, "
+msgstr ""
+
+#: ArrowsModule.py:305
+msgid "or other GIMP changes and possibly before plug-in 'Next ...' buttons."
+msgstr ""
+
+#: ArrowsModule.py:311
+msgid "Status"
+msgstr ""
+
+#: ArrowsModule.py:328
+msgid "start, waiting for two anchors  "
+msgstr ""
+
+#: ArrowsModule.py:329
+msgid "OK, can edit arrow  "
+msgstr ""
+
+#: ArrowsModule.py:330
+msgid "open the path (try Back-Space)  "
+msgstr ""
+
+#: ArrowsModule.py:331
+msgid "select anchor left there + add one.\n"
+msgstr ""
+
+#: ArrowsModule.py:332
+msgid "OK if path re-appears "
+msgstr ""
+
+#: ArrowsModule.py:333
+msgid "move anchor to desired location "
+msgstr ""
+
+#: ArrowsModule.py:334
+msgid "anchor outside canvas! Drag it inside."
+msgstr ""
+
+#: ArrowsModule.py:335
+msgid "extra anchor(s) (try Back-Space)"
+msgstr ""
+
+#: ArrowsModule.py:336
+msgid "needs path tool selected        "
+msgstr ""
+
+#: ArrowsModule.py:337
+msgid "continue, needs a last anchor   "
+msgstr ""
+
+#: ArrowsModule.py:338
+msgid "no anchor left, put them back!  "
+msgstr ""
+
+#: ArrowsModule.py:340
+msgid "size proposed is for one character label.\n"
+msgstr ""
+
+#: ArrowsModule.py:341
+msgid "   For two subtract 15% or more."
+msgstr ""
+
+#: ArrowsModule.py:344
+msgid "ERROR on '%s', put an arrow on the layer\n"
+msgstr ""
+
+#: ArrowsModule.py:345
+msgid " '%s' and re-click button; or 'Close'!"
+msgstr ""
+
+#: ArrowsModule.py:346
+msgid "layer stoked, active layer is now empty."
+msgstr ""
+
+#: ArrowsModule.py:347
+msgid "style_2 don't depend on direction "
+msgstr ""
+
+#: ArrowsModule.py:348
+msgid "<b> Inactive, no wing...</b>"
+msgstr ""
+
+#: ArrowsModule.py:349
+msgid "<b>Max radius %s %.1f PX</b>"
+msgstr ""
+
+#: ArrowsModule.py:351
+msgid " (act.)"
+msgstr ""
+
+#: ArrowsModule.py:352
+msgid " (vir.)"
+msgstr ""
+
+#: ArrowsModule.py:353
+msgid " (emp.)"
+msgstr ""
+
+#: ArrowsModule.py:364
+msgid "Info and state of current operation.\n"
+msgstr ""
+
+#: ArrowsModule.py:365
+msgid "An element's asterisk indicates label possibility and parenthesis "
+msgstr ""
+
+#: ArrowsModule.py:366
+msgid ""
+"after arrow is for it's state.\n"
+"\n"
+"Previous is in arrow layer "
+msgstr ""
+
+#: ArrowsModule.py:367
+msgid "one less than above arrow (if element = 1)."
+msgstr ""
+
+#: ArrowsModule.py:374 ArrowsModule.py:1787
+msgid "Next element"
+msgstr ""
+
+#: ArrowsModule.py:377
+msgid "Preparation: before a click here, make an active arrow, "
+msgstr ""
+
+#: ArrowsModule.py:378
+msgid ""
+"and the label after a 'Next element' click for a labelling arrow, to your "
+msgstr ""
+
+#: ArrowsModule.py:379
+msgid "satisfaction. Top layer, under the AC_group, is the plug-in active one."
+msgstr ""
+
+#: ArrowsModule.py:380
+msgid ""
+"\n"
+"\n"
+"Action: if element>1 or label, then merge down the top layer and so"
+msgstr ""
+
+#: ArrowsModule.py:381
+msgid " stock it. Create a new top layer,"
+msgstr ""
+
+#: ArrowsModule.py:384 ArrowsModule.py:1785
+msgid "Next arrow"
+msgstr ""
+
+#: ArrowsModule.py:387
+msgid "Preparation: before a click here, make and work on the "
+msgstr ""
+
+#: ArrowsModule.py:388
+msgid "active arrow to your satisfaction, the click will make it inactive. "
+msgstr ""
+
+#: ArrowsModule.py:389
+msgid "No plug-in label possibility here."
+msgstr ""
+
+#: ArrowsModule.py:390
+msgid ""
+"\n"
+"\n"
+"Action: create a new active AC_arrow layer, the previous layer "
+msgstr ""
+
+#: ArrowsModule.py:391
+msgid "has the above arrow and so stock it."
+msgstr ""
+
+#: ArrowsModule.py:394
+msgid "Close"
+msgstr ""
+
+#: ArrowsModule.py:397
+msgid "Orderly way to exit for resuming with XCF file"
+msgstr ""
+
+#: ArrowsModule.py:422
+msgid "WARNING: installed path AC_vectors was not saved"
+msgstr ""
+
+#: ArrowsModule.py:423
+msgid ""
+" and is damaged!\n"
+"So no resuming."
+msgstr ""
+
+#: ArrowsModule.py:487
+msgid ""
+"\n"
+"The previous number of arrow layer(s) was %d ."
+msgstr ""
+
+#: ArrowsModule.py:515
+msgid ""
+"\n"
+"AC_group: started on "
+msgstr ""
+
+#: ArrowsModule.py:566
+msgid "Started on %s, with GIMP-%s and %s ."
+msgstr ""
+
+#: ArrowsModule.py:570
+msgid ""
+"\n"
+"The AC_group was empty, refreshing the parasite."
+msgstr ""
+
+#: ArrowsModule.py:576
+msgid ""
+" Since the image may have\n"
+"been resized "
+msgstr ""
+
+#: ArrowsModule.py:577
+msgid "by the plug-in if transparent at border; the previous"
+msgstr ""
+
+#: ArrowsModule.py:578
+msgid ""
+"\n"
+"arrow tail coordinates given may be temporary "
+msgstr ""
+
+#: ArrowsModule.py:579
+msgid "false in 'Status'."
+msgstr ""
+
+#: ArrowsModule.py:583
+msgid "  <b>Resuming:</b> with a previous path on "
+msgstr ""
+
+#: ArrowsModule.py:584
+msgid ""
+"; to see the\n"
+"anchors, <b>select path tool</b> in design mode. "
+msgstr ""
+
+#: ArrowsModule.py:586
+msgid ""
+"\n"
+"\n"
+" You should move those anchors <b>now</b> and for the rest of this session."
+msgstr ""
+
+#: ArrowsModule.py:606
+msgid ""
+"  <b>First start:</b> choose colours and <b>select path tool</b> in design "
+"mode; place now"
+msgstr ""
+
+#: ArrowsModule.py:607
+msgid ""
+"\n"
+"two path anchors (nodes) by clicking at future arrow tail and head on the "
+"canvas"
+msgstr ""
+
+#: ArrowsModule.py:608
+msgid ""
+"\n"
+"(avoid closing the path). An arrow should appear, then adjust values in this"
+msgstr ""
+
+#: ArrowsModule.py:609
+msgid ""
+"\n"
+"window. See, for more updated info, the <b>'Status'</b> frame below."
+msgstr ""
+
+#: ArrowsModule.py:610
+msgid ""
+"\n"
+"You should move those anchors for the rest of the session."
+msgstr ""
+
+#: ArrowsModule.py:611
+msgid ""
+"\n"
+"\n"
+" To change the active arrow colour(s), brush, stroke path, etc... after it's "
+"drawn: "
+msgstr ""
+
+#: ArrowsModule.py:612
+msgid ""
+"\n"
+"changes it in GIMP and then an arrow <b>redrawing</b>."
+msgstr ""
+
+#: ArrowsModule.py:617
+msgid "<b>Note:</b> '%s' is running and about to replace"
+msgstr ""
+
+#: ArrowsModule.py:618
+msgid " the whole existing 'AC_group'!"
+msgstr ""
+
+#: ArrowsModule.py:619
+msgid ""
+"\n"
+"Before clicking OK, you can save this file with GIMP."
+msgstr ""
+
+#: ArrowsModule.py:620
+msgid ""
+"\n"
+"After OK the plug-in window of 'First start' should appear."
+msgstr ""
+
+#: ArrowsModule.py:631
+msgid "Started on %s, with pygimp-%s and %s ."
+msgstr ""
+
+#: ArrowsModule.py:942
+msgid "<b>Element %d%s, arrow %d%s:</b> "
+msgstr ""
+
+#: ArrowsModule.py:955
+msgid ""
+"\n"
+"   So in '%s' what will it be?"
+msgstr ""
+
+#: ArrowsModule.py:960
+msgid "%.3fx , %.2f%s; was style %d at (%.1f, %.1f)px"
+msgstr ""
+
+#: ArrowsModule.py:965
+msgid "no previous in AC_layer #%d!"
+msgstr ""
+
+#: ArrowsModule.py:967
+msgid "no previous"
+msgstr ""
+
+#: ArrowsModule.py:970
+msgid ""
+"\n"
+"Relative to previous: "
+msgstr ""
+
+#: ArrowsModule.py:1064
+msgid "<b>Radius %s %.1f PX</b>"
+msgstr ""
+
+#: ArrowsModule.py:1074
+msgid "no shaft"
+msgstr ""
+
+#: ArrowsModule.py:1078
+msgid "no tail"
+msgstr ""
+
+#: ArrowsModule.py:1570
+msgid "layer to merge with"
+msgstr ""
+
+#: ArrowsModule.py:1617
+msgid "   Label for this Labelling arrow?"
+msgstr ""
+
+#: ArrowsModule.py:1619
+msgid ""
+"At this window opening, the font was <b>%s</b>: it affects the proposed "
+msgstr ""
+
+#: ArrowsModule.py:1620
+msgid "label size. For a label change read the next paragraph, "
+msgstr ""
+
+#: ArrowsModule.py:1621
+msgid "starting with <b>'If needed.'</b> ."
+msgstr ""
+
+#: ArrowsModule.py:1623
+msgid "The font is <b>%s</b> and the label number is %d."
+msgstr ""
+
+#: ArrowsModule.py:1625
+msgid ""
+"\n"
+"If you answer <b>Yes</b>, try to put a printable label at the centre of the "
+"tail circle"
+msgstr ""
+
+#: ArrowsModule.py:1626
+msgid ""
+" and passes to next arrow.\n"
+"If <b>No</b>, no label and produces a next element."
+msgstr ""
+
+#: ArrowsModule.py:1627
+msgid ""
+"\n"
+"\n"
+"If needed. Then open the <b>Text Tool</b> dialogue with left-click on the "
+"tool"
+msgstr ""
+
+#: ArrowsModule.py:1628
+msgid ""
+" followed by a left-click on the proposed char <b>'%s'</b>, this makes a "
+"text-option"
+msgstr ""
+
+#: ArrowsModule.py:1629default
+msgid ""
+" box on the image. The master text-options seems the one dock under the tool "
+"box, for"
+msgstr ""
+
+#: ArrowsModule.py:1630
+msgid " example, to change FG colour (the goal is to be consistent on all)."
+msgstr ""
+
+#: ArrowsModule.py:1631
+msgid ""
+"\n"
+"You select, tweak and keyboard the character(s) of the text layer, on GIMP "
+"at the centre of"
+msgstr ""
+
+#: ArrowsModule.py:1632
+msgid ""
+" the tail circle (move the text-layer with <b>Move Tool</b>, to check the "
+"fit)."
+msgstr ""
+
+#: ArrowsModule.py:1633
+msgid ""
+"\n"
+"An explanation of the label is optional, add automatically in a different "
+"text layer,"
+msgstr ""
+
+#: ArrowsModule.py:1634
+msgid ""
+" if it has the separator <b>' :'</b> after the label; the window focus is "
+"important."
+msgstr ""
+
+#: ArrowsModule.py:1635
+msgid ""
+"\n"
+"Finally re-select the <b>Path Tool</b> and click on the path."
+msgstr ""
+
+#: ArrowsModule.py:1670
+msgid "too long & no label"
+msgstr ""
+
+#: ArrowsModule.py:1673
+msgid "not printable"
+msgstr ""
+
+#: ArrowsModule.py:1677
+msgid "changed to non text\"defaul"
+msgstr ""
+
+#: ArrowsModule.py:1724
+msgid "ERROR in labelling element %d of AC_arrow #%d"
+msgstr ""
+
+#: ArrowsModule.py:1726
+msgid ""
+":\n"
+"the label was not accepted because the text-layer is '%s'!"
+msgstr ""
+
+#: ArrowsModule.py:1732
+msgid "unknown"
+msgstr ""
+
+#: ArrowsModule.py:1746
+msgid "ERROR: a missing %s is undermining this plug-in"
+msgstr ""
+
+#: ArrowsModule.py:1747
+msgid ""
+".\n"
+"It has been auto terminated!"
+msgstr ""
+
+#: ArrowsModule.py:1804 ArrowsModule.py:1862
+msgid "<b>stocking blocked</b> by an empty"
+msgstr ""
+
+#: ArrowsModule.py:1805 ArrowsModule.py:1863
+msgid "stocked the previous active "
+msgstr ""
+
+#: ArrowsModule.py:1807
+msgid "  <b>Next element:</b> this was the last action clicked and \"defaul"
+msgstr ""
+
+#: ArrowsModule.py:1808
+msgid ""
+"\n"
+"layer. Put many arrows or element in one layer by merging down. Also a "
+"chosen label is"
+msgstr ""
+
+#: ArrowsModule.py:1809
+msgid ""
+"\n"
+"possible for a labelling arrow but this close the previous AC_layer."
+msgstr ""
+
+#: ArrowsModule.py:1810
+msgid ""
+"\n"
+"\n"
+"  The GIMP grid or guide could be helpful to align many elements. N.B.: to"
+msgstr ""
+
+#: ArrowsModule.py:1811
+msgid ""
+"\n"
+"produce a curve path 'click+drag' when placing an anchor or on the path "
+"after."
+msgstr ""
+
+#: ArrowsModule.py:1812
+msgid ""
+"\n"
+"  <b>Warning:</b> keep initial image, don't remove 'AC_vectors' path or "
+"change arrow"
+msgstr ""
+
+#: ArrowsModule.py:1813
+msgid ""
+"\n"
+"or element layer (top under AC_group) while the plug-in is active."
+msgstr ""
+
+#: ArrowsModule.py:1865
+msgid "  <b>Next arrow:</b> this was the last action clicked and "
+msgstr ""
+
+#: ArrowsModule.py:1866
+msgid ""
+"\n"
+"layer. Before the drawing of the arrow, drag the anchors to the desired "
+"places."
+msgstr ""
+
+#: ArrowsModule.py:1867
+msgid ""
+"\n"
+"\n"
+"  If you mistakenly create a new anchor, erase it with 'Back Space'."
+msgstr ""
+
+#: ArrowsModule.py:1868
+msgid ""
+"\n"
+"To have two anchors selected: 'Shift+click' on the one not selected (solid "
+"dot"
+msgstr ""
+
+#: ArrowsModule.py:1869
+msgid ""
+"\n"
+"one) or click on the path; this permits a translation movement of the path "
+"when"
+msgstr ""
+
+#: ArrowsModule.py:1870
+msgid ""
+"\n"
+"you drag one anchor. One exits this state by 'Shift+click' on an anchor."
+msgstr ""

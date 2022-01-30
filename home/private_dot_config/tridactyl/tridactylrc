@@ -1,0 +1,21 @@
+" General Settings
+set configversion 1.7
+js tri.config.set("update", {"lastchecktime": 1564688835700})
+js tri.config.set("update", {"nag": true})
+js tri.config.set("update", {"nagwait": 7})
+js tri.config.set("update", {"lastnaggedversion": "1.14.0"})
+js tri.config.set("update", {"checkintervalsecs": 86400})
+set theme dark
+
+" Binds
+bind gnL tabopen https://github.com/tridactyl/tridactyl/pull/1080
+bind goL open https://github.com/tridactyl/tridactyl/pull/1080
+bind gwL winopen https://github.com/tridactyl/tridactyl/pull/1080
+
+bind / fillcmdline find
+bind ? fillcmdline find -?
+bind n findnext 1
+bind N findnext -1
+bind ,<Space> nohlsearch
+
+" vim: set filetype=vim:

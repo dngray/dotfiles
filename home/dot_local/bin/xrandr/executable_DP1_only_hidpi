@@ -1,0 +1,6 @@
+#!/bin/sh
+
+xrandr --output eDP1 --off \
+       --output DP1 --auto
+
+# ~/.fehbg

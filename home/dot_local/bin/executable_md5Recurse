@@ -1,0 +1,5 @@
+#!/bin/sh
+
+md5Recurse() { find . -type f \( -not -name "$1.txt" \) -exec md5sum '{}' \; > "$1.txt"; }
+
+md5Recurse "$1"

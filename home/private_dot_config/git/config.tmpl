@@ -1,0 +1,95 @@
+[advice]
+	pushNonFastForward = false
+	statusHints = false
+[alias]
+	a = add
+	ap = add -p
+	amc = am --continue
+	b = branch
+	bm = branch --merged
+	bnm = branch --no-merged
+	c = clone
+	ca = commit --amend
+	cane = commit --amend --no-edit
+	cf = commit --fixup
+	cm = commit --message
+	co = checkout
+	cob = checkout -b
+	com = checkout master
+	cp = cherry-pick
+	d = diff
+	dc = diff --cached
+	dom = diff origin/master
+	fo = fetch origin
+	g = grep --line-number
+	mbhom = merge-base HEAD origin/master
+	mff = merge --ff-only
+	ol = log --pretty=oneline
+	l = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	p = push
+	pf = push --force
+	prb = pull --rebase
+	r = restore
+	ra = rebase --abort
+	rc = rebase --continue
+	ri = rebase --interactive
+	rl = reflog
+	riom = rebase --interactive origin/master
+	rpo = remote prune origin
+	s = status -sb
+	ss = commit --message snapshot --no-gpg-sign
+	su = submodule update
+	wd = diff --patience --word-diff
+	# https://golang.org/doc/contribute.html
+	change = codereview change
+	gofmt = codereview gofmt
+	mail = codereview mail
+	pending = codereview pending
+	submit = codereview submit
+	sync = codereview sync
+	cu = !git commit --date=\"$(date --utc +%Y-%m-%dT%H:%M:%S%z)\"
+[color]
+	ui = auto
+[core]
+	editor = flatpak run io.neovim.nvim
+	excludesfile = ~/.config/git/ignore
+	whitespace = trailing-space,space-before-tab
+[diff]
+	algorithm = histogram
+	renamelimit = 8192
+	renames = copies
+[fetch]
+	fsckobjects = false
+	prune = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[gitget]
+	root = ~/src
+[init]
+	defaultBranch = "master"
+[pager]
+	branch = false
+	grep = false
+[push]
+	default = current
+[rebase]
+	autosquash = true
+	autostash = true
+[receive]
+	fsckobjects = true
+[status]
+	submoduleSummary = true
+[transfer]
+	fsckobjects = true
+[trim]
+	bases = master,gh-pages
+{{- if .personal }}
+{{    (vault (printf "kv/users/%s/gitconfig" .vaultid1)).data.data.gitconfig }}
+{{-   if .private -}}
+{{-     (vault (printf "kv/users/%s/gitconfig" .vaultid2)).data.data.gitconfig }}
+{{-   end }}
+{{- end }}
+{{/* vim: set filetype=gitconfig: */}}

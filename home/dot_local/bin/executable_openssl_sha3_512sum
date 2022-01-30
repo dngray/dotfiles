@@ -1,0 +1,3 @@
+#!/bin/sh
+
+openssl_sha3_512sum() { openssl dgst -sha3-512 -r "$@"; }

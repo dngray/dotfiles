@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# mpv over Tor
+# Put HTTPTunnelPort 8118 in torrc
+# ytdl doesn't support SOCKS so SOCKSPort 9050 will only work for curl
+# https://github.com/mpv-player/mpv/issues/3373
+
+mpvTor() { http_proxy=http://127.0.0.1:8118 \
+           mpv --http-proxy=http://127.0.0.1:8118 \
+           "$1"; }

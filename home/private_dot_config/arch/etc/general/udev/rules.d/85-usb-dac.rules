@@ -1,0 +1,2 @@
+# Set the USB headset as default sink/source when it is plugged in
+KERNEL=="controlC*", SUBSYSTEM=="sound", SUBSYSTEMS=="usb", ATTRS{idVendor}=="08bb", ATTRS{idProduct}=="2704", ACTION=="add", RUN+="/usr/local/bin/run-script-in-background /usr/local/bin/usb-dac-set-default"
