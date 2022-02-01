@@ -2,7 +2,12 @@
 
 ## Autostart Applications
 ### Polkit (to elevate user rights in GUI apps)
-exec /usr/bin/lxpolkit
+{{- if eq .chezmoi.osRelease.id "fedora" }}
+exec /usr/libexec/lxqt-policykit-agent
+{{- else if eq .chezmoi.osRelease.id "arch" "alpine" }}
+exec /usr/bin/lxqt-policykit-agent
+{{- end }}
+exec udiskie --no-automount  --tray
 
 # Network Manager widget
 exec "nm-applet --indicator"
@@ -12,5 +17,9 @@ exec gammastep
 exec inactive-windows-transparency.py -o 0.8
 exec mako --anchor bottom-right
 
+{{- if eq .chezmoi.osRelease.id "fedora" "arch" }}
 ## Import DISPLAY variable to systemd/dbus env - needed to fix Flatpak app issues with Firefox not opening up when links are being clicked
 exec "dbus-update-activation-environment --systemd DISPLAY MOZ_DBUS_REMOTE MOZ_ENABLE_WAYLAND; systemctl --user start sway-session.target"
+{{- else if eq .chezmoi.osRelease.id "alpine" }}
+exec pipewire
+{{- end }}

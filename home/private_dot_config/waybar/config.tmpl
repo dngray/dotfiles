@@ -162,8 +162,10 @@
         "hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
         //"hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:18.3/hwmon",
         //"input-filename": "temp1_input",
-    {{- else if eq .cpu "intel" }}
+    {{- else if and (eq .cpu "intel") (eq .chezmoi.osRelease.id "fedora") }}
         "hwmon-path": "/sys/devices/platform/coretemp.0/hwmon/hwmon9/temp1_input",
+    {{- else if and (eq .cpu "intel") (eq .chezmoi.osRelease.id "alpine") }}
+        "hwmon-path": "/sys/devices/platform/coretemp.0/hwmon/hwmon3/temp1_input",
     {{- end }}
         "critical-threshold": 80,
         "format-critical": "{icon} {temperatureC}°C",

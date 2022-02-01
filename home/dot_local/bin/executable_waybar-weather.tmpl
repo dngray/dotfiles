@@ -1,3 +1,4 @@
+{{ if not .headless }}
 #!/bin/sh
 
 location='{{ .shortplace }}'
@@ -10,3 +11,4 @@ pressure=$($base_cmd $base_url~$location?format="Pressure:+%P")
 moonphase=$($base_cmd $base_url~$location?format="Moonphase:+%m")
 sunset=$($base_cmd $base_url~$location?format="Dusk:+%s")
 echo '{"text": "'$temp'","tooltip": "'$humidity\\n$wind\\n$pressure\\n$moonphase\\n$sunset'"}'
+{{- end }}

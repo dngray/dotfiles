@@ -27,11 +27,11 @@ alias activeUnits='systemctl list-units --type=service --state=active'
 alias fv='flatpak run io.neovim.nvim'
 alias mpv='flatpak run io.mpv.Mpv'
 alias firefox='flatpak run org.mozilla.firefox'
-{{- if (eq .chezmoi.username "1") }}
-alias yubiUnlock="gpg-connect-agent 'scd checkpin 1' /bye"
-{{- else if (eq .chezmoi.username "2") }}
-alias yubiUnlock="gpg-connect-agent 'scd checkpin 2' /bye"
+{{- if eq .chezmoi.osRelease.id "alpine" }}
+alias sudo='doas'
 {{- end }}
+alias yubiUnlock="gpg-connect-agent 'scd checkpin {{ (vault (printf "kv/users/%s/yubikey" .vaultid1)).data.data.serial }}' /bye"
+
 {{ if or (eq .private true) (eq .currvaultid "1001") }}
 # RDP
 {{-   $rdp := index (vault (printf "kv/users/%s/rdp" .currvaultid)).data.data.rdp -}}
@@ -44,12 +44,4 @@ alias {{ .name }}='xfreerdp /u:{{ .username }} /v:{{.ip }} /dynamic-resolution'
 {{-   range $smb }}
 alias smb{{ .name }}='smbclient //{{ .address }}/{{ .username }}'
 {{-   end }}
-
-# Containers
-{{- $containers := "" }}
-{{- $containers = index (vault (printf "kv/users/%s/containers" .currvaultid)).data.data.containers }}
-{{- range $containers }}
-alias open{{ .CmdAlias }}="sudo cryptsetup luksOpen {{ .Location }}/{{ .DmName }} {{ .DmName }}; sudo mount -t {{ .FsType }} /dev/mapper/{{ .DmName }} {{ .MountPoint }}/{{ .DmName }}"
-alias close{{ .CmdAlias }}="sudo umount {{ .MountPoint }}/{{ .DmName }}; sudo cryptsetup luksClose {{ .DmName }}"
-{{- end }}
 {{- end }}

@@ -1,4 +1,4 @@
-#	$OpenBSD: ssh_config,v 1.33 2017/05/07 23:12:57 djm Exp $
+#	$OpenBSD: ssh_config,v 1.35 2020/07/17 03:43:42 dtucker Exp $
 
 # This is the ssh client system-wide configuration file.  See
 # ssh_config(5) for more information.  This file provides defaults for
@@ -13,39 +13,43 @@
 # Thus, host-specific definitions should be at the beginning of the
 # configuration file, and defaults at the end.
 
-# Site-specific key exchange algorithms. This is here so that if you're
-# having trouble logging into a server, you can modify and uncomment the
-# lines below and be on the way to getting work done.
-
-{{ (vault (printf "kv/users/%s/ssh_hosts" .currvaultid)).data.data.ssh_hosts }}
-
 # Site-wide defaults for some commonly used options.  For a comprehensive
 # list of available options, their meanings and defaults, please see the
 # ssh_config(5) man page.
 
 Host *
-   ForwardAgent no
-   ForwardX11 no
-   PasswordAuthentication no
-   PubkeyAuthentication yes
-   HostbasedAuthentication no
-   GSSAPIAuthentication no
-   GSSAPIDelegateCredentials no
-   BatchMode no
-   CheckHostIP yes
-   AddressFamily any
-   ConnectTimeout 0
-   StrictHostKeyChecking ask
-   Port 22
-   Protocol 2
-   Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
-   KexAlgorithms curve25519-sha256@libssh.org
-   HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa
-   MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com
-   EscapeChar ~
-   Tunnel no
-   TunnelDevice any:any
-   PermitLocalCommand no
-   VisualHostKey no
-   RekeyLimit 1G 1h
-   UseRoaming no
+  ForwardAgent no
+  ForwardX11 no
+  ForwardX11Trusted no
+  PasswordAuthentication no
+  KbdInteractiveAuthentication no
+  HostbasedAuthentication no
+  PubkeyAuthentication yes
+  GSSAPIAuthentication no
+  GSSAPIDelegateCredentials no
+  BatchMode no
+  CheckHostIP yes
+  AddressFamily any
+  ConnectTimeout 0
+  StrictHostKeyChecking ask
+  UpdateHostKeys ask
+  IdentitiesOnly yes
+  Port 22
+  Protocol 2
+  Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
+  MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
+  KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org
+  HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-ed25519,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-512,rsa-sha2-256-cert-v01@openssh.com,rsa-sha2-256
+  EscapeChar ~
+  Tunnel no
+  TunnelDevice any:any
+  PermitLocalCommand no
+  VisualHostKey yes
+  HashKnownHosts yes
+  # ProxyCommand ssh -q -W %h:%p gateway.example.com
+  RekeyLimit 1G 1h
+  UserKnownHostsFile ~/.ssh/known_hosts.d/%k
+  UseRoaming no
+  PubkeyAcceptedKeyTypes sk-ssh-ed25519@openssh.com,ssh-ed25519
+
+{{ (vault (printf "kv/users/%s/ssh_hosts" .currvaultid)).data.data.ssh_hosts }}

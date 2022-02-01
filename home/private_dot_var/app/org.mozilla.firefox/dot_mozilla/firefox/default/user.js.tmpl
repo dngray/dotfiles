@@ -1,1 +1,3 @@
+{{- if not .headless }}
 {{- template "firefox/arkenfox/user.js" . -}}
+{{- end }}

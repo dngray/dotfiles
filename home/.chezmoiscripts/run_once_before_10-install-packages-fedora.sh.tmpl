@@ -1,0 +1,26 @@
+{{- if (eq .chezmoi.osRelease.id "fedora") -}}
+{{-   if (eq .chezmoi.osRelease.variant "Silverblue")  -}}
+#!/bin/bash
+
+set -eufo pipefail
+
+{{ $rpmOStree := list
+     "fish"
+     "gammastep"
+     "lxqt-policykit"
+     "mako"
+     "network-manager-applet"
+     "pulseaudio-utils"
+     "python-i3ipc"
+     "sshfs"
+     "sway"
+     "syncthing"
+     "udiskie"
+     "vault"
+     "waybar" -}}
+
+{{-     if (vault (printf "kv/users/%s/packages" .vaultid1)).data.data.rpmostree }}
+rpm-ostree install {{ $rpmOStree | join " " }}
+{{-     end }}
+{{-   end }}
+{{- end }}

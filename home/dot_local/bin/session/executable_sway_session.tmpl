@@ -11,19 +11,28 @@ export MOZ_ENABLE_WAYLAND=1
 export QT_QPA_PLATFORMTHEME=qt5ct
 export QT_QPA_PLATFORM=wayland-egl
 export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+export XDG_CURRENT_DESKTOP=sway
 
+{{- if eq .chezmoi.osRelease.id "fedora" "arch" -}}
 # Start DBUS
 dbus-update-activation-environment --systemd DISPLAY
+{{- end }}
 
 # Start Gnome Keyring
 #eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
 eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets) # Let ssh be managed by pinentry
 
+{{- if .x11 }}
 if grep -Fxq "Xft.dpi: 220" ~/.Xresources
 then
     sed -i 's/Xft.dpi: 220/Xft.dpi: 96/g' ~/.Xresources
 else
     echo "DPI is already 96"
 fi
+{{- end }}
 
+{{- if eq .chezmoi.osRelease.id "fedora" "arch" }}
 exec sway
+{{- else if eq .chezmoi.osRelease.id "alpine" }}
+dbus-run-session sway
+{{- end }}

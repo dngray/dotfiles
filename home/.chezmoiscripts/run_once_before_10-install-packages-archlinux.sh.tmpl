@@ -12,9 +12,9 @@ set -eufo pipefail
      "apparmor"
      "aspell"
      "aspell-en"
+     "base-devel"
      "bash-completion"
      "bc"
-     "base-devel"
      "bind-tools"
      "bleachbit"
      "bluez-utils"
@@ -62,6 +62,7 @@ set -eufo pipefail
      "lsb-release"
      "lsof"
      "lvm2"
+     "lxqt-policykit"
      "man"
      "man-pages"
      "mc"
@@ -90,7 +91,6 @@ set -eufo pipefail
      "perl-image-exiftool"
      "pipewire"
      "pipewire-pulse"
-     "polkit-gnome"
      "pwgen"
      "python-jedi"
      "python-keyring"
@@ -224,7 +224,7 @@ set -eufo pipefail
      "dracut-git"
      "dracut-hook-uefi" -}}
 
-{{- if (vault (printf "kv/users/%s/runPM" .vaultid1)).data.data.runPacman }}
+{{- if (vault (printf "kv/users/%s/packages" .vaultid1)).data.data.pacman }}
 sudo pacman -Syu -<<EOF
 {{    range ($pacman | sortAlpha | uniq) -}}
 {{ . }}
@@ -232,7 +232,7 @@ sudo pacman -Syu -<<EOF
 EOF
 {{- end }}
 
-{{- if (vault (printf "kv/users/%s/runPM" .vaultid1)).data.data.runYay }}
+{{- if (vault (printf "kv/users/%s/packages" .vaultid1)).data.data.yay }}
 yay -Syu -<<EOF
 {{   range ($yay | sortAlpha | uniq) -}}
 {{ . }}

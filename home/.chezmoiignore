@@ -57,20 +57,24 @@
 .config/qutebrowser
 .config/termite/config
 .config/tridactyl/tridactylrc
-{{- end }}
+.var/app/**
+.mozilla/**
+.conkyrc
 
-{{- if ne .chezmoi.osRelease.id "arch" -}}
-{{-   if not .headless }}
+{{-   if (ne .chezmoi.osRelease.id "alpine") }}
+.config/alpine/**
+.config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml
+{{-   end }}
+
+{{-   if (ne .chezmoi.osRelease.id "arch") }}
 .config/arch/**
 .config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml
-{{-  end }}
-{{- end }}
+{{-   end }}
 
-{{- if ne .chezmoi.osRelease.id "fedora" -}}
-{{-   if not .headless }}
+{{-   if (ne .chezmoi.osRelease.id "fedora") }}
 .config/fedora/**
 .config/environment.d/*
-{{-  end }}
+{{-   end }}
 {{- end }}
 
 {{ if ne .chezmoi.os "windows" }}

@@ -1,3 +1,5 @@
+{{ if not .headless -}}
+
 #!/usr/bin/env bash
 
 CHEZMOI_ROOT="$XDG_DATA_HOME/chezmoi/home"
@@ -64,3 +66,5 @@ update_profile "$ARKENFOX_DIR" "$ARKENFOX_DIR_NAME"
 update_profile "$ARKENFOX_NO_RFP_DIR" "$ARKENFOX_NO_RFP_DIR_NAME"
 update_profile "$DIRECT_DIR" "$DIRECT_DIR_NAME"
 update_profile "$DIRECT_NO_RFP_DIR" "$DIRECT_NO_RFP_DIR_NAME"
+
+{{- end }}

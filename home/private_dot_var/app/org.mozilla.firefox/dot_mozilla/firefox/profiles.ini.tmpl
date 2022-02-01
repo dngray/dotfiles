@@ -1,3 +1,4 @@
+{{- if not .headless }}
 {{- /* Final profile paths for each installation version */ -}}
 {{- $defaultPath := "default" -}}
 {{- $directPath := "direct" -}}
@@ -49,3 +50,4 @@ Path={{- $noRFPpath }}
 [Install{{- $releaseId -}}]
 Default={{- $defaultPath }}
 Locked=1
+{{- end }}
