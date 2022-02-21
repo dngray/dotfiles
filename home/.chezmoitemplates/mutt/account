@@ -5,7 +5,7 @@
 set realname = "{{ $user.realName }}"
 set from = "{{ (index ($aliases) 0) }}"
 set hostname={{ $user.hostname }}
-set my_sendmail_h="$HOME/.local/bin/scripts/mutt/sendmail {{ $user.accountName }}"
+set my_sendmail_h="$HOME/.local/bin/sendmail {{ $user.accountName }}"
 set my_sendmail_p="msmtp -a {{ $user.accountName }}"
 set my_signature_p = $XDG_CONFIG_HOME/mutt/signatures/acc{{ .accNum }}.signature
 set my_signature_h = $XDG_CONFIG_HOME/mutt/signatures/acc{{ .accNum }}_html.signature
@@ -21,12 +21,11 @@ set pgp_self_encrypt = yes
 set pgp_default_key = {{ $user.keyID }}
 {{- end }}
 
-unbind index,pager r
-unbind index,pager m
-macro index,pager rp '<enter-command>set sendmail="$my_sendmail_p"<enter><enter-command>set signature="$my_signature_p"<enter><enter-command>set sig_dashes = yes<enter><<reply>'
-macro index,pager rh '<enter-command>set sendmail="$my_sendmail_h"<enter><enter-command>set signature="$my_signature_h"<enter><enter-command>set sig_dashes = no<enter><reply>'
-macro index,pager mp '<enter-command>set sendmail="$my_sendmail_p"<enter><enter-command>set signature="$my_signature_p"<enter><enter-command>set sig_dashes = yes<enter><<mail>'
-macro index,pager mh '<enter-command>set sendmail="$my_sendmail_h"<enter><enter-command>set signature="$my_signature_h"<enter><enter-command>set sig_dashes = no<enter><mail>'
+unbind index,pager h
+macro index,pager r '<enter-command>set sendmail="$my_sendmail_p"<enter><enter-command>set signature="$my_signature_p"<enter><enter-command>set sig_dashes = yes<enter><reply>'
+macro index,pager hr '<enter-command>set sendmail="$my_sendmail_h"<enter><enter-command>set signature="$my_signature_h"<enter><enter-command>set sig_dashes = no<enter><reply>'
+macro index,pager m '<enter-command>set sendmail="$my_sendmail_p"<enter><enter-command>set signature="$my_signature_p"<enter><enter-command>set sig_dashes = yes<enter><mail>'
+macro index,pager hm '<enter-command>set sendmail="$my_sendmail_h"<enter><enter-command>set signature="$my_signature_h"<enter><enter-command>set sig_dashes = no<enter><mail>'
 
 bind index,pager gg noop
 bind index,pager g noop

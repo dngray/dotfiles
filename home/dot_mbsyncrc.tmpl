@@ -62,4 +62,36 @@ SyncState *
 MaxMessages 0
 # End profile
 {{- end -}}
+
+{{- $secondary := index (vault (printf "kv/users/%s/mail" .vaultid2)).data.data.mail 1 }}
+{{- if (eq $secondary.enabled true) }}
+
+IMAPStore {{ $secondary.accountName }}-remote
+Host {{ $secondary.imapHost }}
+Port  {{ $secondary.imapPort }}
+User {{ $secondary.username }}
+PassCmd "pass {{ $secondary.accountName }}"
+SSLType IMAPS
+{{- if (eq .chezmoi.osRelease.id "debian" "ubuntu") }}
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+{{- else }}
+CertificateFile /etc/pki/tls/certs/ca-bundle.crt
+{{- end }}
+
+MaildirStore {{ $secondary.accountName }}-local
+Subfolders Verbatim
+Path ~/.local/share/mail/{{ $secondary.accountName }}/
+Inbox ~/.local/share/mail/{{ $secondary.accountName }}/INBOX
+Flatten .
+
+Channel {{ $secondary.accountName }}
+Expunge Both
+Far :{{ $secondary.accountName }}-remote:
+Near :{{ $secondary.accountName }}-local:
+Patterns * !"[Gmail]/All Mail"
+Create Both
+SyncState *
+MaxMessages 0
+# End profile
+{{- end -}}
 {{- end -}}
