@@ -11,13 +11,8 @@ export XDG_DATA_HOME="$HOME/.local/share"
 ## https://medium.com/@sidneyliebrand/how-fzf-and-ripgrep-improved-my-workflow-61c7ca212861
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
 
-if [[ "$(hostname)" = "toolbox" ]] ; then
-    export EDITOR='/usr/bin/nvim'
-    export SVN_EDITOR='/usr/bin/nvim'
-else
-    export EDITOR='flatpak run io.neovim.nvim'
-    export SVN_EDITOR='flatpak run io.neovim.nvim'
-fi
+export EDITOR='nvim'
+export SVN_EDITOR='nvim'
 
 set -o vi
 eval "$(dircolors ~/.config/dircolors-solarized/dircolors.256dark)"

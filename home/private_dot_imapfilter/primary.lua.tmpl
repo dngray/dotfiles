@@ -18,7 +18,7 @@ function main ()
     -- Accounts
 {{ if .personal }}
 {{-  if eq .currvaultid .vaultid1 }}
-{{-     (vault (printf "kv/users/%s/imapfilter_primary" .vaultid1)).data.data.imapfilter }}
+{{-     (vault (printf "kv/users/%s/imapfilter_primary" .vaultid1)).data.data.imapfilter_primary }}
 {{-  end }}
 {{- end }}
     -- Debug to view underlying mailbox structure

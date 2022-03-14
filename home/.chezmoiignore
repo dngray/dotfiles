@@ -47,7 +47,7 @@
 .xinitrc
 {{- end }}
 
-{{- if not .headless }}
+{{- if .headless }}
 .config/Element/**
 .config/GIMP/**
 .config/gtk-2.0/*

@@ -13,13 +13,8 @@ set -gx XDG_DATA_HOME $HOME/.local/share
 set -gx FZF_DEFAULT_COMMAND "rg --files --no-ignore-vcs --hidden"
 
 ## Default editor
-if test $hostname = "toolbox"
-    set -gx EDITOR "/usr/bin/nvim"
-    set -gx SVN_EDITOR "/usr/bin/nvim"
-else
-    set -gx EDITOR "flatpak run io.neovim.nvim"
-    set -gx SVN_EDITOR "flatpak run io.neovim.nvim"
-end
+set -gx EDITOR "nvim"
+set -gx SVN_EDITOR "nvim"
 
 set -gx MC_SKIN "$XDG_CONFIG_HOME/selenized/other-apps/mc/selenized.ini"
 set -gx TERM xterm-256color

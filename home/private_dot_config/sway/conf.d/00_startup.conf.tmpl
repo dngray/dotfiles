@@ -16,6 +16,7 @@ exec "nm-applet --indicator"
 exec gammastep
 exec inactive-windows-transparency.py -o 0.8
 exec mako --anchor bottom-right
+exec "foot --server"
 
 {{- if eq .chezmoi.osRelease.id "fedora" "arch" }}
 ## Import DISPLAY variable to systemd/dbus env - needed to fix Flatpak app issues with Firefox not opening up when links are being clicked

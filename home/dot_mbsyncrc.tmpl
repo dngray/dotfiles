@@ -5,7 +5,7 @@ IMAPStore {{ $primary.accountName }}-remote
 Host {{ $primary.imapHost }}
 Port  {{ $primary.imapPort }}
 User {{ $primary.username }}
-PassCmd "pass {{ $primary.accountName }}"
+PassCmd "gopass -o {{ $primary.accountName }}"
 SSLType IMAPS
 {{- if (eq .chezmoi.osRelease.id "debian" "ubuntu") }}
 CertificateFile /etc/ssl/certs/ca-certificates.crt
@@ -38,7 +38,7 @@ IMAPStore {{ $secondary.accountName }}-remote
 Host {{ $secondary.imapHost }}
 Port  {{ $secondary.imapPort }}
 User {{ $secondary.username }}
-PassCmd "pass {{ $secondary.accountName }}"
+PassCmd "gopass -o {{ $secondary.accountName }}"
 SSLType IMAPS
 {{- if (eq .chezmoi.osRelease.id "debian" "ubuntu") }}
 CertificateFile /etc/ssl/certs/ca-certificates.crt
@@ -70,7 +70,7 @@ IMAPStore {{ $secondary.accountName }}-remote
 Host {{ $secondary.imapHost }}
 Port  {{ $secondary.imapPort }}
 User {{ $secondary.username }}
-PassCmd "pass {{ $secondary.accountName }}"
+PassCmd "gopass -o {{ $secondary.accountName }}"
 SSLType IMAPS
 {{- if (eq .chezmoi.osRelease.id "debian" "ubuntu") }}
 CertificateFile /etc/ssl/certs/ca-certificates.crt

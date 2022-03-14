@@ -2,8 +2,14 @@
   "coc.preferences.snippets.enable": false,
   "coc.preferences.currentFunctionSymbolAutoUpdate": true,
   "diagnostic.displayByAle": true,
+  "diagnostic.checkCurrentLine": true,
   "suggest.enablePreview": true,
   "suggest.noselect": false,
+  "markdownlint.config": {
+    "default": true,
+    "line-length": false,
+    "markdownlint.onSave": true
+  },
   "snippets.ultisnips.directories": [
     "UltiSnips",
     "gosnippets/UltiSnips"

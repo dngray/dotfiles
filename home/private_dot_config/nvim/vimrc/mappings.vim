@@ -25,4 +25,13 @@ nmap <C-p> <Plug>MarkdownPreviewToggle
 
 " }}}
 
+" Coc.vim {{{
+map <leader>cld :CocList diagnostics<CR>
+map <leader>a :CocAction<CR>
+map <leader>fa :CocCommand markdownlint.fixAll<CR>
+" }}}
+
+" Show file manager
+map <C-p> :FZF<CR>
+
 " vim:foldmethod=marker:foldlevel=0

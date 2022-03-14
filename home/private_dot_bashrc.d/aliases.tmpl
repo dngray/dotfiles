@@ -24,12 +24,8 @@ alias fc-list-family='fc-list :outline -f "%{family}\n"'
 alias enabledUnits='systemctl list-unit-files --state=enabled'
 alias runningUnits='systemctl list-units --type=service --state=running'
 alias activeUnits='systemctl list-units --type=service --state=active'
-alias fv='flatpak run io.neovim.nvim'
 alias mpv='flatpak run io.mpv.Mpv'
 alias firefox='flatpak run org.mozilla.firefox'
-{{- if eq .chezmoi.osRelease.id "alpine" }}
-alias sudo='doas'
-{{- end }}
 alias yubiUnlock="gpg-connect-agent 'scd checkpin {{ (vault (printf "kv/users/%s/yubikey" .vaultid1)).data.data.serial }}' /bye"
 
 {{ if or (eq .private true) (eq .currvaultid "1001") }}

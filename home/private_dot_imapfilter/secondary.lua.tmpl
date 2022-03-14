@@ -18,7 +18,7 @@ function main ()
     -- Accounts
 {{ if .private }}
 {{-  if .vaultid2 }}
-{{-     (vault (printf "kv/users/%s/imapfilter_secondary" .vaultid2)).data.data.imapfilter }}
+{{-     (vault (printf "kv/users/%s/imapfilter_secondary" .vaultid2)).data.data.imapfilter_secondary }}
 {{-  end }}
 {{- end }}
 
