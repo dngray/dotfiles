@@ -47,7 +47,7 @@
 .xinitrc
 {{- end }}
 
-{{- if not .headless }}
+{{- if .headless }}
 .config/Element/**
 .config/GIMP/**
 .config/gtk-2.0/*
@@ -61,19 +61,31 @@
 .mozilla/**
 .conkyrc
 
-{{-   if (ne .chezmoi.osRelease.id "alpine") }}
+{{- if (ne .chezmoi.osRelease.id "alpine") }}
 .config/alpine/**
 .config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml
-{{-   end }}
+{{- end }}
 
-{{-   if (ne .chezmoi.osRelease.id "arch") }}
+{{- if (ne .chezmoi.osRelease.id "arch") }}
 .config/arch/**
 .config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml
+
+{{-   if (ne .chezmoi.fqdnHostname "den.home.arpa") }}
+.config/arch/etc/lxc/default.conf
+.config/arch/etc/modprobe.d/bonding.conf
+.config/arch/etc/modules-load.d/zfs.conf
+.config/arch/etc/security/limits.conf
+.config/arch/etc/subgid
+.config/arch/etc/subuid
+.config/arch/etc/sysctl.d/90-lxd-override.conf
+.config/arch/etc/systemd/network/*
 {{-   end }}
+{{- end }}
 
 {{-   if (ne .chezmoi.osRelease.id "fedora") }}
 .config/fedora/**
 .config/environment.d/*
+.bashrc.d/toolbox
 {{-   end }}
 {{- end }}
 

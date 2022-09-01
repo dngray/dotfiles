@@ -1,4 +1,4 @@
-{{- $user := index (vault (printf "kv/users/%s/notmuch" .currvaultid)).data.data.notmuch .accIdx }}
+{{- $user := index (vault (printf "kv/users/%s/notmuch" .currVaultID)).data.data.notmuch .accIdx }}
 # .notmuch-config - Configuration file for the notmuch mail system
 #
 # For more information about notmuch, see https://notmuchmail.org

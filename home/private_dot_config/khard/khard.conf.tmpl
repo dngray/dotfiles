@@ -1,4 +1,4 @@
-{{- $primary := index (vault (printf "kv/users/%s/mail" .vaultid1)).data.data.mail 0 -}}
+{{- $primary := index (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail 0 -}}
 # example configuration file for khard version > 0.14.0
 # place it under ~/.config/khard/khard.conf
 
@@ -7,7 +7,7 @@
 path = ~/.local/vdirsyncer/contacts/{{ $primary.calendarID }}
 [[Local]]
 {{-  if .private -}}
-{{- $secondary := index (vault (printf "kv/users/%s/mail" .vaultid2)).data.data.mail 0 }}
+{{- $secondary := index (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.mail 0 }}
 path = ~/.local/khard/contacts/{{ $secondary.accountName }}
 {{-  end }}
 [general]

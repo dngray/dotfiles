@@ -3,7 +3,7 @@
 
 # toolbox customisation
 ## toolbox path customisation
-if [[ "$(hostname)" = "toolbox" ]] ; then
+if [[ "$(cat /proc/sys/kernel/hostname)" = "toolbox" ]] ; then
     PATH=$(echo $PATH | sed -e 's;:\?/var/lib/flatpak/exports/bin;;' -e 's;/var/lib/flatpak/exports/bin:\?;;')
     pathmunge $HOME/.local/toolbox/bin after
     export TERM=xterm-256color

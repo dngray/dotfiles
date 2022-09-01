@@ -17,6 +17,8 @@
 # list of available options, their meanings and defaults, please see the
 # ssh_config(5) man page.
 
+{{ (vault (printf "kv/users/%s/ssh_hosts" .currVaultID)).data.data.ssh_hosts }}
+
 Host *
   ForwardAgent no
   ForwardX11 no
@@ -50,5 +52,3 @@ Host *
   UserKnownHostsFile ~/.ssh/known_hosts.d/%k
   UseRoaming no
   PubkeyAcceptedKeyTypes sk-ssh-ed25519@openssh.com,ssh-ed25519
-
-{{ (vault (printf "kv/users/%s/ssh_hosts" .currvaultid)).data.data.ssh_hosts }}

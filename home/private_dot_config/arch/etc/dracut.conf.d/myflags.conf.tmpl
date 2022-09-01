@@ -1,0 +1,24 @@
+{{- if (eq .chezmoi.osRelease.id "arch") }}
+# /etc/dracut.d/myflags.conf
+rd.vconsole.font=ter-120n
+rd.info
+{{-   if .lvm }}
+rd.lvm=1
+rd.lvm.vg={{ .chezmoi.hostname }}VG
+rd.lvm.lv={{ .chezmoi.hostname }}VG/root
+rd.luks.uuid={{ .lvmuuid }}
+root=/dev/{{ .chezmoi.hostname }}VG/root
+resume=/dev/{{ .chezmoi.hostname }}VG/swap
+{{-   else }}
+root=UUID={{ .rootuuid }}
+{{-  end }}
+rootflags=subvol=@
+{{-   if .tpm }}
+rd.luks.options={{ .rootuuid }}=tpm2-device=auto,discard
+{{-   else }}
+rd.luks.options=discard
+{{-  end }}
+mem_encrypt=off
+apparmor=1
+security=apparmor
+{{- end }}

@@ -9,7 +9,9 @@
 {{- $private := false -}}
 {{- $v_available := (output "sh" "-c" "ping -c 1 vault.den.home.arpa > /dev/null && printf true || printf false") }}
 {{- $dpi := 96 -}}
-{{- $lvmuuid := (output "sh" "-c" "lsblk -o FSTYPE,UUID | awk '/^crypto_LUKS/ { printf $NF; exit }'") -}}
+{{- $tpm := false }}
+{{- $lvm := false }}
+{{- $luksuuid := (output "sh" "-c" "lsblk -o FSTYPE,UUID | awk '/^crypto_LUKS/ { printf $NF; exit }'") -}}
 {{- $rootuuid := (output "sh" "-c" "findmnt / -nro UUID | tr -d '\n'" ) -}}
 {{- $espuuid := (output "sh" "-c" "findmnt /boot -o UUID -nr | tr -d '\n'" ) -}}
 {{- $swapuuid := (output "sh" "-c" "lsblk -o FSTYPE,UUID | awk '/^swap/ { printf $NF; exit }'") -}}
@@ -22,6 +24,7 @@
 {{- $place := "" -}}
 {{- $shortPlace := "" -}}
 {{- $hostname := .chezmoi.hostname -}}
+{{- $fqdnHostname := .chezmoi.fqdnHostname -}}
 
 {{/* detect GitHub codespaces, VSCode remote containers, Docker containers, and Vagrant boxes */}}
 {{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS_IPC") (eq .chezmoi.username "root" "vagrant" "vscode") -}}
@@ -41,7 +44,12 @@
 {{-     $headless = false -}}
 {{-     $wayland = true -}}
 {{-     $personal = true -}}
-{{-   else if (eq $hostname "den") -}}
+{{-     $lvm = false -}}
+{{-     $tpm = true -}}
+{{-     if (eq $hostname "snowfield") -}}
+{{-       $tpm = false -}}
+{{-     end -}}
+{{-   else if (eq $fqdnHostname "den.home.arpa") -}}
 {{-     $headless = true -}}
 {{-     $wayland = false -}}
 {{-     $personal = true -}}
@@ -80,12 +88,12 @@
 {{-       $vaultID2 = "1002" -}}
 {{-       $mutt = true -}}
 {{-       $currVaultID = $vaultID2 -}}
-{{-     else if and (eq $hostname "den") (eq .chezmoi.username "1") -}}
+{{-     else if and (eq $fqdnHostname "den.home.arpa") (eq .chezmoi.username "1") -}}
 {{-       $vaultID1 = "1000" -}}
 {{-       $vaultID2 = "1002" -}}
 {{-       $mutt = true -}}
 {{-       $currVaultID = $vaultID2 -}}
-{{-     else if and (eq $hostname "den") (eq .chezmoi.username "2") -}}
+{{-     else if and (eq $fqdnHostname "den.home.arpa") (eq .chezmoi.username "2") -}}
 {{-       $vaultID1 = "1001" -}}
 {{-       $currVaultID = $vaultID1 -}}
 {{-       $mutt = false -}}
@@ -105,7 +113,7 @@
   ephemeral = {{ $ephemeral }}
   personal = {{ $personal }}
   v_available = {{ $v_available }}
-  currvaultID = {{ $currVaultID | quote }}
+  currVaultID = {{ $currVaultID | quote }}
   vaultID1 = {{ $vaultID1 | quote }}
   private = {{ $private }}
   {{- if $private }}
@@ -122,5 +130,9 @@
   place = {{ $place | quote }}
   shortplace = {{ $shortPlace | quote }}
   dpi = {{ $dpi }}
-  flatpak = {{ $flatpak }}
   {{- end }}
+  rootuuid = {{ $rootuuid | quote }}
+  luksuuid = {{ $luksuuid | quote }}
+  lvm = {{ $lvm }}
+  tpm = {{ $tpm }}
+  flatpak = {{ $flatpak }}

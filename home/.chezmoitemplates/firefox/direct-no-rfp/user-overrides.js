@@ -1,11 +1,10 @@
 /*** MY OVERRIDES ***/
 user_pref("_user.js.parrot", "overrides section syntax error");
 
-/* 4501: enable privacy.resistFingerprinting [FF41+]
- * [SETUP-WEB] RFP can cause some website breakage: mainly canvas, use a site exception via the urlbar
- * RFP also has a few side effects: mainly timezone is UTC0, and websites will prefer light theme
- * [1] https://bugzilla.mozilla.org/418986 ***/
-user_pref("privacy.resistFingerprinting", false);
+/* override recipe: RFP is not for me ***/
+user_pref("privacy.resistFingerprinting", false); // 4501
+user_pref("privacy.resistFingerprinting.letterboxing", false); // 4504 [pointless if not using RFP]
+user_pref("webgl.disabled", false); // 4520 [mostly pointless if not using RFP]
 
 /* Set proxy configuration settings */
 user_pref("network.proxy.type", 1);

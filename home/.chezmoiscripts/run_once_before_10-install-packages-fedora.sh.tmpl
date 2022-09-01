@@ -1,26 +1,50 @@
 {{- if (eq .chezmoi.osRelease.id "fedora") -}}
-{{-   if (eq .chezmoi.osRelease.variant "Silverblue")  -}}
 #!/bin/bash
 
 set -eufo pipefail
-
-{{ $rpmOStree := list
+{{-   if (eq .chezmoi.osRelease.variant "Silverblue")  -}}
+{{ $ostreeOverlay := list
      "fish"
+     "fzf"
      "gammastep"
      "lxqt-policykit"
+     "make"
      "mako"
+     "neovim"
      "network-manager-applet"
-     "pulseaudio-utils"
+     "pam_mount"
      "python-i3ipc"
-     "sshfs"
+     "qemu-kvm"
+     "ripgrep"
+     "starship"
      "sway"
      "syncthing"
      "udiskie"
      "vault"
-     "waybar" -}}
+     "virt-manager"
+     "waybar"
+     "wl-clipboard" -}}
+{{-     if (vault (printf "kv/users/%s/packages" .vaultID1)).data.data.rpmostree }}
+{{-       range $ostreeOverlay }}
+rpm-ostree install {{ . }}
+{{-       end }}
+{{-     end }}
 
-{{-     if (vault (printf "kv/users/%s/packages" .vaultid1)).data.data.rpmostree }}
-rpm-ostree install {{ $rpmOStree | join " " }}
+{{-   else if or (eq .chezmoi.osRelease.variant "Sericea") -}}
+{{ $ostreeOverlay := list
+     "fish"
+     "fzf"
+     "make"
+     "nautilus"
+     "neovim"
+     "ripgrep"
+     "starship"
+     "syncthing"
+     "udiskie" -}}
+{{-     if (vault (printf "kv/users/%s/packages" .vaultID1)).data.data.rpmostree }}
+{{-       range $ostreeOverlay }}
+rpm-ostree install {{ . }}
+{{-       end }}
 {{-     end }}
 {{-   end }}
 {{- end }}

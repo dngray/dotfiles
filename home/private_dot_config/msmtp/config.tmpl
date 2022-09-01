@@ -9,7 +9,7 @@ tls_trust_file	/etc/pki/tls/certs/ca-bundle.crt
 {{- end }}
 #logfile	~/.config/msmtp/msmtp.log
 
-{{-  range $v, $primary := (vault (printf "kv/users/%s/mail" .vaultid1)).data.data.mail }}
+{{-  range $v, $primary := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail }}
 {{-  $aliases := ($primary.alias) }}
 {{-    if .enabled }}
 account {{ .accountName }}
@@ -17,12 +17,13 @@ host {{ .smtpHost }}
 port {{ .smtpPort }}
 from {{ (index ($aliases) 0) }}
 user {{ .username }}
-passwordeval "pass {{ .accountName }}"
+passwordeval "gopass -o {{ .accountName }}"
+# dsn_notify success
 {{-    end -}}
 {{-  end -}}
 
 {{- if .private -}}
-{{-   range $v, $secondary := (vault (printf "kv/users/%s/mail" .vaultid2)).data.data.mail }}
+{{-   range $v, $secondary := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.mail }}
 {{-   $aliases := ($secondary.alias) }}
 {{      if .enabled }}
 account {{ .accountName }}
@@ -30,7 +31,7 @@ host {{ .smtpHost }}
 port {{ .smtpPort }}
 from {{ (index ($aliases) 0) }}
 user {{ .username }}
-passwordeval "pass {{ .accountName }}"
+passwordeval "gopass -o {{ .accountName }}"
 {{-     end }}
 {{-   end -}}
 {{- end }}

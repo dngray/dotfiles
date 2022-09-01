@@ -1,0 +1,10 @@
+[copr:copr.fedorainfracloud.org:dngray:sddm-sugar-candy]
+name=Copr repo for sddm-sugar-candy owned by dngray
+baseurl=https://download.copr.fedorainfracloud.org/results/dngray/sddm-sugar-candy/fedora-$releasever-$basearch/
+type=rpm-md
+skip_if_unavailable=True
+gpgcheck=1
+gpgkey=https://download.copr.fedorainfracloud.org/results/dngray/sddm-sugar-candy/pubkey.gpg
+repo_gpgcheck=0
+enabled=1
+enabled_metadata=1

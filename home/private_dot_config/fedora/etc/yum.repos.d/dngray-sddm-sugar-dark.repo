@@ -1,0 +1,10 @@
+[copr:copr.fedorainfracloud.org:dngray:sddm-sugar-dark]
+name=Copr repo for sddm-sugar-dark owned by dngray
+baseurl=https://download.copr.fedorainfracloud.org/results/dngray/sddm-sugar-dark/fedora-$releasever-$basearch/
+type=rpm-md
+skip_if_unavailable=True
+gpgcheck=1
+gpgkey=https://download.copr.fedorainfracloud.org/results/dngray/sddm-sugar-dark/pubkey.gpg
+repo_gpgcheck=0
+enabled=1
+enabled_metadata=1

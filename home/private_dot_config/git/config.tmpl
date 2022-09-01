@@ -51,7 +51,7 @@
 [color]
 	ui = auto
 [core]
-	editor = flatpak run io.neovim.nvim
+	editor = nvim
 	excludesfile = ~/.config/git/ignore
 	whitespace = trailing-space,space-before-tab
 [diff]
@@ -87,9 +87,9 @@
 [trim]
 	bases = master,gh-pages
 {{- if .personal }}
-{{    (vault (printf "kv/users/%s/gitconfig" .vaultid1)).data.data.gitconfig }}
+{{    (vault (printf "kv/users/%s/gitconfig" .vaultID1)).data.data.gitconfig }}
 {{-   if .private -}}
-{{-     (vault (printf "kv/users/%s/gitconfig" .vaultid2)).data.data.gitconfig }}
+{{-     (vault (printf "kv/users/%s/gitconfig" .vaultID2)).data.data.gitconfig }}
 {{-   end }}
 {{- end }}
 {{/* vim: set filetype=gitconfig: */}}

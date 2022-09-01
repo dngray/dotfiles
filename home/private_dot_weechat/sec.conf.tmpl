@@ -12,13 +12,13 @@
 [crypt]
 cipher = aes256
 hash_algo = sha256
-passphrase_command = "pass weechat"
+passphrase_command = "gopass -o weechat"
 salt = on
 
 [data]
 __passphrase__ = on
 {{ if .personal }}
-{{-  if ne .currvaultid "1000" -}}
-{{     (vault (printf "kv/users/%s/weechat_sec" .currvaultid)).data.data.weechat_sec }}
+{{-  if ne .currVaultID "1000" -}}
+{{     (vault (printf "kv/users/%s/weechat_sec" .currVaultID)).data.data.weechat_sec }}
 {{-  end }}
 {{- end }}

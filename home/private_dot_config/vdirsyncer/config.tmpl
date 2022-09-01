@@ -1,4 +1,4 @@
-{{- $account := index (vault (printf "kv/users/%s/mail" .vaultid1)).data.data.mail 0 -}}
+{{- $account := index (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail 0 -}}
 # Optional parameters are commented out.
 # This file doesn't document all available parameters, see
 # http://vdirsyncer.pimutils.org/ for the rest of them.
@@ -49,7 +49,7 @@ verify = "/etc/pki/tls/certs/ca-bundle.crt"
 username = "{{ $account.username }}"
 # The password can also be fetched from the system password storage, netrc or a
 # custom command. See http://vdirsyncer.pimutils.org/en/stable/keyring.html
-password.fetch = ["command", "pass", "{{ $account.accountName }}"]
+password.fetch = ["command", "gopass", "{{ $account.accountName }}"]
 
 # CALDAV
 [pair calendar]
@@ -75,4 +75,4 @@ verify = "/etc/ssl/certs/ca-certificates.crt"
 verify = "/etc/pki/tls/certs/ca-bundle.crt"
 {{- end }}
 username = "{{ $account.username }}"
-password.fetch = ["command", "pass", "{{ $account.accountName }}"]
+password.fetch = ["command", "gopass", "{{ $account.accountName }}"]

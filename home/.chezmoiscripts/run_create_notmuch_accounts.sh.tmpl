@@ -1,6 +1,6 @@
 #!/bin/bash
 {{- if .mutt -}}
-{{- $vaultJson := vault (printf "kv/users/%s/notmuch" .vaultid1) -}}
+{{- $vaultJson := vault (printf "kv/users/%s/notmuch" .vaultID1) -}}
 {{- $sym_roots := (index $vaultJson.data.data.notmuch 0).sym_roots  -}}
 {{- $profile := (index $vaultJson.data.data.notmuch 0).profile  -}}
 
@@ -21,7 +21,7 @@ for i in "${values[@]}" ; do
   ln -sf "$i" "$XDG_DATA_HOME/mail/notmuch/$profile"
 done
 
-{{- $vaultJson := vault (printf "kv/users/%s/notmuch" .vaultid1) -}}
+{{- $vaultJson := vault (printf "kv/users/%s/notmuch" .vaultID1) -}}
 {{- $sym_roots := (index $vaultJson.data.data.notmuch 1).sym_roots  -}}
 {{- $profile := (index $vaultJson.data.data.notmuch 1).profile  -}}
 
@@ -43,7 +43,7 @@ for i in "${values[@]}" ; do
 done
 
 {{ if .private }}
-{{- $vaultJson := vault (printf "kv/users/%s/notmuch" .vaultid2) -}}
+{{- $vaultJson := vault (printf "kv/users/%s/notmuch" .vaultID2) -}}
 {{- $sym_roots := (index $vaultJson.data.data.notmuch 0).sym_roots  -}}
 {{- $profile := (index $vaultJson.data.data.notmuch 0).profile  -}}
 

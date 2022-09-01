@@ -170,7 +170,7 @@ username = "unknown"
 
 [server]
 {{ if .personal }}
-{{-  if ne .currvaultid "1000" -}}
-{{     (vault (printf "kv/users/%s/weechat_irc" .currvaultid)).data.data.weechat_irc }}
+{{-  if ne .currVaultID "1000" -}}
+{{     (vault (printf "kv/users/%s/weechat_irc" .currVaultID)).data.data.weechat_irc }}
 {{-  end }}
 {{- end }}

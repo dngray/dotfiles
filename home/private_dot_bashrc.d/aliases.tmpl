@@ -24,23 +24,19 @@ alias fc-list-family='fc-list :outline -f "%{family}\n"'
 alias enabledUnits='systemctl list-unit-files --state=enabled'
 alias runningUnits='systemctl list-units --type=service --state=running'
 alias activeUnits='systemctl list-units --type=service --state=active'
-alias fv='flatpak run io.neovim.nvim'
 alias mpv='flatpak run io.mpv.Mpv'
 alias firefox='flatpak run org.mozilla.firefox'
-{{- if eq .chezmoi.osRelease.id "alpine" }}
-alias sudo='doas'
-{{- end }}
-alias yubiUnlock="gpg-connect-agent 'scd checkpin {{ (vault (printf "kv/users/%s/yubikey" .vaultid1)).data.data.serial }}' /bye"
+alias yubiUnlock="gpg-connect-agent 'scd checkpin {{ (vault (printf "kv/users/%s/yubikey" .vaultID1)).data.data.serial }}' /bye"
 
-{{ if or (eq .private true) (eq .currvaultid "1001") }}
+{{ if or (eq .private true) (eq .currVaultID "1001") }}
 # RDP
-{{-   $rdp := index (vault (printf "kv/users/%s/rdp" .currvaultid)).data.data.rdp -}}
+{{-   $rdp := index (vault (printf "kv/users/%s/rdp" .currVaultID)).data.data.rdp -}}
 {{-   range $rdp }}
 alias {{ .name }}='xfreerdp /u:{{ .username }} /v:{{.ip }} /dynamic-resolution'
 {{-   end }}
 
 # smb
-{{-   $smb := index (vault (printf "kv/users/%s/smb" .currvaultid)).data.data.smb -}}
+{{-   $smb := index (vault (printf "kv/users/%s/smb" .currVaultID)).data.data.smb -}}
 {{-   range $smb }}
 alias smb{{ .name }}='smbclient //{{ .address }}/{{ .username }}'
 {{-   end }}

@@ -1,5 +1,5 @@
 # vim: filetype=neomuttrc
-{{- $user := index (vault (printf "kv/users/%s/mail" .currvaultid)).data.data.mail .accIdx }}
+{{- $user := index (vault (printf "kv/users/%s/mail" .currVaultID)).data.data.mail .accIdx }}
 {{- $aliases := ($user.alias) }}
 # muttrc file for account {{ $user.accountName }}
 set realname = "{{ $user.realName }}"
@@ -64,7 +64,7 @@ macro index,pager gv "<change-folder>~/.local/share/mail/decrypted<enter>" "go t
 
 
 bind editor <Tab> complete-query
-{{- if eq .currvaultid .vaultid1 }}
+{{- if eq .currVaultID .vaultID1 }}
 # https://khard.readthedocs.io/en/latest/scripting.html
 bind editor ^T    complete
 unset query_command

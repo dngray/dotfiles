@@ -1,0 +1,46 @@
+{{- if (eq .chezmoi.osRelease.id "arch") }}
+# /etc/dracut.conf.d/desktop-dracut-defaults.conf
+# https://gist.github.com/Neurognostic/259f1ba1e568b31f0732a4a18f399f9e
+#
+hostonly=no
+hostonly_cmdline=no
+use_fstab=yes
+compress=lz4
+show_modules=yes
+
+# https://bugs.archlinux.org/task/69424
+{{-  if .tpm }}
+add_dracutmodules+=" tpm2-tss "
+{{-  end }}
+omit_dracutmodules+=" brltty "
+
+uefi=yes
+early_microcode=yes
+uefi_splash_image="/usr/share/systemd/bootctl/splash-arch.bmp"
+uefi_stub="/usr/lib/systemd/boot/efi/linuxx64.efi.stub"
+uefi_secureboot_cert="/usr/share/secureboot/keys/db/db.pem"
+uefi_secureboot_key="/usr/share/secureboot/keys/db/db.key"
+CMDLINE=(
+	rw
+	rd.auto=1
+{{-   if .lvm }}
+	root=/dev/{{ .chezmoi.hostname }}VG/root
+	resume=/dev/{{ .chezmoi.hostname }}VG/swap
+{{-   else }}
+	root=UUID={{ .rootuuid }}
+	resume=UUID={{ .rootuuid }}
+	rootflags=subvol=@
+{{-   end }}
+{{-   if .tpm }}
+	rd.luks.uuid=luks-{{ .luksuuid }}
+	rd.luks.options=tpm2-device=auto,tpm2-with-pin=true,discard
+{{-  else }}
+	rd.luks.options=discard
+{{-   end }}
+	mem_encrypt=off
+	apparmor=1
+	security=apparmor
+)
+kernel_cmdline="${CMDLINE[*]}"
+unset CMDLINE
+{{- end }}

@@ -1,0 +1,6 @@
+[Match]
+Name=eno1 eno2
+Type=ether
+
+[Network]
+Bond=bond0

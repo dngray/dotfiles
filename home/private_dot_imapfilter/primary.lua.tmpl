@@ -17,8 +17,8 @@ function main ()
 
     -- Accounts
 {{ if .personal }}
-{{-  if eq .currvaultid .vaultid1 }}
-{{-     (vault (printf "kv/users/%s/imapfilter_primary" .vaultid1)).data.data.imapfilter }}
+{{-  if or (eq .private true) (eq .currVaultID "1001") }}
+{{-     (vault (printf "kv/users/%s/imapfilter_primary" .currVaultID)).data.data.imapfilter_primary }}
 {{-  end }}
 {{- end }}
     -- Debug to view underlying mailbox structure
@@ -63,7 +63,7 @@ function main ()
         --     bin_mail:delete_messages()
         -- end
         end
-
+    end
     if (third['Inbox']:check_status() >= 0) then
         inbox_results = third['Inbox']:select_all()
         inbox_results:move_messages(first['INBOX'])
@@ -85,7 +85,7 @@ function main ()
         spam_results = second['Junk']:select_all()
         spam_results:move_messages(first['INBOX'])
     end
-
+end
 -- -- Escapes problematic characters in passwords.
 -- function sanitize_pwd(pwd)
 --     -- Chomp off newline character that is sucked in from Password Store.

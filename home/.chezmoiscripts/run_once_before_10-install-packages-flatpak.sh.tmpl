@@ -1,9 +1,6 @@
 {{- if .flatpak -}}
-#!/bin/bash
 
-set -eufo pipefail
-
-{{ $flatpak := list
+{{ $flathub := list
      "com.bitwarden.desktop"
      "io.mpv.Mpv"
      "org.libreoffice.LibreOffice"
@@ -11,16 +8,17 @@ set -eufo pipefail
      "org.inkscape.Inkscape"
      "com.github.micahflee.torbrowser-launcher"
      "im.riot.Riot"
-     "io.neovim.nvim"
      "org.pulseaudio.pavucontrol"
      "com.github.tchx84.Flatseal"
      "org.mozilla.firefox" -}}
 
-{{- if (vault (printf "kv/users/%s/packages" .vaultid1)).data.data.flatpak }}
-flatpak --user install -<<EOF
-{{   range ($flatpak | sortAlpha | uniq) -}}
-{{ . }}
-{{   end -}}
-EOF
-{{ end }}
+#!/bin/bash
+
+set -eufo pipefail
+
+{{-   if (vault (printf "kv/users/%s/packages" .vaultID1)).data.data.flatpak }}
+{{     range $flathub }}
+flatpak --user install flathub {{ . }}
+{{-    end }}
+{{-   end }}
 {{- end }}
