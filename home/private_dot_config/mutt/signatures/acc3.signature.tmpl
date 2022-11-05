@@ -1,0 +1,3 @@
+{{- if and (eq .private true) (eq .mutt true) -}}
+{{- template "mutt/signature" dict "currVaultID" .vaultID2 "accIdx" 0 }}
+{{- end }}

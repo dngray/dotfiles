@@ -11,7 +11,6 @@ gsettings set org.gtk.Settings.FileChooser sort-directories-first true
 
 fc-cache
 
-gsettings set org.gnome.Terminal.Legacy.Settings default-show-menubar false
 profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
 gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles/${profile}/ font "MesloLGS NF"
 

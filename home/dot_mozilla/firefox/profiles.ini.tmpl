@@ -1,9 +1,8 @@
 {{- /* Final profile paths for each installation version */ -}}
-{{- $releasePath := joinPath .chezmoi.homeDir "/.config/firefox/profiles/default-release" -}}
-{{- $releaseNoRFPpath := joinPath .chezmoi.homeDir "/.config/firefox/profiles/release-no-rfp" -}}
+{{- $defaultPath := joinPath .chezmoi.homeDir "/.config/firefox/profiles/default" -}}
 {{- $directPath := joinPath .chezmoi.homeDir "/.config/firefox/profiles/direct" -}}
 {{- $directNoRFPpath := joinPath .chezmoi.homeDir "/.config/firefox/profiles/direct-no-rfp" -}}
-{{- $nightlyPath := joinPath .chezmoi.homeDir "/.config/firefox/profiles/default-nightly" -}}
+{{- $noRFPpath := joinPath .chezmoi.homeDir "/.config/firefox/profiles/default-no-rfp" -}}
 
 {{- /* IDs for each installation version */ -}}
 {{- $releaseId := "0" -}}
@@ -20,38 +19,32 @@
 {{- end -}}
 
 [Profile0]
-Name=default-release
+Name=default
 IsRelative=0
-Path={{- $releasePath }}
+Path={{- $defaultPath }}
 
 [Profile1]
-Name=default-nightly
-IsRelative=0
-Path={{- $nightlyPath }}
-
-[Profile2]
 Name=direct
 IsRelative=0
 Path={{- $directPath }}
 
-[Profile3]
-Name=release-noRFP
-IsRelative=0
-Path={{- $releaseNoRFPpath }}
-
-[Profile4]
-Name=direct-noRFP
+[Profile2]
+Name=direct-no-rfp
 IsRelative=0
 Path={{- $directNoRFPpath }}
+
+[Profile3]
+Name=default-no-rfp
+IsRelative=0
+Path={{- $noRFPpath }}
 
 [General]
 StartWithLastProfile=1
 Version=2
 
 [Install{{- $releaseId -}}]
-Default={{- $releasePath }}
+Default={{- $defaultPath }}
 Locked=1
 
 [Install{{- $nightlyId -}}]
-Default={{- $nightlyPath }}
 Locked=1

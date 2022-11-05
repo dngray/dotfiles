@@ -19,8 +19,7 @@ exec mako --anchor bottom-right
 exec "foot --server"
 
 {{- if eq .chezmoi.osRelease.id "fedora" "arch" }}
-## Import DISPLAY variable to systemd/dbus env - needed to fix Flatpak app issues with Firefox not opening up when links are being clicked
-exec "dbus-update-activation-environment --systemd DISPLAY MOZ_DBUS_REMOTE MOZ_ENABLE_WAYLAND; systemctl --user start sway-session.target"
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
 {{- else if eq .chezmoi.osRelease.id "alpine" }}
 exec pipewire
 {{- end }}

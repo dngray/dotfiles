@@ -13,7 +13,7 @@ export QT_QPA_PLATFORM=wayland-egl
 export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
 export XDG_CURRENT_DESKTOP=sway
 
-{{- if eq .chezmoi.osRelease.id "fedora" "arch" -}}
+{{- if eq .chezmoi.osRelease.id "fedora" "arch" }}
 # Start DBUS
 dbus-update-activation-environment --systemd DISPLAY
 {{- end }}

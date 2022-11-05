@@ -9,7 +9,9 @@ PassCmd "gopass -o {{ $primary.accountName }}"
 SSLType IMAPS
 {{- if (eq .chezmoi.osRelease.id "debian" "ubuntu") }}
 CertificateFile /etc/ssl/certs/ca-certificates.crt
-{{- else }}
+{{- else if (eq .chezmoi.osRelease.id "arch") }}
+CertificateFile /etc/ssl/cert.pem
+{{- else if (eq .chezmoi.osRelease.id "fedora") }}
 CertificateFile /etc/pki/tls/certs/ca-bundle.crt
 {{- end }}
 
@@ -42,7 +44,9 @@ PassCmd "gopass -o {{ $secondary.accountName }}"
 SSLType IMAPS
 {{- if (eq .chezmoi.osRelease.id "debian" "ubuntu") }}
 CertificateFile /etc/ssl/certs/ca-certificates.crt
-{{- else }}
+{{- else if (eq .chezmoi.osRelease.id "arch") }}
+CertificateFile /etc/ssl/cert.pem
+{{- else if (eq .chezmoi.osRelease.id "fedora") }}
 CertificateFile /etc/pki/tls/certs/ca-bundle.crt
 {{- end }}
 
@@ -61,5 +65,39 @@ Create Both
 SyncState *
 MaxMessages 0
 # End profile
+
+{{- $secondary := index (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.mail 1 }}
+{{- if (eq $secondary.enabled true) }}
+
+IMAPStore {{ $secondary.accountName }}-remote
+Host {{ $secondary.imapHost }}
+Port  {{ $secondary.imapPort }}
+User {{ $secondary.username }}
+PassCmd "gopass -o {{ $secondary.accountName }}"
+SSLType IMAPS
+{{- if (eq .chezmoi.osRelease.id "debian" "ubuntu") }}
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+{{- else if (eq .chezmoi.osRelease.id "arch") }}
+CertificateFile /etc/ssl/cert.pem
+{{- else if (eq .chezmoi.osRelease.id "fedora") }}
+CertificateFile /etc/pki/tls/certs/ca-bundle.crt
+{{- end }}
+
+MaildirStore {{ $secondary.accountName }}-local
+Subfolders Verbatim
+Path ~/.local/share/mail/{{ $secondary.accountName }}/
+Inbox ~/.local/share/mail/{{ $secondary.accountName }}/INBOX
+Flatten .
+
+Channel {{ $secondary.accountName }}
+Expunge Both
+Far :{{ $secondary.accountName }}-remote:
+Near :{{ $secondary.accountName }}-local:
+Patterns * !"[Gmail]/All Mail"
+Create Both
+SyncState *
+MaxMessages 0
+# End profile
+{{- end -}}
 {{- end -}}
 {{- end -}}
