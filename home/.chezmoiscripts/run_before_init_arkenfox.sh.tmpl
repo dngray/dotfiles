@@ -4,15 +4,8 @@
 
 CHEZMOI_ROOT="$XDG_DATA_HOME/chezmoi/home"
 TEMPLATE_DIR="$CHEZMOI_ROOT/.chezmoitemplates/firefox"
-ARKENFOX_DIR_NAME="arkenfox"
-ARKENFOX_DIR="$TEMPLATE_DIR/$ARKENFOX_DIR_NAME"
-ARKENFOX_NO_RFP_DIR_NAME="no-rfp"
-ARKENFOX_NO_RFP_DIR="$TEMPLATE_DIR/$ARKENFOX_NO_RFP_DIR_NAME"
-DIRECT_DIR_NAME="direct"
-DIRECT_DIR="$TEMPLATE_DIR/$DIRECT_DIR_NAME"
-DIRECT_NO_RFP_DIR_NAME="direct-no-rfp"
-DIRECT_NO_RFP_DIR="$TEMPLATE_DIR/$DIRECT_NO_RFP_DIR_NAME"
-SCRIPT_FILE="$ARKENFOX_DIR/updater.sh"
+SCRIPT_FILE="$TEMPLATE_DIR/updater.sh"
+PREFSCLEANER_FILE="$TEMPLATE_DIR/prefsCleaner.sh"
 
 # Download method priority: curl -> wget
 DOWNLOAD_METHOD=''
@@ -41,7 +34,15 @@ update_updater() {
   exit 0
 }
 
-update_profile() {
+update_prefsCleaner() {
+  declare -r tmpfile="$(download_file 'https://raw.githubusercontent.com/arkenfox/user.js/master/prefsCleaner.sh')"
+  [ -z "${tmpfile}" ] && echo -e "${RED}Error! Could not download prefsCleaner.sh${NC}" && return 1 # check if download failed
+  mv "${tmpfile}" "$PREFSCLEANER_FILE"
+  chmod u+x "$PREFSCLEANER_FILE"
+  "$PREFSCLEANER_FILE" "-s"
+}
+
+update_userjs() {
   if [ ! -f "$1"/user.js ]; then
     printf "user.js not found getting one\n"
 
@@ -53,18 +54,38 @@ update_profile() {
   fi
 }
 
-if [ ! -f "$SCRIPT_FILE" ]; then
-  printf "updater.sh not found getting one\n"
-  update_updater "$@"
-elif [ "$(find "$SCRIPT_FILE" -mtime +120)" ]; then
-  printf "File updater.sh exists and is older than 120 days, getting a new one\n"
-  rm "$SCRIPT_FILE"
-  update_updater "$@"
-fi
+checkScriptAge() {
+  if [ ! -f "$SCRIPT_FILE" ]; then
+    printf "updater.sh not found getting one\n"
+    update_updater "$@"
+  elif [ "$(find "$SCRIPT_FILE" -mtime +120)" ]; then
+    printf "File updater.sh exists and is older than 120 days, getting a new one\n"
+    rm "$SCRIPT_FILE"
+    update_updater "$@"
+  fi
 
-update_profile "$ARKENFOX_DIR" "$ARKENFOX_DIR_NAME"
-update_profile "$ARKENFOX_NO_RFP_DIR" "$ARKENFOX_NO_RFP_DIR_NAME"
-update_profile "$DIRECT_DIR" "$DIRECT_DIR_NAME"
-update_profile "$DIRECT_NO_RFP_DIR" "$DIRECT_NO_RFP_DIR_NAME"
+  if [ ! -f "$PREFSCLEANER_FILE" ]; then
+    printf "prefsCleaner.sh not found getting one\n"
+    update_prefsCleaner
+  elif [ "$(find "$PREFSCLEANER_FILE" -mtime +120)" ]; then
+    printf "File prefsCleaner.sh exists and is older than 120 days, getting a new one\n"
+    rm "$PREFSCLEANER_FILE"
+    update_prefsCleaner
+  fi
+}
+
+update_profiles() {
+  declare -a profiles=(default
+                       default-no-rfp
+                       direct
+                       direct-no-rfp)
+
+  for i in "${!profiles[@]}"; do
+    update_userjs "$TEMPLATE_DIR/${profiles[$i]}" "${profiles[$i]}"
+  done
+}
+
+checkScriptAge
+update_profiles
 
 {{- end }}

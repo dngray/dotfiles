@@ -1,0 +1,4 @@
+# vim: filetype=sh
+# .bashrc.d/nnn
+
+export NNN_PLUG='c:-chksum'

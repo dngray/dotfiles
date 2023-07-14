@@ -1,0 +1,16 @@
+[Desktop Entry]
+Name=nheko
+Version=1.0
+Comment=Desktop client for Matrix
+Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=io.github.NhekoReborn.Nheko --file-forwarding io.github.NhekoReborn.Nheko --profile {{ .profile }} @@u %u @@
+Icon={{ .icon }}
+Type=Application
+Categories=Network;InstantMessaging;Qt;
+StartupWMClass=io.github.NhekoReborn.Nheko
+Terminal=false
+MimeType=x-scheme-handler/matrix;
+X-GNOME-UsesNotifications=true
+Keywords=Matrix;matrix.org;chat;irc;communications;talk;riot;element;fractal;voip;
+X-KDE-Keywords=Matrix,matrix.org,chat,irc,communications,talk,riot,element,fractal,voip,
+X-Purism-FormFactor=Workstation;Mobile;
+X-Flatpak=io.github.NhekoReborn.Nheko

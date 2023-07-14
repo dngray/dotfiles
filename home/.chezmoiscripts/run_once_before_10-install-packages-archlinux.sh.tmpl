@@ -16,7 +16,6 @@ set -eufo pipefail
      "base-devel"
      "bash-completion"
      "bc"
-     "bind-tools"
      "bleachbit"
      "btrfs-progs"
      "bubblewrap-suid"
@@ -31,6 +30,7 @@ set -eufo pipefail
      "cups-pdf"
      "diffutils"
      "dvd+rw-tools"
+     "edk2-ovmf"
      "efibootmgr"
      "efitools"
      "eog"
@@ -53,6 +53,7 @@ set -eufo pipefail
      "hunspell-en"
      "iputils"
      "jq"
+     "ldns"
      "libnotify"
      "libvirt"
      "linux-firmware"
@@ -65,7 +66,6 @@ set -eufo pipefail
      "man-pages"
      "mc"
      "mlocate"
-     "nautilus"
      "neovim"
      "network-manager-applet"
      "networkmanager"
@@ -98,7 +98,9 @@ set -eufo pipefail
      "smartmontools"
      "starship"
      "sudo"
+     "swtpm"
      "syncthing"
+     "thunar"
      "tmux"
      "toolbox"
      "tpm2-tss"
@@ -111,11 +113,22 @@ set -eufo pipefail
      "virt-manager"
      "wget"
      "whois"
-     "xdg-desktop-portal-gnome"
      "xdg-user-dirs"
      "yubikey-manager"
      "zip"
      "zram-generator" -}}
+
+{{/* LunarVim dependencies */}}
+{{   $pacman = concat $pacman (list
+       "cargo"
+       "fd"
+       "nodejs"
+       "npm"
+       "prettier"
+       "python-black"
+       "python-pip"
+       "rust"
+       "stylua") -}}
 
 {{ if or (eq .chezmoi.hostname "icefloe" "cavern") -}}
 {{   $pacman = concat $pacman (list
@@ -164,7 +177,9 @@ set -eufo pipefail
        "swaylock"
        "waybar"
        "wl-clipboard"
-       "wofi"
+       "rofi"
+       "xdg-desktop-portal-gnome"
+       "xdg-desktop-portal-wlr"
        "xorg-server-xwayland") -}}
 
 {{   $yay := list

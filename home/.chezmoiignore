@@ -24,8 +24,10 @@
 .config/git/clean.sed
 .config/git/smudge.sed
 .config/git/users/secondary
+.config/git/users/third
 .local/bin/ptime
 .local/share/applications/im.riot.Riot_*
+.local/share/applications/io.github.NhekoReborn.Nheko_*
 {{- end }}
 
 {{- if not .wayland }}
@@ -39,11 +41,9 @@
 
 {{- if not .x11 }}
 .Xresources
-.config/dunst/dunstrc
 .config/i3/**
 .config/picom/picom.conf
 .config/redshift/redshift.conf
-.config/rofi/**
 .xinitrc
 {{- end }}
 
@@ -57,6 +57,8 @@
 .config/qutebrowser
 .config/termite/config
 .config/tridactyl/tridactylrc
+.config/dunst/dunstrc
+.config/rofi/**
 .var/app/**
 .mozilla/**
 .conkyrc
@@ -69,6 +71,7 @@
 {{- if (ne .chezmoi.osRelease.id "arch") }}
 .config/arch/**
 .config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml
+.config/arch/etc/sysctl.d/40-hugepage.conf
 
 {{-   if (ne .chezmoi.fqdnHostname "den.home.arpa") }}
 .config/arch/etc/lxc/default.conf
@@ -79,6 +82,7 @@
 .config/arch/etc/subuid
 .config/arch/etc/sysctl.d/90-lxd-override.conf
 .config/arch/etc/systemd/network/*
+.config/arch/etc/systemd/system/*
 {{-   end }}
 {{- end }}
 

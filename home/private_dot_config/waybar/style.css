@@ -1,129 +1,146 @@
-@define-color background rgba(0, 0, 0, 0.7);
-@define-color foreground #e5e5e5;
-@define-color gray_trnsp rgba(100, 100, 100, 0.5);
-@define-color fucsia     rgba(200, 0, 0, 1);
+@import "nord.css";
 
-/** Colors
-* Selenized dark colorscheme for waybar
-*/
-@define-color bg #103c48;
-@define-color black #184956;
-@define-color br_black #2d5b69;
-@define-color white #72898f;
-@define-color fg #adbcbc;
-@define-color br_white #cad8d9;
-
-@define-color red #fa5750;
-@define-color green #75b938;
-@define-color yellow #dbb32d;
-@define-color blue #4695f7;
-@define-color magenta #f275be;
-@define-color cyan #41c7b9;
-@define-color orange #ed8649;
-@define-color violet #af88eb;
-
-@define-color br_red #ff665c;
-@define-color br_green #84c747;
-@define-color br_yellow #ebc13d;
-@define-color br_blue #58a3ff;
-@define-color br_magenta #ff84cd;
-@define-color br_cyan #53d6c7;
-@define-color br_orange #fd9456;
-@define-color br_violet #bd96fa;
+window {
+    background-color: transparent;
+}
 
 * {
-  font-family: MesloLGS Nerd Font;
-  font-size: 15px;
-  min-height: 0;
+    font-family: Cantarell;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 2px;
 }
 
-window#waybar {
-  background: @background;
-  color: @foreground;
-  border-bottom: 3px solid @gray_trnsp;
-  transition-property: background-color;
-  transition-duration: 0.5s;
-}
-
-window#waybar.hidden {
-  opacity: 0.2;
+/*
+* Left part
+*/
+#mode {
+    color: @nord0;
+    background-color: @nord13;
+    margin-left: 8px;
+    border-radius: 5px;
+    padding: 0px 6px;
 }
 
 #workspaces button {
-  color: @white;
+    margin-left: 8px;
+    background-color: @nord3;
+    padding: 0px 4px;
+    color: @nord6;
+    margin-top: 0;
 }
 
 #workspaces button:hover {
   background: rgba(0, 0, 0, 0.2);
   box-shadow: inherit;
-  border-bottom: 3px solid @gray_trnsp;
 }
 
 #workspaces button.focused {
-  color: @foreground;
-  border-bottom: 3px solid @green;
+    color: @nord0;
+    background-color: @nord8;
 }
 
 #workspaces button.urgent {
-  border-bottom: 3px solid @red;
+  border-bottom: 3px solid @nord11;
 }
 
-#mode {
-  background-color: @fucsia;
-  color: @black;
-  border-top: 5px solid @black;
-  border-bottom: 5px solid @black;
+#window {
+    margin-left: 10px;
+    color: @nord6;
+    font-weight: bold;
+    padding: 0px 5px;
 }
 
-#pulseaudio.muted,
-#network.disabled,
-#network.disconnected,
-#temperature.critical,
-#battery.critical,
-#memory.critical,
-#cpu.load.critical,
-#cpu.critical {
-  border-bottom: 3px solid @red;
-  border-top: 3px solid @red;
+button {
+    box-shadow: inset 0 -3px transparent;
 }
 
-#battery.charging {
-  border-bottom: 3px solid @green;
+button:hover {
+    background: inherit;
+    box-shadow: inset 0 -3px @nord6;
 }
 
-#clock-time,
-#mode,
-#window,
+/*
+* Right part
+*/
 #pulseaudio,
-#pulseaudio.sources,
 #network,
-#cpu,
-#cpu.load,
-#disk,
 #temperature,
-#tray,
+#cpu,
 #memory,
 #backlight,
-#custom-uptime,
+#language,
 #battery,
-#custom-modules-separator,
-#clock {
-  margin: 0 4px;
+#clock,
+#tray {
+    background-color: @nord2;
+    padding: 0px 8px;
+    color: @nord6;
 }
 
-#pulseaudio.sources.muted,
-#pulseaudio.sources.bluetooth,
-#pulseaudio.sources {
-  border-bottom: 3px transparent;
-  border-top: 3px transparent;
+#backlight,
+#language,
+#battery,
+#clock,
+#tray {
+    margin-right: 8px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
-#pulseaudio.bluetooth {
-  border-bottom: 3px solid @blue;
-  border-top: 3px solid @blue;
+#pulseaudio,
+#network,
+#clock,
+#tray {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
-#custom-modules-separator {
-  font-size: 10px;
-  color: @fucsia;
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: @nord13;
+}
+
+#pulseaudio.muted {
+    background-color: @nord13;
+    color: @nord3;
+}
+
+#pulseaudio, #backlight {
+    background-color: @nord10;
+}
+
+#network, #temperature, #cpu, #memory, #battery {
+    background-color: @nord3;
+}
+
+#tray {
+    background-color: @nord1;
+}
+
+#network.disabled,
+#network.disconnected {
+    background-color: @nord13;
+    color: @nord0;
+}
+
+#battery.warning {
+    background-color: @nord13;
+    color: @nord0;
+}
+
+#battery.critical {
+    background-color: @nord11;
+    color: @nord0;
+}
+
+#tray menu {
+    background-color: @nord2;
+    color: @nord4;
+    padding: 10px 5px;
+    border: 2px solid @nord1;
 }

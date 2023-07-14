@@ -1,0 +1,16 @@
+#!/bin/sh
+
+CHEZMOI_ROOT="$XDG_DATA_HOME/chezmoi/home"
+TEMPLATE_DIR="$CHEZMOI_ROOT/.chezmoitemplates/firefox"
+USER_JS="$TEMPLATE_DIR/default/user.js"
+
+# Cleanup old files in Mozilla/Flatpak dir
+rm -rf "$HOME"/.mozilla/firefox/{default,default-no-rfp,direct,direct-no-rfp}/{user.js,userjs_backups,presCleaner.sh}
+rm -rf "$HOME"/.var/app/org.mozilla.firefox/.mozilla/firefox/{default,default-no-rfp,direct,direct-no-rfp}/{user.js,userjs_backups,prefsCleaner.sh}
+
+# Cleanup old files in Chezmoi staging area
+rm -rf "$TEMPLATE_DIR"/{default,default-no-rfp,direct,direct-no-rfp}/{user.js,userjs_backups}
+rm -rf "$TEMPLATE_DIR"/prefsCleaner.sh
+rm -rf "$TEMPLATE_DIR"/updater.sh
+rm -rf "$TEMPLATE_DIR"/user.js
+rm -rf "$TEMPLATE_DIR"/userjs_backups

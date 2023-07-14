@@ -24,6 +24,18 @@ set -eufo pipefail
      "virt-manager"
      "waybar"
      "wl-clipboard" -}}
+
+{{/* LunarVim dependencies */}}
+{{   $ostreeOverlay = concat $ostreeOverlay (list
+       "gcc-c++"
+       "cargo"
+       "fd-find"
+       "nodejs"
+       "npm"
+       "python-black"
+       "python-pip"
+       "rust" ) -}}
+
 {{-     if (vault (printf "kv/users/%s/packages" .vaultID1)).data.data.rpmostree }}
 {{-       range $ostreeOverlay }}
 rpm-ostree install {{ . }}
@@ -34,8 +46,8 @@ rpm-ostree install {{ . }}
 {{ $ostreeOverlay := list
      "fish"
      "fzf"
+     "gvfs-mtp"
      "make"
-     "nautilus"
      "neovim"
      "ripgrep"
      "starship"

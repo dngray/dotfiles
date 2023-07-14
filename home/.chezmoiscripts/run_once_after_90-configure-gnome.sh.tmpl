@@ -11,8 +11,10 @@ gsettings set org.gtk.Settings.FileChooser sort-directories-first true
 
 fc-cache
 
+{{-  if (eq .chezmoi.osRelease.variant "Silverblue")  -}}
 profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
 gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles/${profile}/ font "MesloLGS NF"
+{{- end }}
 
 #gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
 #gsettings set org.gnome.desktop.interface icon-theme 'Adwaita-dark'

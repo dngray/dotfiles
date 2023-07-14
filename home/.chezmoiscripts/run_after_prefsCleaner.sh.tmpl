@@ -1,0 +1,24 @@
+{{ if not .headless -}}
+
+#!/usr/bin/env bash
+
+CHEZMOI_ROOT="$XDG_DATA_HOME/chezmoi/home"
+TEMPLATE_DIR="$CHEZMOI_ROOT/.chezmoitemplates/firefox"
+USER_JS="$TEMPLATE_DIR/default/user.js"
+
+FP_PATH="$HOME/.var/app/org.mozilla.firefox/.mozilla/firefox"
+
+# Run prefsCleaner.sh if user.js is older than 30 days
+if [ "$(find "$USER_JS" -mtime +30)" ]; then
+  printf "user.js is older than 30 days\n"
+
+  profiles=(default
+            default-no-rfp
+            direct
+            direct-no-rfp)
+
+  for i in "${!profiles[@]}"; do
+    "$FP_PATH"/"${profiles[$i]}"/prefsCleaner.sh -s
+  done
+fi
+{{- end }}

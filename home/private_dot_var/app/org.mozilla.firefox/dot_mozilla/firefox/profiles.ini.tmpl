@@ -15,11 +15,8 @@
 {{-   $releaseId = mozillaInstallHash "/Applications/Firefox.app/Contents/MacOS" -}}{{- /* "2656FF1E876E9973" */ -}}
 {{-   $nightlyId = mozillaInstallHash "/Applications/Firefox Nightly.app/Contents/MacOS" -}}{{- /* "31210A081F86E80E" */ -}}
 {{- else if eq .chezmoi.os "linux" -}}
-{{-   $releaseId = mozillaInstallHash "/usr/lib/firefox" -}}{{- /* "4F96D1932A9F858E" */ -}}
+{{-   $releaseId = mozillaInstallHash "/app/lib/firefox" -}}{{- /* "CF146F38BCAB2D21" */ -}}
 {{-   $nightlyId = mozillaInstallHash "/opt/firefox-nightly" -}}{{- /* "6BA5C87ECB35E12F" */ -}}
-{{-   if eq .chezmoi.osRelease.id "fedora" -}}
-{{-     $releaseId = mozillaInstallHash "/app/lib/firefox" -}}{{- /* "CF146F38BCAB2D21" */ -}}
-{{-   end -}}
 {{- end -}}
 
 [General]

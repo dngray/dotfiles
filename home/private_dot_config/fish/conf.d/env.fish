@@ -16,9 +16,9 @@ set -gx FZF_DEFAULT_COMMAND "rg --files --no-ignore-vcs --hidden"
 set -gx EDITOR "nvim"
 set -gx SVN_EDITOR "nvim"
 
-set -gx MC_SKIN "$XDG_CONFIG_HOME/selenized/other-apps/mc/selenized.ini"
+set -gx MC_SKIN "$XDG_DATA_HOME/mc/skins/nord16M.ini"
 set -gx TERM xterm-256color
 
+set -gx PATH "$PATH:$HOME/.local/bin $HOME/.npm-global/bin"
+set -gx NPM_CONFIG_PREFIX "$HOME/.npm-global"
 set -gx VAULT_ADDR "https://vault.den.home.arpa"
-
-set -gx PATH "$PATH:$HOME/.local/bin"

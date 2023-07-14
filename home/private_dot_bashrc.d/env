@@ -15,9 +15,10 @@ export EDITOR='nvim'
 export SVN_EDITOR='nvim'
 
 set -o vi
-eval "$(dircolors ~/.config/dircolors-solarized/dircolors.256dark)"
-export MC_SKIN="$XDG_CONFIG_HOME/selenized/other-apps/mc/selenized.ini"
+eval "$(dircolors $HOME/.dir_colors)"
+export MC_SKIN="$XDG_DATA_HOME/mc/skins/nord16M.ini"
 export TERM="xterm-256color"
 
-export PATH="$PATH:$HOME/.local/bin"
+export PATH="$PATH:$HOME/.local/bin:$HOME/.npm-global/bin"
+export NPM_CONFIG_PREFIX="$HOME/.npm-global"
 export VAULT_ADDR="https://vault.den.home.arpa"

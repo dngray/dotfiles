@@ -41,7 +41,7 @@ fileext = ".vcf"
 type = "carddav"
 url = "{{ (vault "kv/shared/dav").data.data.davURL }}"
 verify_fingerprint = "{{ (vault "kv/shared/dav").data.data.davFingerprint }}"
-{{- if (eq .chezmoi.osRelease.id "debian" "ubuntu") }}
+{{- if (eq .chezmoi.osRelease.id "debian" "ubuntu" "arch") }}
 verify = "/etc/ssl/certs/ca-certificates.crt"
 {{- else }}
 verify = "/etc/pki/tls/certs/ca-bundle.crt"
@@ -69,7 +69,7 @@ fileext = ".ics"
 type = "caldav"
 url = "{{ (vault "kv/shared/dav").data.data.davURL }}"
 verify_fingerprint = "{{ (vault "kv/shared/dav").data.data.davFingerprint }}"
-{{- if (eq .chezmoi.osRelease.id "debian" "ubuntu") }}
+{{- if (eq .chezmoi.osRelease.id "debian" "ubuntu" "arch") }}
 verify = "/etc/ssl/certs/ca-certificates.crt"
 {{- else }}
 verify = "/etc/pki/tls/certs/ca-bundle.crt"

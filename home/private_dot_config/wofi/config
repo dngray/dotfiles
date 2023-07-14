@@ -5,10 +5,10 @@ show=drun
 allow_images=true
 
 # Specifies  the  CSS  file  to use as the stylesheet
-stylesheet=selenized-dark.css
+stylesheet=nord.css
 
 # Specifies the term to use when running a program in a terminal.
-term=alacritty
+term=foot
 
 # See wofi(7) for more information, default is center.
 location=top_left
