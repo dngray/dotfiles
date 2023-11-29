@@ -1,0 +1,129 @@
+Create Both
+Sync Full
+Remove Both
+Expunge Both
+
+{{- $id := .chezmoi.osRelease.id }}
+{{-  range $v, $primary := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail }}
+{{-  $aliases := ($primary.alias) }}
+{{-    if .enabled }}
+
+IMAPAccount {{ .accountName }}
+Host {{ .imapHost }}
+User {{ .username }}
+AuthMechs LOGIN
+PassCmd "gopass -o mail/{{ .accountName }}"
+TLSType IMAPS
+{{-     if (eq $id "debian" "ubuntu") }}
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+{{-     else if (eq $id "arch") }}
+CertificateFile /etc/ssl/cert.pem
+{{-     else if (eq $id "fedora") }}
+CertificateFile /etc/pki/tls/certs/ca-bundle.crt
+{{-     end }}
+Port {{ .imapPort }}
+Timeout 120
+
+IMAPStore {{ .accountName }}-remote
+Account {{ .accountName }}
+
+MaildirStore {{ .accountName }}-local
+Subfolders Verbatim
+Path ~/.local/share/mail/{{ .type }}/{{ .accountName }}/
+Inbox ~/.local/share/mail/{{ .type }}/{{ .accountName }}/Inbox
+Flatten .
+
+Channel {{ .accountName }}-folders
+Far :{{ .accountName }}-remote:
+Near :{{ .accountName }}-local:
+Patterns * !INBOX !Archive*
+
+Channel {{ .accountName }}-inbox
+Far ":{{ .accountName }}-remote:INBOX"
+Near ":{{ .accountName }}-local:Inbox"
+
+Channel {{ .accountName }}-archive
+Far ":{{ .accountName }}-remote:Archive"
+Near ":{{ .accountName }}-local:Archive"
+Patterns *
+
+Group {{ .accountName }}
+Channel {{ .accountName }}-inbox
+Channel {{ .accountName }}-folders
+Channel {{ .accountName }}-archive
+
+Group {{ .accountName }}-fast
+Channel {{ .accountName }}-inbox
+Channel {{ .accountName }}-folders
+{{-    end }}
+{{-  end }}
+
+{{- if .private -}}
+{{-  range $v, $secondary := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.mail }}
+{{-  $aliases := ($secondary.alias) }}
+{{-    if .enabled }}
+
+IMAPAccount {{ .accountName }}
+Host {{ .imapHost }}
+User {{ .username }}
+AuthMechs LOGIN
+PassCmd "gopass -o mail/{{ .accountName }}"
+TLSType IMAPS
+{{-     if (eq $id "debian" "ubuntu") }}
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+{{-     else if (eq $id "arch") }}
+CertificateFile /etc/ssl/cert.pem
+{{-     else if (eq $id "fedora") }}
+CertificateFile /etc/pki/tls/certs/ca-bundle.crt
+{{-     end }}
+Port {{ .imapPort }}
+Timeout 120
+
+IMAPStore {{ .accountName }}-remote
+Account {{ .accountName }}
+
+MaildirStore {{ .accountName }}-local
+Subfolders Verbatim
+Path ~/.local/share/mail/{{ .type }}/{{ .accountName }}/
+Inbox ~/.local/share/mail/{{ .type }}/{{ .accountName }}/Inbox
+Flatten .
+
+Channel {{ .accountName }}-folders
+Far :{{ .accountName }}-remote:
+Near :{{ .accountName }}-local:
+Patterns * !INBOX !Archive*
+
+Channel {{ .accountName }}-inbox
+Far ":{{ .accountName }}-remote:INBOX"
+Near ":{{ .accountName }}-local:Inbox"
+
+Channel {{ .accountName }}-archive
+Far ":{{ .accountName }}-remote:Archive"
+Near ":{{ .accountName }}-local:Archive"
+Patterns *
+
+Group {{ .accountName }}
+Channel {{ .accountName }}-inbox
+Channel {{ .accountName }}-folders
+Channel {{ .accountName }}-archive
+
+Group {{ .accountName }}-fast
+Channel {{ .accountName }}-inbox
+Channel {{ .accountName }}-folders
+{{-    end }}
+{{-  end }}
+{{-  end }}
+
+Group inboxes
+{{- range $v, $primary := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail }}
+{{-   if .enabled }}
+Channel {{ .accountName }}-inbox
+{{-   end }}
+{{- end -}}
+{{- if .private -}}
+{{-   range $v, $secondary := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.mail }}
+{{-     if .enabled }}
+Channel {{ .accountName }}-inbox
+{{-     end }}
+{{-   end }}
+{{- end }}

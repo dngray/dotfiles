@@ -6,6 +6,7 @@
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
 
 ## Set default FZF command
 ## https://medium.com/@sidneyliebrand/how-fzf-and-ripgrep-improved-my-workflow-61c7ca212861
@@ -22,3 +23,7 @@ export TERM="xterm-256color"
 export PATH="$PATH:$HOME/.local/bin:$HOME/.npm-global/bin"
 export NPM_CONFIG_PREFIX="$HOME/.npm-global"
 export VAULT_ADDR="https://vault.den.home.arpa"
+
+export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
+
+export TERMINAL="/usr/bin/footclient"

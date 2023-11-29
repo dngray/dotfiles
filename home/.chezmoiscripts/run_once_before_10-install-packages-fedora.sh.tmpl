@@ -25,16 +25,9 @@ set -eufo pipefail
      "waybar"
      "wl-clipboard" -}}
 
-{{/* LunarVim dependencies */}}
+{{/* Lazyvim dependencies */}}
 {{   $ostreeOverlay = concat $ostreeOverlay (list
-       "gcc-c++"
-       "cargo"
-       "fd-find"
-       "nodejs"
-       "npm"
-       "python-black"
-       "python-pip"
-       "rust" ) -}}
+       "gcc-c++" ) -}}
 
 {{-     if (vault (printf "kv/users/%s/packages" .vaultID1)).data.data.rpmostree }}
 {{-       range $ostreeOverlay }}
@@ -45,7 +38,6 @@ rpm-ostree install {{ . }}
 {{-   else if or (eq .chezmoi.osRelease.variant "Sericea") -}}
 {{ $ostreeOverlay := list
      "fish"
-     "fzf"
      "gvfs-mtp"
      "make"
      "neovim"

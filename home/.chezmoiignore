@@ -10,6 +10,7 @@
 .config/vdirsyncer/config
 .local/bin/mailsync
 .local/bin/openfile
+.local/bin/gi
 .mbsyncrc
 
 {{-   if not .private -}}

@@ -3,8 +3,9 @@
  */
 
 configuration {
-    font: "MesloLGS NF 14 ";
-    modes: "window,drun,run,ssh";
+    font: "MesloLGS Nerd Font Mono 14";
+    modes: "window,drun,run,ssh,combi";
+    combi-modes: "window,run";
     line-margin: 10;
 
     display-ssh:    "";
@@ -13,6 +14,7 @@ configuration {
     display-window: "";
     display-combi:  "";
     show-icons:     true;
+    terminal: "footclient";
 }
 
 @theme "~/.config/rofi/nord.rasi"

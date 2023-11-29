@@ -1,4 +1,7 @@
-{{- $user := index (vault (printf "kv/users/%s/notmuch" .currVaultID)).data.data.notmuch .accIdx }}
+{{- $user := index (vault (printf "kv/users/%s/mail" .currVaultID)).data.data.mail .accIdx }}
+{{- $notmuch := index (vault (printf "kv/users/%s/mail" .currVaultID)).data.data.notmuch }}
+{{- $configPath := joinPath ".local/share/mail/" $user.type -}}
+
 # .notmuch-config - Configuration file for the notmuch mail system
 #
 # For more information about notmuch, see https://notmuchmail.org
@@ -12,7 +15,7 @@
 # configured here named ".notmuch".
 #
 [database]
-path={{ $user.path }}
+path={{ $configPath }}
 
 # User configuration
 #
@@ -30,9 +33,9 @@ path={{ $user.path }}
 # address to which the original email was addressed.
 #
 [user]
-name={{ $user.name }}
-primary_email={{ $user.primary_email }}
-other_email={{ $user.other_email }}
+name={{ $user.realName }}
+primary_email={{ (index ($user.alias) 0) }}
+other_email={{ (index $notmuch 0).otherEmail}}
 
 # Configuration for "notmuch new"
 #
@@ -49,7 +52,7 @@ other_email={{ $user.other_email }}
 #		in the mail store.
 #
 [new]
-ignore=.mbsyncstate;.uidvalidity
+ignore=.mbsyncstate;.uidvalidity;/dovecot/;maildirfolder
 
 # Search configuration
 #
@@ -84,3 +87,7 @@ ignore=.mbsyncstate;.uidvalidity
 #	commands will notice tag changes and update flags in filenames
 #
 [maildir]
+synchronize_flags=true
+
+[index]
+decrypt=true

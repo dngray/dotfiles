@@ -28,6 +28,7 @@ set -eufo pipefail
      "cups"
      "cups-filters"
      "cups-pdf"
+     "deno"
      "diffutils"
      "dvd+rw-tools"
      "edk2-ovmf"
@@ -118,23 +119,22 @@ set -eufo pipefail
      "zip"
      "zram-generator" -}}
 
-{{/* LunarVim dependencies */}}
-{{   $pacman = concat $pacman (list
-       "cargo"
-       "fd"
-       "nodejs"
-       "npm"
-       "prettier"
-       "python-black"
-       "python-pip"
-       "rust"
-       "stylua") -}}
-
 {{ if or (eq .chezmoi.hostname "icefloe" "cavern") -}}
 {{   $pacman = concat $pacman (list
        "amd-ucode"
        "xf86-video-amdgpu") -}}
 {{- end }}
+
+{{ if eq .chezmoi.hostname "ocean" -}}
+{{   $pacman = concat $pacman (list
+       "aerc"
+       "goimapnotify"
+       "gopass"
+       "khard"
+       "msmtp"
+       "notmuch"
+       "vdirsyncer") -}}
+{{ end -}}
 
 {{ if eq .chezmoi.hostname "iceberg" -}}
 {{   $pacman = concat $pacman (list
@@ -183,7 +183,10 @@ set -eufo pipefail
        "xorg-server-xwayland") -}}
 
 {{   $yay := list
-       "greetd" -}}
+       "greetd"
+       "dracut-ukify"
+       "imapfilter"
+       "isync-git" -}}
 {{ end -}}
 
 {{ if eq .chezmoi.hostname "snowfield" -}}

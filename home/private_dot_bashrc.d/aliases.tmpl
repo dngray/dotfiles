@@ -25,7 +25,6 @@ alias enabledUnits='systemctl list-unit-files --state=enabled'
 alias runningUnits='systemctl list-units --type=service --state=running'
 alias activeUnits='systemctl list-units --type=service --state=active'
 alias mpv='flatpak run io.mpv.Mpv'
-alias firefox='flatpak run org.mozilla.firefox'
 alias yubiUnlock="gpg-connect-agent 'scd checkpin {{ (vault (printf "kv/users/%s/yubikey" .vaultID1)).data.data.serial }}' /bye"
 
 {{ if or (eq .private true) (eq .currVaultID "1001") }}

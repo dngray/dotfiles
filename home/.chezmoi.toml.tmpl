@@ -19,10 +19,6 @@
 {{- $vaultID2 := "" -}}
 {{- $currVaultID := "" -}}
 {{- $sysUID := (output "id" "-u") | trim -}}
-{{- $longitude := "" -}}
-{{- $latitude := "" -}}
-{{- $place := "" -}}
-{{- $shortPlace := "" -}}
 {{- $hostname := .chezmoi.hostname -}}
 {{- $fqdnHostname := .chezmoi.fqdnHostname -}}
 
@@ -40,7 +36,7 @@
 {{-  end -}}
 
 {{- if not $ephemeral -}}
-{{-   if or (eq $hostname "icefloe" "snowfield" "cavern" "iceberg" "ocean") -}}
+{{-   if or (eq $hostname "icefloe" "snowfield" "cavern" "iceberg" "ocean" "puddle") -}}
 {{-     $headless = false -}}
 {{-     $wayland = true -}}
 {{-     $personal = true -}}
@@ -73,7 +69,7 @@
 
 {{- if $personal -}}
 {{-   if eq $v_available "true" -}}
-{{-     if eq $hostname "snowfield" "cavern" -}}
+{{-     if eq $hostname "snowfield" "cavern" "puddle" -}}
 {{-       $flatpak = true -}}
 {{-       $vaultID1 = "1001" -}}
 {{-       $currVaultID = $vaultID1 -}}
@@ -98,13 +94,9 @@
 {{-       $currVaultID = $vaultID1 -}}
 {{-       $mutt = false -}}
 {{-     end }}
-{{-  if eq $currVaultID "1002" -}}
-{{     $private = true -}}
-{{-  end -}}
-{{-     $longitude = (vault "kv/shared/location").data.data.longitude -}}
-{{-     $latitude = (vault "kv/shared/location").data.data.latitude -}}
-{{-     $place = (vault "kv/shared/location").data.data.place -}}
-{{-     $shortPlace = (vault "kv/shared/location").data.data.shortPlace -}}
+{{-     if eq $currVaultID "1002" -}}
+{{        $private = true -}}
+{{-     end -}}
 {{-   end -}}
 {{- end -}}
 
@@ -125,10 +117,6 @@
   wayland = {{ $wayland }}
   x11 = {{ $x11 }}
   {{- if not $headless }}
-  latitude = {{ $latitude | quote }}
-  longitude = {{ $longitude | quote }}
-  place = {{ $place | quote }}
-  shortplace = {{ $shortPlace | quote }}
   dpi = {{ $dpi }}
   {{- end }}
   rootuuid = {{ $rootuuid | quote }}

@@ -7,12 +7,12 @@ set from = "{{ (index ($aliases) 0) }}"
 set hostname={{ $user.hostname }}
 set my_sendmail_h="$HOME/.local/bin/sendmail {{ $user.accountName }}"
 set my_sendmail_p="msmtp -a {{ $user.accountName }}"
-set my_signature_p = $XDG_CONFIG_HOME/mutt/signatures/acc{{ .accNum }}.signature
-set my_signature_h = $XDG_CONFIG_HOME/mutt/signatures/acc{{ .accNum }}_html.signature
+set my_signature_p = $XDG_CONFIG_HOME/mutt/signatures/{{ .accNum }}.signature
+set my_signature_h = $XDG_CONFIG_HOME/mutt/signatures/{{ .accNum }}_html.signature
 {{- range $k, $aliases }}
 alias alias{{ add $k 1 }} = {{ $user.realName}} <{{ . }}>
 {{- end }}
-set folder = $XDG_DATA_HOME/mail/{{ $user.accountName }}
+set folder = $XDG_DATA_HOME/mail/{{ $user.type }}/{{ $user.accountName }}
 set header_cache = $XDG_CACHE_HOME/mutt-wizard/{{ $user.accountName }}/headers
 set message_cachedir = $XDG_CACHE_HOME/mutt-wizard/{{ $user.accountName }}/bodies
 set mbox_type = Maildir
@@ -32,17 +32,16 @@ bind index,pager g noop
 bind index,pager M noop
 bind index,pager C noop
 bind index gg first-entry
-macro index o "<shell-escape>mailsync -V {{ $user.accountName }}<enter>" "run mbsync to sync {{ $user.accountName }}"
 unmailboxes *
 
-set spoolfile = "+INBOX"
+set spoolfile = "+Inbox"
 set record = "+Sent"
 set postponed = "+Drafts"
 set trash = "+Trash"
-mailboxes `find ~/.local/share/mail/{{ $user.accountName }} -type d -name cur | sort | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | tr '\n' ' '`
-macro index,pager gi "<change-folder>=INBOX<enter>" "go to inbox"
-macro index,pager Mi ";<save-message>=INBOX<enter>" "move mail to inbox"
-macro index,pager Ci ";<copy-message>=INBOX<enter>" "copy mail to inbox"
+mailboxes `find ~/.local/share/mail/{{ $user.type }}/{{ $user.accountName }} -type d -name cur | sort | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | tr '\n' ' '`
+macro index,pager gi "<change-folder>=Inbox<enter>" "go to inbox"
+macro index,pager Mi ";<save-message>=Inbox<enter>" "move mail to inbox"
+macro index,pager Ci ";<copy-message>=Inbox<enter>" "copy mail to inbox"
 macro index,pager gs "<change-folder>=Sent<enter>" "go to sent"
 macro index,pager Ms ";<save-message>=Sent<enter>" "move mail to sent"
 macro index,pager Cs ";<copy-message>=Sent<enter>" "copy mail to sent"
@@ -59,8 +58,8 @@ macro index,pager gj "<change-folder>=Junk<enter>" "go to junk"
 macro index,pager Mj ";<save-message>=Junk<enter>" "move mail to junk"
 macro index,pager Cj ";<copy-message>=Junk<enter>" "copy mail to junk"
 
-macro index,pager v ";<decrypt-copy>~/.local/share/mail/decrypted<enter>" "Save decrypted copy"
-macro index,pager gv "<change-folder>~/.local/share/mail/decrypted<enter>" "go to decrypted dump"
+macro index,pager v ";<decrypt-copy>~/.local/share/mail/{{ $user.type }}/decrypted<enter>" "Save decrypted copy"
+macro index,pager gv "<change-folder>~/.local/share/mail/{{ $user.type }}/decrypted<enter>" "go to decrypted dump"
 
 
 bind editor <Tab> complete-query

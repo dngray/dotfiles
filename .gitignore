@@ -1,5 +1,6 @@
 home/.chezmoitemplates/firefox/updater.sh
 home/.chezmoitemplates/firefox/prefsCleaner.sh
+home/.chezmoitemplates/firefox/user.js
 home/.chezmoitemplates/firefox/default/user.js
 home/.chezmoitemplates/firefox/default/userjs_backups
 home/.chezmoitemplates/firefox/default-no-rfp/user.js

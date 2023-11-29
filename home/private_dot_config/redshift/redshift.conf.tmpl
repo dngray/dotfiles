@@ -12,8 +12,8 @@ adjustment-method=randr
 
 ; The location provider and adjustment method settings
 ; are in their own sections.
-; This is an example lat long for {{ .place }}
+; This is an example lat long for {{- (vault "kv/shared/location").data.data.place -}}
 [manual]
-lat={{ .latitude }}
-lon={{ .longitude }}
+lat={{ (vault "kv/shared/location").data.data.latitude -}}
+lon={{ (vault "kv/shared/location").data.data.longitude -}}
 {{- end -}}

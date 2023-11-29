@@ -14,7 +14,7 @@
 # the first key found in the secret keyring
 
 {{- if .personal }}
-default-key {{ (vault (printf "kv/users/%s/pgp" .vaultID1)).data.data.defaultKey }}
+default-key {{ (index (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail 0).keyID }}
 {{- end }}
 
 #-----------------------------

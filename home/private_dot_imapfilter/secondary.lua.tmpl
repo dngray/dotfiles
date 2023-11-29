@@ -32,17 +32,6 @@ function main ()
         spam_results = second['Junk']:select_all()
         spam_results:move_messages(first['INBOX'])
     end
-
-    if (third['Inbox']:check_status() > 0) then
-        inbox_results = third['Inbox']:select_all()
-        inbox_results:move_messages(first['INBOX'])
-
-        sent_results = third['Sent']:select_all()
-        sent_results:move_messages(first['INBOX'])
-
-        spam_results = third['Junk']:select_all()
-        spam_results:move_messages(first['INBOX'])
-    end
 end
 
 -- Escapes problematic characters in passwords.

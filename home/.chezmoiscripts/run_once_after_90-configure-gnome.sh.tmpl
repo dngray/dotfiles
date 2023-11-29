@@ -3,22 +3,19 @@
 
 set -eufo pipefail
 
-gsettings set org.gnome.nautilus.list-view default-zoom-level small
-gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'
-gsettings set org.gnome.nautilus.preferences show-hidden-files true
 gsettings set org.gtk.Settings.FileChooser show-hidden true
 gsettings set org.gtk.Settings.FileChooser sort-directories-first true
+gsettings set org.gnome.desktop.wm.preferences button-layout ':'
 
 fc-cache
 
 {{-  if (eq .chezmoi.osRelease.variant "Silverblue")  -}}
 profile=$(gsettings get org.gnome.Terminal.ProfilesList default)
 gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles/${profile}/ font "MesloLGS NF"
+gsettings set org.gnome.nautilus.list-view default-zoom-level small
+gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'
+gsettings set org.gnome.nautilus.preferences show-hidden-files true
+gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+gsettings set org.gnome.desktop.interface icon-theme 'Adwaita-dark'
 {{- end }}
-
-#gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
-#gsettings set org.gnome.desktop.interface icon-theme 'Adwaita-dark'
-
-gsettings set org.gnome.desktop.wm.preferences button-layout ':'
-
 {{ end -}}

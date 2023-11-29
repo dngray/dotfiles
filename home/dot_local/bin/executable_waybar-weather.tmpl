@@ -1,7 +1,7 @@
 {{ if not .headless }}
 #!/bin/sh
 
-location='{{ .shortplace }}'
+location='{{- (vault "kv/shared/location").data.data.shortPlace -}}'
 base_url='https:/wttr.in/'
 base_cmd='curl -s'
 temp=$($base_cmd $base_url~$location?format="%t+%c")

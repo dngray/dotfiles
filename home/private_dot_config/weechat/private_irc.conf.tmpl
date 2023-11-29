@@ -6,8 +6,10 @@
 #
 # Use commands like /set or /fset to change settings in WeeChat.
 #
-# For more info, see: https://weechat.org/doc/quickstart/
+# For more info, see: https://weechat.org/doc/weechat/quickstart/
 #
+
+config_version = 3
 
 [look]
 buffer_open_before_autojoin = on
@@ -27,6 +29,7 @@ display_ctcp_unknown = on
 display_extended_join = on
 display_host_join = on
 display_host_join_local = on
+display_host_notice = on
 display_host_quit = on
 display_join_message = "329,332,333,366"
 display_old_topic = on
@@ -43,8 +46,12 @@ item_display_server = buffer_plugin
 item_nick_modes = on
 item_nick_prefix = on
 join_auto_add_chantype = off
+list_buffer_scroll_horizontal = 10
+list_buffer_sort = "~name2"
+list_buffer_topic_strip_colors = on
 msgbuffer_fallback = current
 new_channel_position = none
+new_list_position = none
 new_pv_position = none
 nick_completion_smart = speakers
 nick_mode = prefix
@@ -55,6 +62,7 @@ notice_welcome_redirect = on
 notice_welcome_tags = ""
 notify_tags_ison = "notify_message"
 notify_tags_whois = "notify_message"
+open_pv_buffer_echo_msg = on
 part_closes_buffer = off
 pv_buffer = independent
 pv_tags = "notify_private"
@@ -84,6 +92,8 @@ item_nick_modes = default
 item_tls_version_deprecated = yellow
 item_tls_version_insecure = red
 item_tls_version_ok = green
+list_buffer_line_selected = white
+list_buffer_line_selected_bg = 24
 message_account = cyan
 message_chghost = brown
 message_join = green
@@ -169,6 +179,7 @@ notify = ""
 password = ""
 proxy = ""
 realname = ""
+registered_mode = "r"
 sasl_fail = continue
 sasl_key = ""
 sasl_mechanism = plain
@@ -176,13 +187,13 @@ sasl_password = ""
 sasl_timeout = 15
 sasl_username = ""
 split_msg_max_length = 512
-ssl = off
-ssl_cert = ""
-ssl_dhkey_size = 2048
-ssl_fingerprint = ""
-ssl_password = ""
-ssl_priorities = "NORMAL:-VERS-SSL3.0"
-ssl_verify = on
+tls = off
+tls_cert = ""
+tls_dhkey_size = 2048
+tls_fingerprint = ""
+tls_password = ""
+tls_priorities = "NORMAL:-VERS-SSL3.0"
+tls_verify = on
 usermode = ""
 username = "unknown"
 

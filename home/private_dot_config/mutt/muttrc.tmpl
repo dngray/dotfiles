@@ -1,12 +1,13 @@
 # vim: filetype=neomuttrc
 source "$XDG_CONFIG_HOME/mutt/mutt-wizard.muttrc"
-source "$XDG_CONFIG_HOME"/mutt/accounts/acc1.muttrc
-macro index,pager i1 '<sync-mailbox><enter-command>source "$XDG_CONFIG_HOME"/mutt/accounts/acc1.muttrc<enter><change-folder>!<enter>;<check-stats>' "Switch to Account 1"
+source "$XDG_CONFIG_HOME"/mutt/accounts/1.muttrc
+macro index,pager i1 '<sync-mailbox><enter-command>source "$XDG_CONFIG_HOME"/mutt/accounts/1.muttrc<enter><change-folder>!<enter>;<check-stats>' "Switch to Account 1"
 {{- if .private }}
-macro index,pager i2 '<sync-mailbox><enter-command>source "$XDG_CONFIG_HOME"/mutt/accounts/acc2.muttrc<enter><change-folder>!<enter>;<check-stats>' "Switch to Account 2"
-macro index,pager i3 '<sync-mailbox><enter-command>source "$XDG_CONFIG_HOME"/mutt/accounts/acc3.muttrc<enter><change-folder>!<enter>;<check-stats>' "Switch to Account 3"
+macro index,pager i2 '<sync-mailbox><enter-command>source "$XDG_CONFIG_HOME"/mutt/accounts/2.muttrc<enter><change-folder>!<enter>;<check-stats>' "Switch to Account 2"
+macro index,pager i3 '<sync-mailbox><enter-command>source "$XDG_CONFIG_HOME"/mutt/accounts/3.muttrc<enter><change-folder>!<enter>;<check-stats>' "Switch to Account 3"
 {{-  end }}
 macro index ii "<shell-escape>imapfilter -c $HOME/.imapfilter/secondary.lua<enter>" "Run imapfilter"
+macro index o "<shell-escape>mbsync inboxes<enter>" "run mbsync to sync inboxes"
 set crypt_use_gpgme = yes
 set tmpdir = "/tmp/mutt"
 

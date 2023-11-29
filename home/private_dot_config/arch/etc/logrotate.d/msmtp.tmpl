@@ -1,0 +1,7 @@
+{{ .chezmoi.homeDir }}/.msmtp.log {{ .chezmoi.homeDir }}/.msmtp.queue.log {
+  rotate 9999
+  weekly
+  compress
+  notifempty
+  missingok
+}

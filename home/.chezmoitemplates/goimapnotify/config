@@ -1,0 +1,21 @@
+{{- $user := index (vault (printf "kv/users/%s/mail" .currVaultID)).data.data.mail .accIdx -}}
+{
+  "host": "{{ $user.imapHost }}",
+  "hostCmd": "",
+  "port": {{ $user.imapPort }},
+  "tls": true,
+  "tlsOptions": {
+    "rejectUnauthorized": true
+  },
+  "username": "{{ $user.username }}",
+  "usernameCmd": "",
+  "password": "",
+  "passwordCmd": "gopass -o mail/{{ $user.accountName }}",
+  "xoauth2": false,
+  "onNewMail": "mbsync {{ $user.accountName }}-inbox",
+  "onNewMailPost": "notmuch --config ~/.config/notmuch/{{ $user.type }}/config new",
+  "wait": 20,
+  "boxes": [
+    "Inbox"
+  ]
+}

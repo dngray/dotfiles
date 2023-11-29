@@ -1,0 +1,13 @@
+{{ if (and (eq .chezmoi.osRelease.id "fedora") (not .ephemeral) (not .headless)) -}}
+[Desktop Entry]
+Name=Bitwarden
+GenericName=Password Manager
+Comment=A secure and free password manager for all of your devices.
+Exec=.local/bin/bitwarden-x86_64.appimage
+Terminal=false
+MimeType=x-scheme-handler/bitwarden
+Type=Application
+Icon=bitwarden
+Categories=Utility;
+StartupWMClass=Bitwarden
+{{- end}}

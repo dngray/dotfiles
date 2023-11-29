@@ -1,0 +1,15 @@
+profile helpers {
+  #include <abstractions/base>
+  /{,usr/}bin/bash mr,
+  /{,usr/}bin/dash mr,
+  /tmp/            rw,
+  owner /tmp/*     rw,
+
+  /usr/bin/secret-tool PUx,
+  /usr/bin/gpg{,2}     PUx,
+  /home/fbence/.local/bin/mailctl{,2} PUx,
+  /usr/bin/pass        PUx,
+  /usr/bin/head        PUx,
+  /usr/bin/keyring     PUx,
+  /{,usr/}bin/cat      PUx,
+}

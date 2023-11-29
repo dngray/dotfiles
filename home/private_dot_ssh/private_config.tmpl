@@ -19,6 +19,12 @@
 
 {{ (vault (printf "kv/users/%s/ssh_hosts" .currVaultID)).data.data.ssh_hosts }}
 
+{{- if (eq .chezmoi.osRelease.id "fedora") }}
+{{ (vault "kv/shared/ssh_hosts_redhat").data.data.ssh_hosts_redhat }}
+{{- else }}
+{{ (vault "kv/shared/ssh_hosts_other").data.data.ssh_hosts_other }}
+{{- end }}
+
 Host *
   ForwardAgent no
   ForwardX11 no

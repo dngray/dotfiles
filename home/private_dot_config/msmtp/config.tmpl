@@ -1,28 +1,27 @@
 defaults
 auth on
-tls	on
+tls on
 tls_starttls off
 {{- if (eq .chezmoi.osRelease.id "debian" "ubuntu") }}
-tls_trust_file	/etc/ssl/certs/ca-certificates.crt
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
 {{- else if (eq .chezmoi.osRelease.id "arch") }}
 tls_trust_file /etc/ssl/cert.pem
 {{- else if (eq .chezmoi.osRelease.id "fedora") }}
 tls_trust_file /etc/pki/tls/certs/ca-bundle.crt
 {{- end }}
-#logfile	~/.config/msmtp/msmtp.log
-
-{{-  range $v, $primary := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail }}
-{{-  $aliases := ($primary.alias) }}
-{{-    if .enabled }}
+#logfile ~/.config/msmtp/msmtp.log
+{{  range $v, $primary := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail }}
+{{- $aliases := ($primary.alias) }}
+{{-   if .enabled }}
 account {{ .accountName }}
 host {{ .smtpHost }}
 port {{ .smtpPort }}
 from {{ (index ($aliases) 0) }}
 user {{ .username }}
-passwordeval "gopass -o {{ .accountName }}"
+passwordeval "gopass -o mail/{{ .accountName }}"
 # dsn_notify success
-{{-    end -}}
-{{-  end -}}
+{{-   end -}}
+{{- end -}}
 
 {{- if .private -}}
 {{-   range $v, $secondary := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.mail }}
@@ -33,7 +32,7 @@ host {{ .smtpHost }}
 port {{ .smtpPort }}
 from {{ (index ($aliases) 0) }}
 user {{ .username }}
-passwordeval "gopass -o {{ .accountName }}"
+passwordeval "gopass -o mail/{{ .accountName }}"
 {{-     end }}
 {{-   end -}}
 {{- end }}
