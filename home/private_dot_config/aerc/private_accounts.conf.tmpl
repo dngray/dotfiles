@@ -1,0 +1,109 @@
+# Aerc main configuration. For detailed information type "man aerc"
+# Read `man 5 aerc-accounts` for reference.
+
+{{ $type := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.type }}
+{{- range $v, $account := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail }}
+{{-   $aliases := ($account.alias) }}
+{{-   $localAbooks := ($account.localAbooks) }}
+{{-   if .enabled -}}
+[{{ .shortAccountName }}]
+source                    = maildir://~/.local/share/mail/{{ $type }}/{{ .accountName }}
+check-mail-cmd            = mbsync -a {{ .shortAccountName }}
+outgoing                  = bash -c ~/.local/bin/msmtpq/msmtpq -a {{ .accountName }}
+copy-to                   = Sent
+default                   = Inbox
+from                      = {{ .realName | quote }} <{{ (index ($aliases) 0) }}>
+{{- if gt (len $localAbooks) 0 }}
+address-book-cmd          = khard email -f %s -p --remove-first-line -a
+{{-   range $ab, $localAbooks := $account.localAbooks }}
+{{-   if $ab }},{{ end -}}
+{{      $localAbooks }}
+{{-   end }}
+{{- end }}
+pgp-key-id                = {{ if eq (hasKey $account "keyID") true }}{{ .keyID }}{{ end }}
+pgp-auto-sign             = true
+pgp-opportunistic-encrypt = false
+signature-file            = ~/.config/aerc/signatures/1.signature
+{{-   end }}
+{{- end }}
+{{  if .private }}
+{{- $type := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.type }}
+{{-   range $v, $account := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.mail }}
+{{-     $aliases := ($account.alias) }}
+{{-     $localAbooks := ($account.localAbooks) }}
+{{-     if .enabled }}
+[{{ .shortAccountName }}]
+source                    = maildir://~/.local/share/mail/{{ $type }}/{{ .accountName }}
+check-mail-cmd            = mbsync -a {{ .accountName }}
+outgoing                  = bash -c ~/.local/bin/msmtpq/msmtpq -a {{ .accountName }}
+copy-to                   = Sent
+default                   = Inbox
+from                      = {{ .realName | quote }} <{{ (index ($aliases) 0) }}>
+{{- if gt (len $localAbooks) 0 }}
+address-book-cmd          = khard email -f %s -p --remove-first-line -a
+{{-   range $ab, $localAbooks := $account.localAbooks }}
+{{-   if $ab }},{{ end -}}
+{{      $localAbooks }}
+{{-   end }}
+{{- end }}
+pgp-key-id                = {{ if eq (hasKey $account "keyID") true }}{{ .keyID }}{{ end }}
+pgp-auto-sign             = true
+pgp-opportunistic-encrypt = false
+signature-file            = ~/.config/aerc/signatures/2.signature
+{{-     end }}
+{{    end }}
+{{- end }}
+{{- $type := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.type }}
+{{- $account := index (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail 0 }}
+{{-   $aliases := ($account.alias) }}
+{{-   $localAbooks := ($account.localAbooks) }}
+{{-   if $account.enabled }}
+[nm-{{ $account.shortAccountName }}]
+source                    = notmuch://~/.local/share/mail/{{ $type }}/
+maildir-store             = ~/.local/share/mail/{{ $type }}/
+outgoing                  = bash -c ~/.local/bin/msmtpq/msmtpq -a {{ $account.accountName }}
+copy-to                   = {{ $account.accountName }}/Sent
+query-map                 = ~/.config/aerc/notmuchmap/{{ $type }}.conf
+default                   = Inbox
+folders-sort              = Inbox
+from                      = {{ $account.realName | quote }} <{{ (index ($aliases) 0) }}>
+{{- if gt (len $localAbooks) 0 }}
+address-book-cmd          = khard email -f %s -p --remove-first-line -a
+{{-   range $ab, $localAbooks := $account.localAbooks }}
+{{-   if $ab }},{{ end -}}
+{{      $localAbooks }}
+{{-   end }}
+{{- end }}
+pgp-key-id                = {{ if eq (hasKey $account "keyID") true }}{{ $account.keyID }}{{ end }}
+pgp-auto-sign             = true
+pgp-opportunistic-encrypt = false
+signature-file            = ~/.config/aerc/signatures/1.signature
+{{-   end }}
+{{  if .private }}
+{{-   $type := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.type }}
+{{-   $account := index (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.mail 0 }}
+{{-   $aliases := ($account.alias) }}
+{{-   $localAbooks := ($account.localAbooks) }}
+{{-   if $account.enabled }}
+[nm-{{ $account.shortAccountName }}]
+source                    = notmuch://~/.local/share/mail/{{ $type }}/
+maildir-store             = ~/.local/share/mail/{{ $type }}/
+outgoing                  = bash -c ~/.local/bin/msmtpq/msmtpq -a {{ $account.accountName }}
+copy-to                   = {{ $account.accountName }}/Sent
+query-map                 = ~/.config/aerc/notmuchmap/{{ $type }}.conf
+default                   = Inbox
+folders-sort              = Inbox
+from                      = {{ $account.realName | quote }} <{{ (index ($aliases) 0) }}>
+{{- if gt (len $localAbooks) 0 }}
+address-book-cmd          = khard email -f %s -p --remove-first-line -a
+{{-   range $ab, $localAbooks := $account.localAbooks }}
+{{-   if $ab }},{{ end -}}
+{{      $localAbooks }}
+{{-   end }}
+{{- end }}
+pgp-key-id                = {{ if eq (hasKey $account "keyID") true }}{{ $account.keyID }}{{ end }}
+pgp-auto-sign             = true
+pgp-opportunistic-encrypt = false
+signature-file            = ~/.config/aerc/signatures/2.signature
+{{-   end }}
+{{- end }}

@@ -1,4 +1,5 @@
 # vim: filetype=neomuttrc
+{{- $type := (vault (printf "kv/users/%s/mail" .currVaultID)).data.data.type -}}
 {{- $user := index (vault (printf "kv/users/%s/mail" .currVaultID)).data.data.mail .accIdx }}
 {{- $aliases := ($user.alias) }}
 # muttrc file for account {{ $user.accountName }}
@@ -7,14 +8,14 @@ set from = "{{ (index ($aliases) 0) }}"
 set hostname={{ $user.hostname }}
 set my_sendmail_h="$HOME/.local/bin/sendmail {{ $user.accountName }}"
 set my_sendmail_p="msmtp -a {{ $user.accountName }}"
-set my_signature_p = $XDG_CONFIG_HOME/mutt/signatures/{{ .accNum }}.signature
-set my_signature_h = $XDG_CONFIG_HOME/mutt/signatures/{{ .accNum }}_html.signature
+set my_signature_p = ~/.config/mutt/signatures/{{ .accNum }}.signature
+set my_signature_h = ~/.config/mutt/signatures/{{ .accNum }}_html.signature
 {{- range $k, $aliases }}
 alias alias{{ add $k 1 }} = {{ $user.realName}} <{{ . }}>
 {{- end }}
-set folder = $XDG_DATA_HOME/mail/{{ $user.type }}/{{ $user.accountName }}
-set header_cache = $XDG_CACHE_HOME/mutt-wizard/{{ $user.accountName }}/headers
-set message_cachedir = $XDG_CACHE_HOME/mutt-wizard/{{ $user.accountName }}/bodies
+set folder = ~/.local/share/mail/{{ $type }}/{{ $user.accountName }}
+set header_cache = ~/.cache/mutt-wizard/{{ $user.accountName }}/headers
+set message_cachedir = ~/.cache/mutt-wizard/{{ $user.accountName }}/bodies
 set mbox_type = Maildir
 {{ if eq (hasKey $user "keyID") true }}
 set pgp_self_encrypt = yes
@@ -38,7 +39,7 @@ set spoolfile = "+Inbox"
 set record = "+Sent"
 set postponed = "+Drafts"
 set trash = "+Trash"
-mailboxes `find ~/.local/share/mail/{{ $user.type }}/{{ $user.accountName }} -type d -name cur | sort | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | tr '\n' ' '`
+mailboxes `find ~/.local/share/mail/{{ $type }}/{{ $user.accountName }} -type d -name cur | sort | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | tr '\n' ' '`
 macro index,pager gi "<change-folder>=Inbox<enter>" "go to inbox"
 macro index,pager Mi ";<save-message>=Inbox<enter>" "move mail to inbox"
 macro index,pager Ci ";<copy-message>=Inbox<enter>" "copy mail to inbox"
@@ -58,8 +59,8 @@ macro index,pager gj "<change-folder>=Junk<enter>" "go to junk"
 macro index,pager Mj ";<save-message>=Junk<enter>" "move mail to junk"
 macro index,pager Cj ";<copy-message>=Junk<enter>" "copy mail to junk"
 
-macro index,pager v ";<decrypt-copy>~/.local/share/mail/{{ $user.type }}/decrypted<enter>" "Save decrypted copy"
-macro index,pager gv "<change-folder>~/.local/share/mail/{{ $user.type }}/decrypted<enter>" "go to decrypted dump"
+macro index,pager v ";<decrypt-copy>~/.local/share/mail/{{ $type }}/decrypted<enter>" "Save decrypted copy"
+macro index,pager gv "<change-folder>~/.local/share/mail/{{ $type }}/decrypted<enter>" "go to decrypted dump"
 
 
 bind editor <Tab> complete-query

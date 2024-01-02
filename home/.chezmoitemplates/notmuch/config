@@ -1,6 +1,6 @@
+{{- $type := (vault (printf "kv/users/%s/mail" .currVaultID)).data.data.type -}}
 {{- $user := index (vault (printf "kv/users/%s/mail" .currVaultID)).data.data.mail .accIdx }}
 {{- $notmuch := index (vault (printf "kv/users/%s/mail" .currVaultID)).data.data.notmuch }}
-{{- $configPath := joinPath ".local/share/mail/" $user.type -}}
 
 # .notmuch-config - Configuration file for the notmuch mail system
 #
@@ -15,6 +15,7 @@
 # configured here named ".notmuch".
 #
 [database]
+{{ $configPath := joinPath ".local/share/mail/" $type -}}
 path={{ $configPath }}
 
 # User configuration

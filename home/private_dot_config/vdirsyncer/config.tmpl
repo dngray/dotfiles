@@ -5,7 +5,7 @@
 
 [general]
 # A folder where vdirsyncer can store some metadata about each pair.
-status_path = "~/.config/vdirsyncer/status/"
+status_path = "~/.local/state/vdirsyncer"
 
 # CARDDAV
 [pair contacts]
@@ -28,13 +28,13 @@ metadata = ["displayname"]
 #   `null` - abort when collisions occur (default)
 #   `"a wins"` - assume a's items to be more up-to-date
 #   `"b wins"` - assume b's items to be more up-to-date
-conflict_resolution = ["command", "vimdiff"]
+conflict_resolution = ["command", "nvim", "-d"]
 
 [storage contacts_local]
 # A storage references actual data on a remote server or on the local disk.
 # Similar to repositories in OfflineIMAP.
 type = "filesystem"
-path = "~/.local/vdirsyncer/contacts/"
+path = "~/.local/share/address-book/Personal/"
 fileext = ".vcf"
 
 [storage contacts_remote]
@@ -62,7 +62,7 @@ metadata = ["color"]
 
 [storage calendar_local]
 type = "filesystem"
-path = "~/.local/vdirsyncer/calendars/"
+path = "~/.local/share/calendars/"
 fileext = ".ics"
 
 [storage calendar_remote]

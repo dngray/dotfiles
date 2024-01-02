@@ -1,7 +1,7 @@
 [user]
 {{- $gitUser := index (vault (printf "kv/users/%s/mail" .uid)).data.data.mail .accountNumber }}
 	name = {{ $gitUser.realName }}
-	email = {{ $gitUser.username }}
+	email = {{ index ($gitUser.alias) 0 }}
 	signingkey = {{ if eq (hasKey $gitUser "keyID") true }}{{ $gitUser.keyID }}{{ end }}
 [alias]
 	cf = commit -s --fixup

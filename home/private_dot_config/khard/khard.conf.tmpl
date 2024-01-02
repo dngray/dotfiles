@@ -4,18 +4,18 @@
 
 [addressbooks]
 [[Personal]]
-path = ~/.local/vdirsyncer/contacts/{{ $primary.calendarID }}
+path = ~/.local/share/address-book/Personal/{{ index ($primary.remoteAbooks) 0  }}
 [[Local]]
 {{-  if .private -}}
 {{- $secondary := index (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.mail 0 }}
-path = ~/.local/khard/contacts/{{ $secondary.accountName }}
+path = ~/.local/share/address-book/Local/{{ $secondary.accountName }}
 {{-  end }}
 [general]
 debug = no
 default_action = list
 # These are either strings or comma seperated lists
 editor = nvim, -i, NONE
-merge_editor = vimdiff
+merge_editor = 'nvim -d'
 
 [contact table]
 # display names by first or last name: first_name / last_name / formatted_name

@@ -5,7 +5,6 @@ alias ll='ls -alF'
 alias dir='ls -lah'
 alias la='ls -A'
 alias l='ls -CF'
-alias nmu='TZ=UTC neomutt'
 alias mkdir='mkdir -p'
 alias h="history|grep "
 alias f="find . |grep "
@@ -19,15 +18,30 @@ alias rm='rm -i'
 alias diff='diff --color=auto'
 alias dmesg='dmesg --color=always'
 alias cdr='cd `pwd -P`' # cd from a symlink into a real dir
-alias ev='evince'
+alias duH1D1M='du -h -d 1 -t 1M'
 alias fc-list-family='fc-list :outline -f "%{family}\n"'
 alias enabledUnits='systemctl list-unit-files --state=enabled'
 alias runningUnits='systemctl list-units --type=service --state=running'
 alias activeUnits='systemctl list-units --type=service --state=active'
 alias mpv='flatpak run io.mpv.Mpv'
-alias yubiUnlock="gpg-connect-agent 'scd checkpin {{ (vault (printf "kv/users/%s/yubikey" .vaultID1)).data.data.serial }}' /bye"
+{{- $vaultID1 := .vaultID1 -}}
+{{ $type := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.type }}
+{{- range $v, $primary := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail }}
+{{-   if eq (hasKey $primary "serial") true }}
+alias yu{{ $type }}_{{ $v }}="gpg-connect-agent 'scd checkpin {{ $primary.serial }}'"
+{{-   end }}
+{{-  end }}
+{{- if .private -}}
+{{- $vaultID1 := .vaultID2 -}}
+{{ $type := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.type }}
+{{- range $v, $secondary := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.mail }}
+{{-   if eq (hasKey $secondary "serial") true }}
+alias yu{{ $type }}_{{ $v }}="gpg-connect-agent 'scd checkpin {{ $secondary.serial }}'"
+{{-   end }}
+{{-  end }}
+{{- end }}
 
-{{ if or (eq .private true) (eq .currVaultID "1001") }}
+{{ if or (eq .private true) (eq .currVaultID "1001") -}}
 # RDP
 {{-   $rdp := index (vault (printf "kv/users/%s/rdp" .currVaultID)).data.data.rdp -}}
 {{-   range $rdp }}

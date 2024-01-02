@@ -1,23 +1,34 @@
-{{- if not .mutt }}
+{{- if not .cliMail }}
+.config/aerc/accounts.conf
+.config/aerc/aerc.conf
+.config/aerc/bindings.conf
+.config/aerc/notmuchmap/primary.conf
+.config/aerc/notmuchmap/stylesets/**
+.config/aerc/notmuchmap/third.conf
+.config/aerc/signatures/1.signature
+.config/aerc/signatures/3.signature
+.config/goimapnotify/1.conf
+.config/isyncrc
 .config/khard/khard.conf
 .config/msmtp/config
-.config/mutt/accounts/acc1.muttrc
+.config/mutt/accounts/1.muttrc
 .config/mutt/muttrc
-.config/mutt/signatures/acc1.signature
-.config/mutt/signatures/acc1_html.signature
-.config/notmuch/acc1/config
-.config/notmuch/acch/config
+.config/mutt/signatures/1.signature
+.config/mutt/signatures/1_html.signature
+.config/notmuch/primary/config
+.config/notmuch/third/config
 .config/vdirsyncer/config
-.local/bin/mailsync
-.local/bin/openfile
 .local/bin/gi
-.mbsyncrc
 
 {{-   if not .private -}}
-.config/mutt/accounts/acc2.muttrc
-.config/mutt/signatures/acc2.signature
-.config/mutt/signatures/acc2_html.signature
-.config/notmuch/acc2/config
+.config/aerc/notmuchmap/secondary.conf
+.config/aerc/signatures/2.signature
+.config/goimapnotify/2.conf
+.config/goimapnotify/2.conf
+.config/mutt/accounts/2.muttrc
+.config/mutt/signatures/2.signature
+.config/mutt/signatures/2_html.signature
+.config/notmuch/secondary/config
 {{-   end }}
 {{- end }}
 

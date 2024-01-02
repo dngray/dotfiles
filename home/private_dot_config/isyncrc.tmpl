@@ -4,8 +4,8 @@ Remove Both
 Expunge Both
 
 {{- $id := .chezmoi.osRelease.id }}
+{{- $type := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.type -}}
 {{-  range $v, $primary := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail }}
-{{-  $aliases := ($primary.alias) }}
 {{-    if .enabled }}
 
 IMAPAccount {{ .accountName }}
@@ -29,8 +29,8 @@ Account {{ .accountName }}
 
 MaildirStore {{ .accountName }}-local
 Subfolders Verbatim
-Path ~/.local/share/mail/{{ .type }}/{{ .accountName }}/
-Inbox ~/.local/share/mail/{{ .type }}/{{ .accountName }}/Inbox
+Path ~/.local/share/mail/{{ $type }}/{{ .accountName }}/
+Inbox ~/.local/share/mail/{{ $type }}/{{ .accountName }}/Inbox
 Flatten .
 
 Channel {{ .accountName }}-folders
@@ -59,8 +59,8 @@ Channel {{ .accountName }}-folders
 {{-  end }}
 
 {{- if .private -}}
+{{- $type := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.type -}}
 {{-  range $v, $secondary := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.mail }}
-{{-  $aliases := ($secondary.alias) }}
 {{-    if .enabled }}
 
 IMAPAccount {{ .accountName }}
@@ -84,8 +84,8 @@ Account {{ .accountName }}
 
 MaildirStore {{ .accountName }}-local
 Subfolders Verbatim
-Path ~/.local/share/mail/{{ .type }}/{{ .accountName }}/
-Inbox ~/.local/share/mail/{{ .type }}/{{ .accountName }}/Inbox
+Path ~/.local/share/mail/{{ $type }}/{{ .accountName }}/
+Inbox ~/.local/share/mail/{{ $type }}/{{ .accountName }}/Inbox
 Flatten .
 
 Channel {{ .accountName }}-folders

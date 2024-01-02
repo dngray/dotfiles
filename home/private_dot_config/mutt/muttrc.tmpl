@@ -1,10 +1,10 @@
 # vim: filetype=neomuttrc
-source "$XDG_CONFIG_HOME/mutt/mutt-wizard.muttrc"
-source "$XDG_CONFIG_HOME"/mutt/accounts/1.muttrc
-macro index,pager i1 '<sync-mailbox><enter-command>source "$XDG_CONFIG_HOME"/mutt/accounts/1.muttrc<enter><change-folder>!<enter>;<check-stats>' "Switch to Account 1"
+source ~/.config/mutt/mutt-wizard.muttrc
+source ~/.config"/mutt/accounts/1.muttrc
+macro index,pager i1 '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/1.muttrc<enter><change-folder>!<enter>;<check-stats>' "Switch to Account 1"
 {{- if .private }}
-macro index,pager i2 '<sync-mailbox><enter-command>source "$XDG_CONFIG_HOME"/mutt/accounts/2.muttrc<enter><change-folder>!<enter>;<check-stats>' "Switch to Account 2"
-macro index,pager i3 '<sync-mailbox><enter-command>source "$XDG_CONFIG_HOME"/mutt/accounts/3.muttrc<enter><change-folder>!<enter>;<check-stats>' "Switch to Account 3"
+macro index,pager i2 '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/2.muttrc<enter><change-folder>!<enter>;<check-stats>' "Switch to Account 2"
+macro index,pager i3 '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/3.muttrc<enter><change-folder>!<enter>;<check-stats>' "Switch to Account 3"
 {{-  end }}
 macro index ii "<shell-escape>imapfilter -c $HOME/.imapfilter/secondary.lua<enter>" "Run imapfilter"
 macro index o "<shell-escape>mbsync inboxes<enter>" "run mbsync to sync inboxes"
@@ -20,12 +20,11 @@ set charset="utf-8"
 set send_charset="us-ascii:utf-8"
 
 # Autocrypt
-set crypt_protected_headers_write = yes
-set crypt_protected_headers_subject = "..."
-set autocrypt = yes
-# set autocrypt_dir = "$XDG_CONFIG_HOME/mutt/autocrypt"
-set autocrypt_dir = "~/.gnupg"
+# set crypt_protected_headers_write = yes
+# set crypt_protected_headers_subject = "..."
+# set autocrypt = yes
+# # set autocrypt_dir = "~/.config/mutt/autocrypt"
+# set autocrypt_dir = "~/.gnupg"
+# bind index z autocrypt-acct-menu
 
-bind index z autocrypt-acct-menu
-
-set mailcap_path = "$XDG_CONFIG_HOME"/mailcap
+set mailcap_path = "~/.config"/mailcap

@@ -3,7 +3,7 @@
 {{- $ephemeral := false -}}{{/* true if this machine is ephemeral, e.g. a cloud or VM instance */}}
 {{- $personal := false -}} {{/* true if this machine should have personal secrets from LastPass */}}
 {{- $x11 := false -}}
-{{- $mutt := false -}}
+{{- $cli_mail := false -}}
 {{- $wayland := false -}}
 {{- $flatpak := false -}}
 {{- $private := false -}}
@@ -76,23 +76,23 @@
 {{-     else if eq $hostname "iceberg" -}}
 {{-       $flatpak = true -}}
 {{-       $vaultID1 = "1000" -}}
-{{-       $mutt = true -}}
+{{-       $cli_mail = true -}}
 {{-       $currVaultID = $vaultID1 -}}
 {{-     else if eq $hostname "icefloe" "ocean" -}}
 {{-       $flatpak = true -}}
 {{-       $vaultID1 = "1000" -}}
 {{-       $vaultID2 = "1002" -}}
-{{-       $mutt = true -}}
+{{-       $cli_mail = true -}}
 {{-       $currVaultID = $vaultID2 -}}
 {{-     else if and (eq $fqdnHostname "den.home.arpa") (eq .chezmoi.username "1") -}}
 {{-       $vaultID1 = "1000" -}}
 {{-       $vaultID2 = "1002" -}}
-{{-       $mutt = true -}}
+{{-       $cli_mail = true -}}
 {{-       $currVaultID = $vaultID2 -}}
 {{-     else if and (eq $fqdnHostname "den.home.arpa") (eq .chezmoi.username "2") -}}
 {{-       $vaultID1 = "1001" -}}
 {{-       $currVaultID = $vaultID1 -}}
-{{-       $mutt = false -}}
+{{-       $cli_mail = false -}}
 {{-     end }}
 {{-     if eq $currVaultID "1002" -}}
 {{        $private = true -}}
@@ -111,7 +111,7 @@
   {{- if $private }}
   vaultID2 = {{ $vaultID2 | quote }}
   {{- end }}
-  mutt = {{ $mutt }}
+  cliMail = {{ $cli_mail }}
   sysUID = {{ $sysUID | quote }}
   cpu = {{ $cpu | quote }}
   wayland = {{ $wayland }}
