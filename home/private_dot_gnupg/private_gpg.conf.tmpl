@@ -13,8 +13,8 @@
 # The default key to sign with. If this option is not used, the default key is
 # the first key found in the secret keyring
 
-{{- if .personal }}
-default-key {{ (index (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail 0).keyID }}
+{{- if .state.personal }}
+default-key {{ (index (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail 0).keyID }}
 {{- end }}
 
 #-----------------------------

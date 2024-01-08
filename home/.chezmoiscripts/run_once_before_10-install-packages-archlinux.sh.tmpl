@@ -4,6 +4,7 @@
 set -eufo pipefail
 
 {{ $pacman := list
+     "aardvark-dns"
      "adwaita-icon-theme"
      "adwaita-qt5"
      "adwaita-qt6"
@@ -147,7 +148,7 @@ set -eufo pipefail
        "xf86-video-intel") -}}
 {{ end -}}
 
-{{ if .x11 -}}
+{{ if .system.graphics.x11 -}}
 {{   $pacman = concat $pacman (list
        "hsetroot"
        "i3-wm"
@@ -164,7 +165,7 @@ set -eufo pipefail
        "xsel") -}}
 {{ end -}}
 
-{{ if .wayland -}}
+{{ if .system.graphics.wayland -}}
 {{   $pacman = concat $pacman (list
        "gammastep"
        "grim"
@@ -194,7 +195,7 @@ set -eufo pipefail
        "grub") -}}
 {{ end -}}
 
-{{-   if (vault (printf "kv/users/%s/packages" .vaultID1)).data.data.pacman }}
+{{-   if (vault (printf "kv/users/%s/packages" .profiles.a)).data.data.pacman }}
 sudo pacman -Syu {{ $pacman | join " " }}
 {{-   end }}
 {{- end }}

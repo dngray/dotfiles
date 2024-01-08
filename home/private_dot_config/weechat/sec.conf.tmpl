@@ -17,8 +17,16 @@ salt = on
 
 [data]
 __passphrase__ = on
-{{ if .personal }}
-{{-  if ne .currVaultID "1000" -}}
-{{     (vault (printf "kv/users/%s/weechat_sec" .currVaultID)).data.data.weechat_sec }}
-{{-  end }}
+
+{{- if and (.state.personal) (.state.private) }}
+{{-   range $secure := (vault (printf "kv/users/%s/chat" .profiles.main)).data.data.weechat }}
+{{-     range $option := (index $secure) }}
+{{-       if (hasKey $option "username") }}
+{{ $option.network }}_username = {{ $option.username | quote }}
+{{-       end }}
+{{-       if (hasKey $option "password") }}
+{{ $option.network }}_password = {{ $option.password | quote }}
+{{-       end }}
+{{-     end }}
+{{-   end }}
 {{- end }}

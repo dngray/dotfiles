@@ -15,6 +15,7 @@ alias egrep="egrep --color=auto"
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
+alias vi='nvim'
 alias diff='diff --color=auto'
 alias dmesg='dmesg --color=always'
 alias cdr='cd `pwd -P`' # cd from a symlink into a real dir
@@ -24,33 +25,31 @@ alias enabledUnits='systemctl list-unit-files --state=enabled'
 alias runningUnits='systemctl list-units --type=service --state=running'
 alias activeUnits='systemctl list-units --type=service --state=active'
 alias mpv='flatpak run io.mpv.Mpv'
-{{- $vaultID1 := .vaultID1 -}}
-{{ $type := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.type }}
-{{- range $v, $primary := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail }}
-{{-   if eq (hasKey $primary "serial") true }}
-alias yu{{ $type }}_{{ $v }}="gpg-connect-agent 'scd checkpin {{ $primary.serial }}'"
+{{ $profile := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.profile }}
+{{- range $v, $profile_a := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail }}
+{{-   if eq (hasKey $profile_a "serial") true }}
+alias yk{{ $profile }}_{{ $v }}="gpg-connect-agent 'scd checkpin {{ $profile_a.serial }}'"
 {{-   end }}
 {{-  end }}
-{{- if .private -}}
-{{- $vaultID1 := .vaultID2 -}}
-{{ $type := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.type }}
-{{- range $v, $secondary := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.mail }}
-{{-   if eq (hasKey $secondary "serial") true }}
-alias yu{{ $type }}_{{ $v }}="gpg-connect-agent 'scd checkpin {{ $secondary.serial }}'"
+{{- if .state.private -}}
+{{ $profile := (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.profile }}
+{{- range $v, $profile_b := (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail }}
+{{-   if eq (hasKey $profile_b "serial") true }}
+alias yk{{ $profile }}_{{ $v }}="gpg-connect-agent 'scd checkpin {{ $profile_b.serial }}'"
 {{-   end }}
 {{-  end }}
 {{- end }}
 
-{{ if or (eq .private true) (eq .currVaultID "1001") -}}
+{{ if or (eq .state.private true) (eq .profiles.main "profile11") -}}
 # RDP
-{{-   $rdp := index (vault (printf "kv/users/%s/rdp" .currVaultID)).data.data.rdp -}}
+{{-   $rdp := index (vault (printf "kv/users/%s/resources" .profiles.main)).data.data.rdp -}}
 {{-   range $rdp }}
 alias {{ .name }}='xfreerdp /u:{{ .username }} /v:{{.ip }} /dynamic-resolution'
 {{-   end }}
 
 # smb
-{{-   $smb := index (vault (printf "kv/users/%s/smb" .currVaultID)).data.data.smb -}}
+{{-   $smb := index (vault (printf "kv/users/%s/resources" .profiles.main)).data.data.smb -}}
 {{-   range $smb }}
-alias smb{{ .name }}='smbclient //{{ .address }}/{{ .username }}'
+alias smb{{ .share_name }}='smbclient //{{ .address }}/{{ .username }}'
 {{-   end }}
 {{- end }}

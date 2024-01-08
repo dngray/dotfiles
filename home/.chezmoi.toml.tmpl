@@ -1,33 +1,29 @@
-{{/* boolean feature tags */}}
+{{/* Profiles */}}
+{{- $profile_a := "" -}}
+{{- $profile_b := "" -}}
+{{- $main_profile := "" -}}
+{{/* State */}}
 {{- $headless := false -}} {{/* true if this machine does not have a screen and keyboard */}}
 {{- $ephemeral := false -}}{{/* true if this machine is ephemeral, e.g. a cloud or VM instance */}}
-{{- $personal := false -}} {{/* true if this machine should have personal secrets from LastPass */}}
-{{- $x11 := false -}}
+{{- $personal := false -}} {{/* true if this machine should have personal secrets from vault */}}
+{{- $private := false -}}  {{/* true if second private profile is set */}}
 {{- $cli_mail := false -}}
+{{- $vault_access := (output "sh" "-c" "ping -c 1 vault.den.home.arpa > /dev/null && printf true || printf false") -}}
+
+{{/* System */}}
+{{- $luksUUID := (output "sh" "-c" "lsblk -o FSTYPE,UUID | awk '/^crypto_LUKS/ { printf $NF; exit }'") -}}
+{{- $rootUUID := (output "sh" "-c" "findmnt / -nro UUID | tr -d '\n'" ) -}}
+{{- $espUUID := (output "sh" "-c" "findmnt /boot -o UUID -nr | tr -d '\n'" ) -}}
+{{- $swapUUID := (output "sh" "-c" "lsblk -o FSTYPE,UUID | awk '/^swap/ { printf $NF; exit }'") -}}
+{{- $lvm := false -}}
+
+{{/* Graphics */}}
 {{- $wayland := false -}}
-{{- $flatpak := false -}}
-{{- $private := false -}}
-{{- $v_available := (output "sh" "-c" "ping -c 1 vault.den.home.arpa > /dev/null && printf true || printf false") }}
-{{- $dpi := 96 -}}
-{{- $tpm := false }}
-{{- $lvm := false }}
-{{- $luksuuid := (output "sh" "-c" "lsblk -o FSTYPE,UUID | awk '/^crypto_LUKS/ { printf $NF; exit }'") -}}
-{{- $rootuuid := (output "sh" "-c" "findmnt / -nro UUID | tr -d '\n'" ) -}}
-{{- $espuuid := (output "sh" "-c" "findmnt /boot -o UUID -nr | tr -d '\n'" ) -}}
-{{- $swapuuid := (output "sh" "-c" "lsblk -o FSTYPE,UUID | awk '/^swap/ { printf $NF; exit }'") -}}
-{{- $vaultID1 := "" -}}
-{{- $vaultID2 := "" -}}
-{{- $currVaultID := "" -}}
-{{- $sysUID := (output "id" "-u") | trim -}}
-{{- $hostname := .chezmoi.hostname -}}
-{{- $fqdnHostname := .chezmoi.fqdnHostname -}}
+{{- $x11 := false -}}
+{{- $dpi := "96" -}}
 
-{{/* detect GitHub codespaces, VSCode remote containers, Docker containers, and Vagrant boxes */}}
-{{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS_IPC") (eq .chezmoi.username "root" "vagrant" "vscode") -}}
-{{-   $headless = true -}}
-{{-   $ephemeral = true -}}
-{{- end -}}
-
+{{/* Hardware */}}
+{{- $tpm := false -}}
 {{- $cpu := "" -}}
 {{-  if eq (output "awk" "/^vendor_id[[:blank:]]:/ { printf $NF; exit }" "/proc/cpuinfo") "GenuineIntel" -}}
 {{-    $cpu = "intel" -}}
@@ -35,17 +31,27 @@
 {{-    $cpu = "amd" -}}
 {{-  end -}}
 
+{{/* Local */}}
+{{- $hostname := .chezmoi.hostname -}}
+{{- $fqdnHostname := .chezmoi.fqdnHostname -}}
+{{- $username := .chezmoi.username -}}
+
+{{/* detect GitHub codespaces, VSCode remote containers, Docker containers, and Vagrant boxes */}}
+{{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS_IPC") (eq $username "root" "vagrant" "vscode") -}}
+{{-   $headless = true -}}
+{{-   $ephemeral = true -}}
+{{- end -}}
+
+{{/* Set state */}}
 {{- if not $ephemeral -}}
-{{-   if or (eq $hostname "icefloe" "snowfield" "cavern" "iceberg" "ocean" "puddle") -}}
-{{-     $headless = false -}}
+{{-   if or (eq $hostname "icefloe" "snowfield" "cavern" "iceberg" "ocean" "icecube") -}}
 {{-     $wayland = true -}}
 {{-     $personal = true -}}
-{{-     $lvm = false -}}
 {{-     $tpm = true -}}
 {{-     if (eq $hostname "snowfield") -}}
 {{-       $tpm = false -}}
 {{-     end -}}
-{{-   else if (eq $fqdnHostname "den.home.arpa") -}}
+{{-   else if (eq $fqdnHostname "arch.den.home.arpa") -}}
 {{-     $headless = true -}}
 {{-     $wayland = false -}}
 {{-     $personal = true -}}
@@ -67,60 +73,56 @@
 {{-   end -}}
 {{- end -}}
 
+{{/* Set profile for each host */}}
 {{- if $personal -}}
-{{-   if eq $v_available "true" -}}
-{{-     if eq $hostname "snowfield" "cavern" "puddle" -}}
-{{-       $flatpak = true -}}
-{{-       $vaultID1 = "1001" -}}
-{{-       $currVaultID = $vaultID1 -}}
-{{-     else if eq $hostname "iceberg" -}}
-{{-       $flatpak = true -}}
-{{-       $vaultID1 = "1000" -}}
+{{-   if eq $vault_access "true" -}}
+{{-     if eq $hostname "snowfield" "cavern" "icecube" -}}
+{{-       $profile_a = "profile11" -}}
+{{-       $main_profile = $profile_a -}}
+{{-     else if eq $hostname "iceberg" "icefloe" -}}
 {{-       $cli_mail = true -}}
-{{-       $currVaultID = $vaultID1 -}}
-{{-     else if eq $hostname "icefloe" "ocean" -}}
-{{-       $flatpak = true -}}
-{{-       $vaultID1 = "1000" -}}
-{{-       $vaultID2 = "1002" -}}
+{{-       $profile_a = "profile01" -}}
+{{-       $main_profile = $profile_a -}}
+{{-     else if or (and (eq $fqdnHostname "arch.den.home.arpa") (eq $username "1")) (eq $hostname "ocean") -}}
 {{-       $cli_mail = true -}}
-{{-       $currVaultID = $vaultID2 -}}
-{{-     else if and (eq $fqdnHostname "den.home.arpa") (eq .chezmoi.username "1") -}}
-{{-       $vaultID1 = "1000" -}}
-{{-       $vaultID2 = "1002" -}}
-{{-       $cli_mail = true -}}
-{{-       $currVaultID = $vaultID2 -}}
-{{-     else if and (eq $fqdnHostname "den.home.arpa") (eq .chezmoi.username "2") -}}
-{{-       $vaultID1 = "1001" -}}
-{{-       $currVaultID = $vaultID1 -}}
+{{-       $profile_a = "profile01" -}}
+{{-       $profile_b = "profile02" -}}
+{{-       $main_profile = $profile_b -}}
+{{-     else if and (eq $fqdnHostname "arch.den.home.arpa") (eq $username "2") -}}
+{{-       $profile_a = "profile11" -}}
+{{-       $main_profile = $profile_a -}}
 {{-       $cli_mail = false -}}
-{{-     end }}
-{{-     if eq $currVaultID "1002" -}}
-{{        $private = true -}}
+{{-     end -}}
+{{-     if eq $main_profile "profile02" -}}
+{{-       $private = true -}}
 {{-     end -}}
 {{-   end -}}
 {{- end -}}
 
 [data]
-  headless = {{ $headless }}
-  ephemeral = {{ $ephemeral }}
-  personal = {{ $personal }}
-  v_available = {{ $v_available }}
-  currVaultID = {{ $currVaultID | quote }}
-  vaultID1 = {{ $vaultID1 | quote }}
-  private = {{ $private }}
-  {{- if $private }}
-  vaultID2 = {{ $vaultID2 | quote }}
-  {{- end }}
-  cliMail = {{ $cli_mail }}
-  sysUID = {{ $sysUID | quote }}
-  cpu = {{ $cpu | quote }}
-  wayland = {{ $wayland }}
-  x11 = {{ $x11 }}
-  {{- if not $headless }}
-  dpi = {{ $dpi }}
-  {{- end }}
-  rootuuid = {{ $rootuuid | quote }}
-  luksuuid = {{ $luksuuid | quote }}
-  lvm = {{ $lvm }}
-  tpm = {{ $tpm }}
-  flatpak = {{ $flatpak }}
+  [data.profiles]
+    a = {{ $profile_a | quote }}
+    b = {{ $profile_b | quote }}
+    main = {{ $main_profile | quote }}
+
+  [data.state]
+    headless = {{ $headless }}
+    ephemeral = {{ $ephemeral }}
+    personal = {{ $personal }}
+    private = {{ $private }}
+    cli_mail = {{ $cli_mail }}
+
+  [data.system]
+    [data.system.storage]
+    root_uuid = {{ $rootUUID | quote }}
+    luks_uuid = {{ $luksUUID | quote }}
+    lvm = {{ $lvm }}
+
+    [data.system.graphics]
+      wayland = {{ $wayland }}
+      x11 = {{ $x11 }}
+      dpi = {{ $dpi }}
+
+    [data.system.hw]
+      cpu = {{ $cpu | quote }}
+      tpm = {{ $tpm }}

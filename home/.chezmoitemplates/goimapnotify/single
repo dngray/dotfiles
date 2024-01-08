@@ -1,0 +1,25 @@
+{{- $profile := (vault (printf "kv/users/%s/mail" .profile)).data.data.profile -}}
+{{- range $account := (vault (printf "kv/users/%s/mail" .profile)).data.data.mail -}}
+{{-   if .enabled -}}
+[
+  {
+    "host": "{{ $account.imapHost }}",
+    "port": 993,
+    "tls": true,
+    "tlsOptions": {
+      "rejectUnauthorized": true
+    },
+    "username": "{{ $account.username }}",
+    "alias": "{{ $account.shortAccountName }}",
+    "passwordCmd": "gopass -o mail/{{ $account.accountName }}",
+    "boxes": [
+      {
+        "mailbox": "Inbox",
+        "onNewMail": "mbsync {{ $account.accountName }}-inbox",
+        "onNewMailPost": "NOTMUCH_PROFILE={{ $profile }} notmuch new"
+      }
+    ]
+  }
+]
+{{-   end -}}
+{{- end -}}

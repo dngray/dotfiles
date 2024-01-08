@@ -1,4 +1,4 @@
-{{ if not .headless }}
+{{- if not .state.headless -}}
 #!/bin/sh
 
 location='{{- (vault "kv/shared/location").data.data.shortPlace -}}'

@@ -2,11 +2,11 @@
 source ~/.config/mutt/mutt-wizard.muttrc
 source ~/.config"/mutt/accounts/1.muttrc
 macro index,pager i1 '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/1.muttrc<enter><change-folder>!<enter>;<check-stats>' "Switch to Account 1"
-{{- if .private }}
+{{- if .state.private }}
 macro index,pager i2 '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/2.muttrc<enter><change-folder>!<enter>;<check-stats>' "Switch to Account 2"
 macro index,pager i3 '<sync-mailbox><enter-command>source ~/.config/mutt/accounts/3.muttrc<enter><change-folder>!<enter>;<check-stats>' "Switch to Account 3"
 {{-  end }}
-macro index ii "<shell-escape>imapfilter -c $HOME/.imapfilter/secondary.lua<enter>" "Run imapfilter"
+macro index ii "<shell-escape>imapfilter -c ~/.config/imapfilter/2.lua<enter>" "Run imapfilter"
 macro index o "<shell-escape>mbsync inboxes<enter>" "run mbsync to sync inboxes"
 set crypt_use_gpgme = yes
 set tmpdir = "/tmp/mutt"

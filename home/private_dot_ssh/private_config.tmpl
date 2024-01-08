@@ -17,13 +17,76 @@
 # list of available options, their meanings and defaults, please see the
 # ssh_config(5) man page.
 
-{{ (vault (printf "kv/users/%s/ssh_hosts" .currVaultID)).data.data.ssh_hosts }}
-
-{{- if (eq .chezmoi.osRelease.id "fedora") }}
-{{ (vault "kv/shared/ssh_hosts_redhat").data.data.ssh_hosts_redhat }}
-{{- else }}
-{{ (vault "kv/shared/ssh_hosts_other").data.data.ssh_hosts_other }}
+{{- range $ssh_hosts := (vault (printf "kv/users/%s/resources" .profiles.main)).data.data.ssh }}
+{{- $host := index ($ssh_hosts) }}
+Host {{ .Host }}
+  Hostname {{ .Hostname }}
+{{- if (hasKey $host "IdentityFile") }}
+  IdentityFile {{ $host.IdentityFile }}
 {{- end }}
+{{- if (hasKey $host "IdentitiesOnly") }}
+  IdentitiesOnly {{ $host.IdentitiesOnly }}
+{{- end }}
+{{- if (hasKey $host "KexAlgorithms") }}
+  KexAlgorithms {{ $host.KexAlgorithms }}
+{{- end }}
+{{- if (hasKey $host "MACs") }}
+  MACs {{ $host.MACs }}
+{{- end }}
+{{- if (hasKey $host "Port") }}
+  Port {{ $host.Port }}{{ end }}
+{{- if (hasKey $host "User") }}
+  User {{ $host.User }}
+{{- end }}
+{{- if (hasKey $host "PasswordAuthentication") }}
+  PasswordAuthentication {{ $host.PasswordAuthentication }}
+{{- end }}
+{{ end }}
+
+{{- $redhat := .chezmoi.osRelease.id }}
+{{- range $ssh_hosts := (vault (printf "kv/shared/resources")).data.data.ssh }}
+{{- $host := index ($ssh_hosts) }}
+Host {{ .Host }}
+  Hostname {{ .Hostname }}
+{{- if (hasKey $host "IdentityFile") }}
+  IdentityFile {{ $host.IdentityFile }}
+{{- end }}
+{{- if (hasKey $host "IdentitiesOnly") }}
+  IdentitiesOnly {{ $host.IdentitiesOnly }}
+{{- end }}
+{{- if (hasKey $host "KexAlgorithms") }}
+  KexAlgorithms {{ $host.KexAlgorithms }}
+{{- end }}
+{{- if (hasKey $host "MACs") }}
+  MACs {{ $host.MACs }}
+{{- end }}
+{{- if (hasKey $host "Port") }}
+  Port {{ $host.Port }}{{ end }}
+{{- if (hasKey $host "User") }}
+  User {{ $host.User }}
+{{- end }}
+{{- if (hasKey $host "PasswordAuthentication") }}
+  PasswordAuthentication {{ $host.PasswordAuthentication }}
+{{- end }}
+{{- if (hasKey $host "Ciphers") }}
+   Ciphers {{ $host.Ciphers }}
+{{- end }}
+{{- if (hasKey $host "HostkeyAlgorithms") }}
+   HostkeyAlgorithms {{ $host.HostkeyAlgorithms }}
+{{- end }}
+{{- if (hasKey $host "PubkeyAcceptedAlgorithms") }}
+   PubkeyAcceptedAlgorithms {{ $host.PubkeyAcceptedAlgorithms }}
+{{- end }}
+{{- if (hasKey $host "PubkeyAcceptedKeyTypes") }}
+   PubkeyAcceptedKeyTypes {{ $host.PubkeyAcceptedKeyTypes }}
+{{- end }}
+{{- if (hasKey $host "PubkeyAcceptedKeyTypes") }}
+   PubkeyAcceptedKeyTypes {{ $host.PubkeyAcceptedKeyTypes }}
+{{- end }}
+{{- if and (hasKey $host "RSAMinSize") (eq $redhat "fedora") }}
+   RSAMinSize {{ $host.RSAMinSize }}
+{{- end }}
+{{ end }}
 
 Host *
   ForwardAgent no

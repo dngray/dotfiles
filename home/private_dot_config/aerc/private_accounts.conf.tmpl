@@ -1,13 +1,13 @@
 # Aerc main configuration. For detailed information type "man aerc"
 # Read `man 5 aerc-accounts` for reference.
 
-{{ $type := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.type }}
-{{- range $v, $account := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail }}
+{{ $profile := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.profile }}
+{{- range $v, $account := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail }}
 {{-   $aliases := ($account.alias) }}
 {{-   $localAbooks := ($account.localAbooks) }}
 {{-   if .enabled -}}
 [{{ .shortAccountName }}]
-source                    = maildir://~/.local/share/mail/{{ $type }}/{{ .accountName }}
+source                    = maildir://~/.local/share/mail/{{ $profile }}/{{ .accountName }}
 check-mail-cmd            = mbsync -a {{ .shortAccountName }}
 outgoing                  = bash -c ~/.local/bin/msmtpq/msmtpq -a {{ .accountName }}
 copy-to                   = Sent
@@ -23,17 +23,17 @@ address-book-cmd          = khard email -f %s -p --remove-first-line -a
 pgp-key-id                = {{ if eq (hasKey $account "keyID") true }}{{ .keyID }}{{ end }}
 pgp-auto-sign             = true
 pgp-opportunistic-encrypt = false
-signature-file            = ~/.config/aerc/signatures/1.signature
+signature-file            = ~/.config/email-common/{{ $profile }}/signatures/{{ $account.accountNumber }}.signature
 {{-   end }}
 {{- end }}
-{{  if .private }}
-{{- $type := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.type }}
-{{-   range $v, $account := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.mail }}
+{{  if .state.private }}
+{{- $profile := (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.profile }}
+{{-   range $v, $account := (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail }}
 {{-     $aliases := ($account.alias) }}
 {{-     $localAbooks := ($account.localAbooks) }}
 {{-     if .enabled }}
 [{{ .shortAccountName }}]
-source                    = maildir://~/.local/share/mail/{{ $type }}/{{ .accountName }}
+source                    = maildir://~/.local/share/mail/{{ $profile }}/{{ .accountName }}
 check-mail-cmd            = mbsync -a {{ .accountName }}
 outgoing                  = bash -c ~/.local/bin/msmtpq/msmtpq -a {{ .accountName }}
 copy-to                   = Sent
@@ -49,21 +49,21 @@ address-book-cmd          = khard email -f %s -p --remove-first-line -a
 pgp-key-id                = {{ if eq (hasKey $account "keyID") true }}{{ .keyID }}{{ end }}
 pgp-auto-sign             = true
 pgp-opportunistic-encrypt = false
-signature-file            = ~/.config/aerc/signatures/2.signature
+signature-file            = ~/.config/email-common/{{ $profile }}/signatures/{{ $account.accountNumber }}.signature
 {{-     end }}
 {{    end }}
 {{- end }}
-{{- $type := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.type }}
-{{- $account := index (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail 0 }}
+{{- $profile := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.profile }}
+{{- $account := index (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail 0 }}
 {{-   $aliases := ($account.alias) }}
 {{-   $localAbooks := ($account.localAbooks) }}
 {{-   if $account.enabled }}
 [nm-{{ $account.shortAccountName }}]
-source                    = notmuch://~/.local/share/mail/{{ $type }}/
-maildir-store             = ~/.local/share/mail/{{ $type }}/
+source                    = notmuch://~/.local/share/mail/{{ $profile }}/
+maildir-store             = ~/.local/share/mail/{{ $profile }}/
 outgoing                  = bash -c ~/.local/bin/msmtpq/msmtpq -a {{ $account.accountName }}
 copy-to                   = {{ $account.accountName }}/Sent
-query-map                 = ~/.config/aerc/notmuchmap/{{ $type }}.conf
+query-map                 = ~/.config/aerc/notmuchmap/{{ $profile }}.conf
 default                   = Inbox
 folders-sort              = Inbox
 from                      = {{ $account.realName | quote }} <{{ (index ($aliases) 0) }}>
@@ -77,20 +77,20 @@ address-book-cmd          = khard email -f %s -p --remove-first-line -a
 pgp-key-id                = {{ if eq (hasKey $account "keyID") true }}{{ $account.keyID }}{{ end }}
 pgp-auto-sign             = true
 pgp-opportunistic-encrypt = false
-signature-file            = ~/.config/aerc/signatures/1.signature
+signature-file            = ~/.config/email-common/{{ $profile }}/signatures/{{ $account.accountNumber }}.signature
 {{-   end }}
-{{  if .private }}
-{{-   $type := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.type }}
-{{-   $account := index (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.mail 0 }}
+{{  if .state.private }}
+{{-   $profile := (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.profile }}
+{{-   $account := index (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail 0 }}
 {{-   $aliases := ($account.alias) }}
 {{-   $localAbooks := ($account.localAbooks) }}
 {{-   if $account.enabled }}
 [nm-{{ $account.shortAccountName }}]
-source                    = notmuch://~/.local/share/mail/{{ $type }}/
-maildir-store             = ~/.local/share/mail/{{ $type }}/
+source                    = notmuch://~/.local/share/mail/{{ $profile }}/
+maildir-store             = ~/.local/share/mail/{{ $profile }}/
 outgoing                  = bash -c ~/.local/bin/msmtpq/msmtpq -a {{ $account.accountName }}
 copy-to                   = {{ $account.accountName }}/Sent
-query-map                 = ~/.config/aerc/notmuchmap/{{ $type }}.conf
+query-map                 = ~/.config/aerc/notmuchmap/{{ $profile }}.conf
 default                   = Inbox
 folders-sort              = Inbox
 from                      = {{ $account.realName | quote }} <{{ (index ($aliases) 0) }}>
@@ -104,6 +104,6 @@ address-book-cmd          = khard email -f %s -p --remove-first-line -a
 pgp-key-id                = {{ if eq (hasKey $account "keyID") true }}{{ $account.keyID }}{{ end }}
 pgp-auto-sign             = true
 pgp-opportunistic-encrypt = false
-signature-file            = ~/.config/aerc/signatures/2.signature
+signature-file            = ~/.config/email-common/{{ $profile }}/signatures/{{ $account.accountNumber }}.signature
 {{-   end }}
 {{- end }}

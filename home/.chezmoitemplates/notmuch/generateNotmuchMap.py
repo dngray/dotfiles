@@ -1,5 +1,5 @@
-{{- $type := (vault (printf "kv/users/%s/mail" .currVaultID)).data.data.type -}}
-{{- range $v, $notmuch := (vault (printf "kv/users/%s/mail" .currVaultID)).data.data.notmuch -}}
+{{- $profile := (vault (printf "kv/users/%s/mail" .profile)).data.data.profile -}}
+{{- range $notmuch := (vault (printf "kv/users/%s/mail" .profile)).data.data.notmuch -}}
 
  #!/usr/bin/env python
 
@@ -20,7 +20,7 @@ FOLDERS = [
 {{-   end }}
 ]
 
-with open(path.join (Path.home(), ".config/aerc/notmuchmap/{{ $type }}.conf"), "w") as f:
+with open(path.join (Path.home(), ".config/aerc/notmuchmap/{{ $profile }}.conf"), "w") as f:
     # RECENT
     s = "Recent=date:30days..today and not ("
     for i, m in enumerate(MAILDIRS):

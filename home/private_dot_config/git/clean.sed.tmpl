@@ -1,3 +1,6 @@
-{{- if .private -}}
-{{- (vault (printf "kv/users/%s/clean" .vaultID2)).data.data.clean -}}
-{{- end }}
+{{- if .state.private -}}
+{{- $clean := (vault (printf "kv/users/%s/git" .profiles.b)).data.data.clean -}}
+{{-   range $clean}}
+{{-   . }}
+{{    end }}
+{{- end -}}

@@ -86,10 +86,28 @@
 	fsckobjects = true
 [trim]
 	bases = master,gh-pages
-{{- if .personal }}
-{{    (vault (printf "kv/users/%s/gitconfig" .vaultID1)).data.data.gitconfig }}
-{{-   if .private -}}
-{{-     (vault (printf "kv/users/%s/gitconfig" .vaultID2)).data.data.gitconfig }}
+{{- if .state.personal }}
+{{-   $gitconfig := (vault (printf "kv/users/%s/git" .profiles.a)).data.data.gitconfig.includes -}}
+{{    range $v := $gitconfig }}
+[includeIf "{{ .gitDir }}"]
+  path = ~/.config/git/users/{{ .gitUser }}
+{{-   end }}
+{{-   $gitconfig := (vault (printf "kv/users/%s/git" .profiles.a)).data.data.gitconfig.rewrite -}}
+{{    range $v := $gitconfig }}
+[url "{{ .url }}"]
+  insteadOf = {{ .insteadOf }}
+{{-   end }}
+{{-   if .state.private -}}
+{{-   $gitconfig := (vault (printf "kv/users/%s/git" .profiles.b)).data.data.gitconfig.includes -}}
+{{      range $v := $gitconfig }}
+[includeIf "{{ .gitDir }}"]
+  path = ~/.config/git/users/{{ .gitUser }}
+{{-     end }}
+{{-   $gitconfig := (vault (printf "kv/users/%s/git" .profiles.b)).data.data.gitconfig.rewrite -}}
+{{      range $v := $gitconfig }}
+[url "{{ .url }}"]
+	insteadOf = {{ .insteadOf }}
+{{-     end }}
 {{-   end }}
 {{- end }}
 {{/* vim: set filetype=gitconfig: */}}

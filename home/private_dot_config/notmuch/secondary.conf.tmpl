@@ -1,3 +1,0 @@
-{{- if and (eq .private true) (eq .cliMail true) -}}
-{{- template "notmuch/config" dict "currVaultID" .vaultID2 "accIdx" 0 "homeDir" .chezmoi.homeDir }}
-{{- end }}

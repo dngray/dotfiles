@@ -1,48 +1,32 @@
-{{- if not .cliMail }}
-.config/aerc/accounts.conf
-.config/aerc/aerc.conf
-.config/aerc/bindings.conf
-.config/aerc/notmuchmap/primary.conf
-.config/aerc/notmuchmap/stylesets/**
-.config/aerc/notmuchmap/third.conf
-.config/aerc/signatures/1.signature
-.config/aerc/signatures/3.signature
-.config/goimapnotify/1.conf
+{{- if not .state.cli_mail }}
+.config/aerc/**
+.config/aerc/notmuchmap/1.conf
+.config/email-common/**
+.config/goimapnotify/goimapnotify.conf
 .config/isyncrc
 .config/khard/khard.conf
 .config/msmtp/config
-.config/mutt/accounts/1.muttrc
-.config/mutt/muttrc
-.config/mutt/signatures/1.signature
-.config/mutt/signatures/1_html.signature
-.config/notmuch/primary/config
-.config/notmuch/third/config
+.config/mutt/**
+.config/notmuch/**
 .config/vdirsyncer/config
-.local/bin/gi
-
-{{-   if not .private -}}
-.config/aerc/notmuchmap/secondary.conf
-.config/aerc/signatures/2.signature
-.config/goimapnotify/2.conf
-.config/goimapnotify/2.conf
+{{-   if not .state.private -}}
+.config/aerc/notmuchmap/2.conf
+.config/email-common/2/**
 .config/mutt/accounts/2.muttrc
-.config/mutt/signatures/2.signature
-.config/mutt/signatures/2_html.signature
-.config/notmuch/secondary/config
+.config/notmuch/2/**
 {{-   end }}
 {{- end }}
 
-{{-  if not .private -}}
+{{-  if not .state.private -}}
 .config/git/clean.sed
 .config/git/smudge.sed
-.config/git/users/secondary
-.config/git/users/third
-.local/bin/ptime
+.config/git/users/2
+.config/git/users/3
 .local/share/applications/im.riot.Riot_*
 .local/share/applications/io.github.NhekoReborn.Nheko_*
 {{- end }}
 
-{{- if not .wayland }}
+{{- if not .system.graphics.wayland }}
 .config/alacritty/*
 .config/gammastep/config.ini
 .config/mako/config
@@ -51,7 +35,7 @@
 .config/wofi/*
 {{- end }}
 
-{{- if not .x11 }}
+{{- if not .system.graphics.x11 }}
 .Xresources
 .config/i3/**
 .config/picom/picom.conf
@@ -59,7 +43,7 @@
 .xinitrc
 {{- end }}
 
-{{- if .headless }}
+{{- if .state.headless }}
 .config/Element/**
 .config/GIMP/**
 .config/gtk-2.0/*
@@ -85,7 +69,7 @@
 .config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml
 .config/arch/etc/sysctl.d/40-hugepage.conf
 
-{{-   if (ne .chezmoi.fqdnHostname "den.home.arpa") }}
+{{-   if (ne .chezmoi.fqdnHostname "arch.den.home.arpa") }}
 .config/arch/etc/lxc/default.conf
 .config/arch/etc/modprobe.d/bonding.conf
 .config/arch/etc/modules-load.d/zfs.conf

@@ -1,0 +1,3 @@
+{{- if and (.state.private) -}}
+{{- template "imapfilter/config" dict "profile" .profiles.b "personal" .state.personal "private" .state.private }}
+{{- end }}

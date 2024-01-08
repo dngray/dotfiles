@@ -1,3 +1,0 @@
-{{- if and (eq .private true) (eq .cliMail true) -}}
-{{- template "mail/signature_html" dict "currVaultID" .vaultID2 "accIdx" 0 }}
-{{- end }}

@@ -1,5 +1,7 @@
-{{- template "git/user" dict "uid" .vaultID2 "accountNumber" 0 }}
+{{- if .state.private }}
+{{- template "git/user" dict "profile" .profiles.b "accIdx" 1 }}
 [filter "clean"]
 	clean = sed --file=$XDG_CONFIG_HOME/git/clean.sed
 	smudge = sed --file=$XDG_CONFIG_HOME/git/smudge.sed
 	required
+{{- end }}

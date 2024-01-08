@@ -1,1 +1,4 @@
-{{- (vault (printf "kv/users/%s/smudge" .vaultID2)).data.data.smudge -}}
+{{- $smudge := (vault (printf "kv/users/%s/git" .profiles.b)).data.data.smudge -}}
+{{- range $smudge}}
+{{- . }}
+{{  end -}}

@@ -198,8 +198,36 @@ usermode = ""
 username = "unknown"
 
 [server]
-{{- if .personal }}
-{{-   if ne .currVaultID "1000" }}
-{{      (vault (printf "kv/users/%s/weechat_irc" .currVaultID)).data.data.weechat_irc }}
-{{-  end -}}
-{{- end -}}
+{{- if and (.state.personal) (.state.private) }}
+{{-   range $irc_servers := (vault (printf "kv/users/%s/chat" .profiles.main)).data.data.weechat }}
+{{-     range $option := (index $irc_servers) }}
+{{-       if (hasKey $option "addresses") }}
+{{ $option.network }}.addresses = {{ $option.addresses | quote }}
+{{-       end }}
+{{-       if (hasKey $option "proxy") }}
+{{ $option.network }}.proxy = {{ $option.proxy | quote }}
+{{-       end }}
+{{-       if (hasKey $option "tls") }}
+{{ $option.network }}.tls = {{ $option.tls }}
+{{-       end }}
+{{-       if (hasKey $option "tls_cert") }}
+{{ $option.network }}.tls_cert = {{ $option.tls_cert | quote }}
+{{-       end }}
+{{-       if (hasKey $option "sasl_mechanism") }}
+{{ $option.network }}.sasl_mechanism = {{ $option.sasl_mechanism }}
+{{-       end }}
+{{-       if (hasKey $option "sasl_username") }}
+{{ $option.network }}.username = {{ $option.sasl_username | quote }}
+{{-       end }}
+{{-       if (hasKey $option "sasl_password") }}
+{{ $option.network }}.password = {{ $option.sasl_password | quote }}
+{{-       end }}
+{{-       if (hasKey $option "nicks") }}
+{{ $option.network }}.nicks = {{ $option.nicks | quote }}
+{{-       end }}
+{{-       if (hasKey $option "realname") }}
+{{ $option.network }}.realname = {{ $option.realname | quote }}
+{{-       end }}
+{{-     end }}
+{{-   end }}
+{{- end }}

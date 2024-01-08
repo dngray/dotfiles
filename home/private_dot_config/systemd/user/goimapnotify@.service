@@ -4,7 +4,6 @@ Description=start goimapnotify for various mailboxes
 After=local-fs.target
 After=network.target
 
-
 [Service]
 Restart=always
 RestartSec=300

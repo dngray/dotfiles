@@ -1,0 +1,3 @@
+{{- if and (.state.cli_mail) -}}
+{{- template "mail/signature" dict "profile" .profiles.a "html" true "accIdx" 0 }}
+{{- end }}

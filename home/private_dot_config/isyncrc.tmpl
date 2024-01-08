@@ -4,8 +4,8 @@ Remove Both
 Expunge Both
 
 {{- $id := .chezmoi.osRelease.id }}
-{{- $type := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.type -}}
-{{-  range $v, $primary := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail }}
+{{- $profile := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.profile -}}
+{{-  range $v, $profile_a := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail }}
 {{-    if .enabled }}
 
 IMAPAccount {{ .accountName }}
@@ -29,8 +29,8 @@ Account {{ .accountName }}
 
 MaildirStore {{ .accountName }}-local
 Subfolders Verbatim
-Path ~/.local/share/mail/{{ $type }}/{{ .accountName }}/
-Inbox ~/.local/share/mail/{{ $type }}/{{ .accountName }}/Inbox
+Path ~/.local/share/mail/{{ $profile }}/{{ .accountName }}/
+Inbox ~/.local/share/mail/{{ $profile }}/{{ .accountName }}/Inbox
 Flatten .
 
 Channel {{ .accountName }}-folders
@@ -58,9 +58,9 @@ Channel {{ .accountName }}-folders
 {{-    end }}
 {{-  end }}
 
-{{- if .private -}}
-{{- $type := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.type -}}
-{{-  range $v, $secondary := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.mail }}
+{{- if .state.private -}}
+{{- $profile := (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.profile -}}
+{{-  range $v, $profile_b := (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail }}
 {{-    if .enabled }}
 
 IMAPAccount {{ .accountName }}
@@ -84,8 +84,8 @@ Account {{ .accountName }}
 
 MaildirStore {{ .accountName }}-local
 Subfolders Verbatim
-Path ~/.local/share/mail/{{ $type }}/{{ .accountName }}/
-Inbox ~/.local/share/mail/{{ $type }}/{{ .accountName }}/Inbox
+Path ~/.local/share/mail/{{ $profile }}/{{ .accountName }}/
+Inbox ~/.local/share/mail/{{ $profile }}/{{ .accountName }}/Inbox
 Flatten .
 
 Channel {{ .accountName }}-folders
@@ -115,13 +115,13 @@ Channel {{ .accountName }}-folders
 {{-  end }}
 
 Group inboxes
-{{- range $v, $primary := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail }}
+{{- range $v, $profile_a := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail }}
 {{-   if .enabled }}
 Channel {{ .accountName }}-inbox
 {{-   end }}
 {{- end -}}
-{{- if .private -}}
-{{-   range $v, $secondary := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.mail }}
+{{- if .state.private -}}
+{{-   range $v, $profile_b := (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail }}
 {{-     if .enabled }}
 Channel {{ .accountName }}-inbox
 {{-     end }}

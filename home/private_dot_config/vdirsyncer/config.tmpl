@@ -1,4 +1,4 @@
-{{- $account := index (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail 0 -}}
+{{- $account := index (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail 0 -}}
 # Optional parameters are commented out.
 # This file doesn't document all available parameters, see
 # http://vdirsyncer.pimutils.org/ for the rest of them.

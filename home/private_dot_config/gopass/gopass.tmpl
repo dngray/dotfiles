@@ -1,4 +1,4 @@
 [mounts]
 	path = ~/.local/share/gopass/stores/root
 [recipients]
-	hash = {{ (index (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail 0).recipientHash }}
+	hash = {{ (index (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail 0).recipientHash }}

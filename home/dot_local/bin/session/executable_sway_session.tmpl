@@ -22,7 +22,7 @@ dbus-update-activation-environment --systemd DISPLAY
 #eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
 eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets) # Let ssh be managed by pinentry
 
-{{- if .x11 }}
+{{- if .system.graphics.x11 }}
 if grep -Fxq "Xft.dpi: 220" ~/.Xresources
 then
     sed -i 's/Xft.dpi: 220/Xft.dpi: 96/g' ~/.Xresources

@@ -10,8 +10,8 @@ tls_trust_file /etc/ssl/cert.pem
 tls_trust_file /etc/pki/tls/certs/ca-bundle.crt
 {{- end }}
 #logfile ~/.config/msmtp/msmtp.log
-{{  range $v, $primary := (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail }}
-{{- $aliases := ($primary.alias) }}
+{{  range $profile_a := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail }}
+{{- $aliases := ($profile_a.alias) }}
 {{-   if .enabled }}
 account {{ .accountName }}
 host {{ .smtpHost }}
@@ -23,9 +23,9 @@ passwordeval "gopass -o mail/{{ .accountName }}"
 {{-   end -}}
 {{- end -}}
 
-{{- if .private -}}
-{{-   range $v, $secondary := (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.mail }}
-{{-   $aliases := ($secondary.alias) }}
+{{- if .state.private -}}
+{{-   range $profile_b := (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail }}
+{{-   $aliases := ($profile_b.alias) }}
 {{      if .enabled }}
 account {{ .accountName }}
 host {{ .smtpHost }}

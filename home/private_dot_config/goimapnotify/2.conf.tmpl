@@ -1,3 +1,0 @@
-{{- if and (eq .private true) (eq .cliMail true) -}}
-{{- template "goimapnotify/config" dict "currVaultID" .vaultID2 "vaultID1" .vaultID1 "accIdx" 0 "accNum" 2 }}
-{{- end }}

@@ -1,8 +1,19 @@
-{{- $user := index (vault (printf "kv/users/%s/mail" .currVaultID)).data.data.mail .accIdx }}
-{{- $user.realName }}
-{{- if eq (hasKey $user "shortID") true  }}
-{{-   " " }}{{ $user.shortID }}
+{{- if not .html }}
+{{- $account := index (vault (printf "kv/users/%s/mail" .profile)).data.data.mail .accIdx }}
+{{- $account.realName }}
+{{- if (hasKey $account "shortID") }}
+{{-   " " }}{{ $account.shortID }}
 {{- end }}
-{{- if eq (hasKey $user "mastodon") true  }}
-{{    $user.mastodon }}
+{{- if (hasKey $account "mastodon") }}
+{{    $account.mastodon }}
+{{- end -}}
+{{ else if .html}}
+{{- $account := index (vault (printf "kv/users/%s/mail" .profile)).data.data.mail .accIdx }}
+{{- $account.realName }}
+{{- if eq (hasKey $account "shortID") true  }}
+{{-   " " }}{{ $account.shortID }} <br>
+{{- end }}
+{{- if eq (hasKey $account "mastodon") true  }}
+{{-   $account.mastodon }}
+{{- end -}}
 {{- end -}}

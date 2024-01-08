@@ -29,7 +29,7 @@ set -eufo pipefail
 {{   $ostreeOverlay = concat $ostreeOverlay (list
        "gcc-c++" ) -}}
 
-{{-     if (vault (printf "kv/users/%s/packages" .vaultID1)).data.data.rpmostree }}
+{{-     if (vault (printf "kv/users/%s/packages" .profiles.a)).data.data.rpmostree }}
 {{-       range $ostreeOverlay }}
 rpm-ostree install {{ . }}
 {{-       end }}
@@ -45,7 +45,7 @@ rpm-ostree install {{ . }}
      "starship"
      "syncthing"
      "udiskie" -}}
-{{-     if (vault (printf "kv/users/%s/packages" .vaultID1)).data.data.rpmostree }}
+{{-     if (vault (printf "kv/users/%s/packages" .profiles.a)).data.data.rpmostree }}
 {{-       range $ostreeOverlay }}
 rpm-ostree install {{ . }}
 {{-       end }}

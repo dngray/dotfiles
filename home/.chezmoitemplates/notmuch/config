@@ -1,6 +1,6 @@
-{{- $type := (vault (printf "kv/users/%s/mail" .currVaultID)).data.data.type -}}
-{{- $user := index (vault (printf "kv/users/%s/mail" .currVaultID)).data.data.mail .accIdx }}
-{{- $notmuch := index (vault (printf "kv/users/%s/mail" .currVaultID)).data.data.notmuch }}
+{{- $profile := (vault (printf "kv/users/%s/mail" .profile)).data.data.profile -}}
+{{- $account := index (vault (printf "kv/users/%s/mail" .profile)).data.data.mail .accIdx }}
+{{- $notmuch := index (vault (printf "kv/users/%s/mail" .profile)).data.data.notmuch }}
 
 # .notmuch-config - Configuration file for the notmuch mail system
 #
@@ -15,7 +15,7 @@
 # configured here named ".notmuch".
 #
 [database]
-{{ $configPath := joinPath ".local/share/mail/" $type -}}
+{{ $configPath := joinPath ".local/share/mail/" $profile -}}
 path={{ $configPath }}
 
 # User configuration
@@ -34,8 +34,8 @@ path={{ $configPath }}
 # address to which the original email was addressed.
 #
 [user]
-name={{ $user.realName }}
-primary_email={{ (index ($user.alias) 0) }}
+name={{ $account.realName }}
+primary_email={{ (index ($account.alias) 0) }}
 other_email={{ (index $notmuch 0).otherEmail}}
 
 # Configuration for "notmuch new"

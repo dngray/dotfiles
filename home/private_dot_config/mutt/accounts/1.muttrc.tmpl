@@ -1,1 +1,3 @@
-{{- template "mutt/account" dict "currVaultID" .vaultID1 "vaultID1" .vaultID1 "accIdx" 0 "accNum" 1 }}
+{{- if and (.state.cli_mail) -}}
+{{- template "mutt/account" dict "profile" .profiles.a "accIdx" 0 }}
+{{- end }}

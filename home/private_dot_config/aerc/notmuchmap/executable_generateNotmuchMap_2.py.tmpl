@@ -1,3 +1,3 @@
-{{- if and (eq .private true) (eq .cliMail true) -}}
-{{- template "notmuch/generateNotmuchMap.py" dict "currVaultID" .vaultID2 }}
+{{- if and (.state.private) (.state.cli_mail) -}}
+{{- template "notmuch/generateNotmuchMap.py" dict "profile" .profiles.b }}
 {{- end }}

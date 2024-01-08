@@ -9,7 +9,7 @@ compress=lz4
 show_modules=yes
 
 # https://bugs.archlinux.org/task/69424
-{{-  if .tpm }}
+{{-  if .system.hw.tpm }}
 add_dracutmodules+=" tpm2-tss "
 {{-  end }}
 omit_dracutmodules+=" brltty "
@@ -23,16 +23,16 @@ uefi_secureboot_key="/usr/share/secureboot/keys/db/db.key"
 CMDLINE=(
 	rw
 	rd.auto=1
-{{-   if .lvm }}
+{{-   if .system.storage.lvm }}
 	root=/dev/{{ .chezmoi.hostname }}VG/root
 	resume=/dev/{{ .chezmoi.hostname }}VG/swap
 {{-   else }}
-	root=UUID={{ .rootuuid }}
-	resume=UUID={{ .rootuuid }}
+	root=UUID={{ .system.storage.root_uuid }}
+	resume=UUID={{ .system.storage.root_uuid }}
 	rootflags=subvol=@
 {{-   end }}
-{{-   if .tpm }}
-	rd.luks.uuid=luks-{{ .luksuuid }}
+{{-   if .system.hw.tpm }}
+	rd.luks.uuid=luks-{{ .system.storage.luks_uuid }}
 	rd.luks.options=tpm2-device=auto,tpm2-with-pin=true,discard
 {{-  else }}
 	rd.luks.options=discard

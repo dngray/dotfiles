@@ -1,5 +1,5 @@
 [user]
-{{- $gitUser := index (vault (printf "kv/users/%s/mail" .uid)).data.data.mail .accountNumber }}
+{{- $gitUser := index (vault (printf "kv/users/%s/mail" .profile)).data.data.mail .accIdx }}
 	name = {{ $gitUser.realName }}
 	email = {{ index ($gitUser.alias) 0 }}
 	signingkey = {{ if eq (hasKey $gitUser "keyID") true }}{{ $gitUser.keyID }}{{ end }}

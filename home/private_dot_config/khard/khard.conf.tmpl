@@ -1,14 +1,15 @@
-{{- $primary := index (vault (printf "kv/users/%s/mail" .vaultID1)).data.data.mail 0 -}}
-# example configuration file for khard version > 0.14.0
-# place it under ~/.config/khard/khard.conf
+# khard configuration.
+# For detailed information type "man 5 khard.conf"
+# Read `man 1 khard` for a complete reference.
 
+{{ $profile_a := index (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail 0 -}}
 [addressbooks]
 [[Personal]]
-path = ~/.local/share/address-book/Personal/{{ index ($primary.remoteAbooks) 0  }}
+path = ~/.local/share/address-book/Personal/{{ index ($profile_a.remoteAbooks) 0  }}
 [[Local]]
-{{-  if .private -}}
-{{- $secondary := index (vault (printf "kv/users/%s/mail" .vaultID2)).data.data.mail 0 }}
-path = ~/.local/share/address-book/Local/{{ $secondary.accountName }}
+{{-  if .state.private -}}
+{{- $profile_b := index (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail 0 }}
+path = ~/.local/share/address-book/Local/{{ $profile_b.accountName }}
 {{-  end }}
 [general]
 debug = no
