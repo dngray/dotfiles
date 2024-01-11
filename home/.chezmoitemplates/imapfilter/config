@@ -11,25 +11,28 @@ function Main()
 	options.subscribe = true
 
 	-- Accounts
+{{- $profile := .profile }}
 {{- if .personal }}
-{{-   if or (eq .private true) }}
-{{-     range $account := (vault (printf "kv/users/%s/mail" .profile)).data.data.mail }}
+{{-     range $account := (vault (printf "kv/users/%s/mail" $profile)).data.data.mail }}
 {{-       range index $account.imapfilter }}
 {{-         if eq .enabled true }}
+  local password = GetPass({{ $account.accountName | quote }}, {{ $profile | quote }})
   local {{ $account.accountName }} = IMAP({
     server = '{{ $account.imapHost }}',
     username = '{{ $account.username }}',
-    password = pipe_from('gopass -o mail/{{ $account.accountName }}'),
+    password = password,
     ssl = 'tls13'
   })
-{{          end }}
 {{-       end }}
 {{-     end }}
+{{- end }}
+{{- $profile := .profile }}
+{{- if .personal }}
 	-- Move to Main. (Main user is always first)
-{{- $mainUser := index (vault (printf "kv/users/%s/mail" .profile)).data.data.mail 0 }}
-{{-     range $account := (vault (printf "kv/users/%s/mail" .profile)).data.data.mail }}
+{{- $mainUser := index (vault (printf "kv/users/%s/mail" $profile)).data.data.mail 0 }}
+{{-     range $account := (vault (printf "kv/users/%s/mail" $profile)).data.data.mail }}
 {{-       range $imapfilter := (index $account.imapfilter) }}
-{{-           if and (hasKey $imapfilter "from") .enabled true }}
+{{-         if and (hasKey $imapfilter "from") .enabled true }}
   -- Account: {{ $account.accountName }}
 	local fromPath = {}
 {{-             $inbox := (index $imapfilter.from "inbox" ) }}
@@ -37,7 +40,7 @@ function Main()
 {{-             $spam := (index $imapfilter.from "spam" ) }}
 {{-             $trash := (index $imapfilter.from "trash" ) }}
 	fromPath["inbox"] = "{{ $inbox }}"
-	fromPath["sent"] = " {{ $sent }}"
+	fromPath["sent"] = "{{ $sent }}"
 	fromPath["spam"] = "{{ $spam }}"
 	fromPath["trash"] = "{{ $trash }}"
 	local toPath = {}
@@ -48,11 +51,24 @@ function Main()
 	toPath["sent"] = "{{ $sent }}"
 	toPath["spam"] = "{{ $spam }}"
 	MoveToMainAcc(fromPath, toPath, {{ $account.accountName }}, {{ $mainUser.accountName }})
-{{            end }}
+{{-         end }}
 {{-       end }}
 {{-     end }}
 {{-   end }}
 {{- end }}
+end
+
+function GetPass(account, profile)
+	local raw_pass
+
+	vault_ret = "vault kv get -format=json kv/users/"
+		.. profile
+		.. "/mail | jq -r --arg queryname "
+		.. account
+		.. " '.data.data.mail[] | select(.accountName == $queryname).password'"
+
+	status, raw_pass = pipe_from(vault_ret)
+	return Sanitize_pwd(raw_pass)
 end
 
 function MoveToMainAcc(fromPath, toPath, fromAcc, toAcc)
@@ -121,9 +137,6 @@ function Sanitize_pwd(pwd)
 	-- The slashes are escaped first. If they were escaped later then characters
 	-- escaped later would be escaped again.
 	pwd = string.gsub(pwd, "%\\", "\\\\")
-
-	-- Escape double quote characters that exist in passwords.
-	pwd = string.gsub(pwd, '%"', '\\"')
 
 	return pwd
 end
