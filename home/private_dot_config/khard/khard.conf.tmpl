@@ -2,15 +2,25 @@
 # For detailed information type "man 5 khard.conf"
 # Read `man 1 khard` for a complete reference.
 
-{{ $profile_a := index (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail 0 -}}
+{{ $profile_a := index (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail 0 }}
 [addressbooks]
-[[Personal]]
-path = ~/.local/share/address-book/Personal/{{ index ($profile_a.remoteAbooks) 0  }}
-[[Local]]
-{{-  if .state.private -}}
-{{- $profile_b := index (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail 0 }}
-path = ~/.local/share/address-book/Local/{{ $profile_b.accountName }}
+{{ range $profile_a.addressbooks }}
+[[{{ .name }}]]
+path = ~/.local/share/address-book/Personal/{{ .remote }}
+{{ end }}
+{{-  if .state.private }}
+{{-  $profile_b := index (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail 0 }}
+{{     range $profile_b.addressbooks }}
+[[{{   .name }}]]
+path = ~/.local/share/address-book/{{ .name }}/
+{{-      if gt (len .remote) 0 }}
+{{-       .remote }}
+{{-      else }}
+{{-      $profile_b.accountName }}
+{{       end }}
+{{-    end }}
 {{-  end }}
+
 [general]
 debug = no
 default_action = list

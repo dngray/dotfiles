@@ -1,4 +1,5 @@
 {{- if not .state.cli_mail }}
+.local/bin/sm
 .config/aerc/**
 .config/aerc/notmuchmap/1.conf
 .config/email-common/**
@@ -13,7 +14,10 @@
 .config/aerc/notmuchmap/2.conf
 .config/email-common/2/**
 .config/mutt/accounts/2.muttrc
+.config/notmuch/2
 .config/notmuch/2/**
+.config/notmuch/3
+.config/notmuch/3/**
 .config/imapfilter/2.lua
 {{-   end }}
 {{- end }}
@@ -37,7 +41,7 @@
 {{- end }}
 
 {{- if not .system.graphics.x11 }}
-.Xresources
+.config/Xresources/*
 .config/i3/**
 .config/picom/picom.conf
 .config/redshift/redshift.conf
@@ -93,3 +97,12 @@
 {{ if ne .chezmoi.os "windows" }}
 .config/win10/*
 {{- end }}
+
+.asdf/installs
+.asdf/installs/**
+.asdf/download
+.asdf/downloads/**
+.asdf/plugins
+.asdf/plugins/**
+.asdf/shims
+.asdf/shims/**

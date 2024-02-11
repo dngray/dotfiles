@@ -79,11 +79,11 @@
 {{-     if eq $hostname "snowfield" "cavern" "icecube" -}}
 {{-       $profile_a = "profile11" -}}
 {{-       $main_profile = $profile_a -}}
-{{-     else if eq $hostname "iceberg" "icefloe" -}}
+{{-     else if or (and (eq $username "1") (eq $hostname "iceberg" "iceflow")) -}}
 {{-       $cli_mail = true -}}
 {{-       $profile_a = "profile01" -}}
 {{-       $main_profile = $profile_a -}}
-{{-     else if or (and (eq $fqdnHostname "arch.den.home.arpa") (eq $username "1")) (eq $hostname "ocean") -}}
+{{-     else if or (or (and (eq $fqdnHostname "arch.den.home.arpa") (eq $username "1")) (eq $username "3")) -}}
 {{-       $cli_mail = true -}}
 {{-       $profile_a = "profile01" -}}
 {{-       $profile_b = "profile02" -}}

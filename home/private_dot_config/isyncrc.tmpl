@@ -14,13 +14,7 @@ User {{ .username }}
 AuthMechs LOGIN
 PassCmd "gopass -o mail/{{ .accountName }}"
 TLSType IMAPS
-{{-     if (eq $id "debian" "ubuntu") }}
-CertificateFile /etc/ssl/certs/ca-certificates.crt
-{{-     else if (eq $id "arch") }}
 CertificateFile /etc/ssl/cert.pem
-{{-     else if (eq $id "fedora") }}
-CertificateFile /etc/pki/tls/certs/ca-bundle.crt
-{{-     end }}
 Port {{ .imapPort }}
 Timeout 120
 
@@ -69,13 +63,7 @@ User {{ .username }}
 AuthMechs LOGIN
 PassCmd "gopass -o mail/{{ .accountName }}"
 TLSType IMAPS
-{{-     if (eq $id "debian" "ubuntu") }}
-CertificateFile /etc/ssl/certs/ca-certificates.crt
-{{-     else if (eq $id "arch") }}
 CertificateFile /etc/ssl/cert.pem
-{{-     else if (eq $id "fedora") }}
-CertificateFile /etc/pki/tls/certs/ca-bundle.crt
-{{-     end }}
 Port {{ .imapPort }}
 Timeout 120
 

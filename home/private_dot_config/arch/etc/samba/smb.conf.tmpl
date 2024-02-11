@@ -44,7 +44,7 @@
 # following example restricts access to two C class networks and
 # the "loopback" interface. For more examples of the syntax see
 # the smb.conf man page
-;   hosts allow = 192.168.1. 192.168.2. 127.
+;   hosts allow = 192.0.1. 192.0.2. 127.
 
 # Uncomment this if you want a guest account, you must add this to /etc/passwd
 # otherwise the user "nobody" is used
@@ -75,7 +75,7 @@
 # Configure Samba to use multiple interfaces
 # If you have multiple network interfaces then you must list them
 # here. See the man page for details.
-;   interfaces = 192.168.12.2/24 192.168.13.2/24 
+;   interfaces = 192.0.12.2/24 192.0.13.2/24
 
 # Where to store roving profiles (only for Win95 and WinNT)
 #        %L substitutes for this servers netbios name, %U is username

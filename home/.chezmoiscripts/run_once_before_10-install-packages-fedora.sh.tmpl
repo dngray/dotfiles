@@ -2,53 +2,47 @@
 #!/bin/bash
 
 set -eufo pipefail
-{{-   if (eq .chezmoi.osRelease.variant "Silverblue")  -}}
 {{ $ostreeOverlay := list
+     "edk2-ovmf"
      "fish"
      "fzf"
      "gammastep"
+     "gstreamer1-plugin-openh264"
+     "gvfs-mtp"
+     "gvfs-smb"
      "lxqt-policykit"
      "make"
-     "mako"
+     "mozilla-openh264"
      "neovim"
-     "network-manager-applet"
-     "pam_mount"
-     "python-i3ipc"
-     "qemu-kvm"
+     "qemu"
      "ripgrep"
      "starship"
-     "sway"
+     "swtpm"
      "syncthing"
+     "tmux"
      "udiskie"
      "vault"
+     "virt-install"
      "virt-manager"
-     "waybar"
      "wl-clipboard" -}}
 
 {{/* Lazyvim dependencies */}}
 {{   $ostreeOverlay = concat $ostreeOverlay (list
        "gcc-c++" ) -}}
 
-{{-     if (vault (printf "kv/users/%s/packages" .profiles.a)).data.data.rpmostree }}
-{{-       range $ostreeOverlay }}
-rpm-ostree install {{ . }}
-{{-       end }}
-{{-     end }}
+{{-    if (eq .chezmoi.osRelease.variant "Silverblue")  -}}
+{{       $ostreeOverlay = concat $ostreeOverlay (list
+         "dunst"
+         "lxqt-policykit"
+         "network-manager-applet"
+         "python-i3ipc"
+         "sway"
+         "waybar" ) -}}
+{{-    end }}
 
-{{-   else if or (eq .chezmoi.osRelease.variant "Sericea") -}}
-{{ $ostreeOverlay := list
-     "fish"
-     "gvfs-mtp"
-     "make"
-     "neovim"
-     "ripgrep"
-     "starship"
-     "syncthing"
-     "udiskie" -}}
-{{-     if (vault (printf "kv/users/%s/packages" .profiles.a)).data.data.rpmostree }}
-{{-       range $ostreeOverlay }}
+{{-    if (vault (printf "kv/users/%s/packages" .profiles.a)).data.data.rpmostree }}
+{{-      range $ostreeOverlay }}
 rpm-ostree install {{ . }}
-{{-       end }}
-{{-     end }}
-{{-   end }}
+{{-      end }}
+{{-    end }}
 {{- end }}

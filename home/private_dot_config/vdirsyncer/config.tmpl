@@ -40,12 +40,7 @@ fileext = ".vcf"
 [storage contacts_remote]
 type = "carddav"
 url = "{{ (vault "kv/shared/dav").data.data.davURL }}"
-verify_fingerprint = "{{ (vault "kv/shared/dav").data.data.davFingerprint }}"
-{{- if (eq .chezmoi.osRelease.id "debian" "ubuntu" "arch") }}
-verify = "/etc/ssl/certs/ca-certificates.crt"
-{{- else }}
-verify = "/etc/pki/tls/certs/ca-bundle.crt"
-{{- end }}
+verify = "/etc/ssl/cert.pem"
 username = "{{ $account.username }}"
 # The password can also be fetched from the system password storage, netrc or a
 # custom command. See http://vdirsyncer.pimutils.org/en/stable/keyring.html
@@ -68,11 +63,6 @@ fileext = ".ics"
 [storage calendar_remote]
 type = "caldav"
 url = "{{ (vault "kv/shared/dav").data.data.davURL }}"
-verify_fingerprint = "{{ (vault "kv/shared/dav").data.data.davFingerprint }}"
-{{- if (eq .chezmoi.osRelease.id "debian" "ubuntu" "arch") }}
-verify = "/etc/ssl/certs/ca-certificates.crt"
-{{- else }}
-verify = "/etc/pki/tls/certs/ca-bundle.crt"
-{{- end }}
+verify = "/etc/ssl/cert.pem"
 username = "{{ $account.username }}"
 password.fetch = ["command", "gopass", "mail/{{ $account.accountName }}"]

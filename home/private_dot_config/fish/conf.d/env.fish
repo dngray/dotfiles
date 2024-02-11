@@ -20,6 +20,6 @@ set -gx SVN_EDITOR nvim
 set -gx MC_SKIN "$XDG_DATA_HOME/mc/skins/nord16M.ini"
 set -gx TERM xterm-256color
 
-set -gx PATH "$PATH:$HOME/.local/bin $HOME/.npm-global/bin"
+set -gx PATH "$PATH:$HOME/.local/bin $HOME/.asdf/bin $HOME/.asdf/shims"
 set -gx NPM_CONFIG_PREFIX "$HOME/.npm-global"
 set -gx VAULT_ADDR "https://vault.den.home.arpa"

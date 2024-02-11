@@ -1,0 +1,8 @@
+{{- if .state.cli_mail }}
+#!/bin/sh
+mbsync -a
+i=1; while [ $i -le 2 ]; do
+  NOTMUCH_PROFILE="$i" notmuch new
+  i=$(( i + 1 ))
+done
+{{- end }}

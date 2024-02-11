@@ -15,7 +15,7 @@ exec "nm-applet --indicator"
 # Autostart some stuff
 exec gammastep
 exec inactive-windows-transparency.py -o 0.8
-exec mako --anchor bottom-right
+exec dunst
 exec "foot --server"
 
 {{- if eq .chezmoi.osRelease.id "fedora" "arch" }}

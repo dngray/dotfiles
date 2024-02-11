@@ -1,0 +1,18 @@
+#!/bin/sh
+
+asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+asdf install nodejs latest
+asdf global nodejs latest
+
+asdf plugin-add rust https://github.com/asdf-community/asdf-rust.git
+asdf install rust latest
+asdf global rust latest
+
+asdf plugin-add deno https://github.com/asdf-community/asdf-deno.git
+asdf install deno latest
+asdf global deno latest
+
+asdf plugin add golang https://github.com/asdf-community/asdf-golang.git
+asdf install golang latest
+asdf global golang latest
+asdf reshim golang

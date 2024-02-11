@@ -65,14 +65,13 @@ macro index,pager gv "<change-folder>~/.local/share/mail/{{ $profile }}/decrypte
 
 bind editor <Tab> complete-query
 {{- if (eq $profile "1") }}
-{{-   $localAbooks := ($account.localAbooks) }}
 # https://khard.readthedocs.io/en/latest/scripting.html
 bind editor ^T    complete
 unset query_command
 set query_command = "khard email -f %s -p -a
-{{-   range $ab, $localAbooks := $account.localAbooks }}
-{{-   if $ab }},{{ end -}}
-{{      $localAbooks }}"
+{{-   range $v, $abook := $account.addressbooks}}
+{{-     if $v }},{{ end -}}
+{{      .name }}
 {{-   end }}
 macro index,pager Z \
   "<pipe-message>khard add-email<return>" \
@@ -81,9 +80,9 @@ macro index,pager Z \
 # Unbind khard
 unset query_command
 set query_command = "khard email -f %s -p -a
-{{-   range $ab, $localAbooks := $account.localAbooks }}
-{{-   if $ab }},{{ end -}}
-{{      $localAbooks }}
-{{-   end }}"
+{{-   range $v, $abook := $account.addressbooks}}
+{{-     if $v }},{{ end -}}
+{{      .name }}
+{{-   end }}
 {{- end }}
 unmacro index,pager Z

@@ -2,13 +2,7 @@ defaults
 auth on
 tls on
 tls_starttls off
-{{- if (eq .chezmoi.osRelease.id "debian" "ubuntu") }}
-tls_trust_file /etc/ssl/certs/ca-certificates.crt
-{{- else if (eq .chezmoi.osRelease.id "arch") }}
 tls_trust_file /etc/ssl/cert.pem
-{{- else if (eq .chezmoi.osRelease.id "fedora") }}
-tls_trust_file /etc/pki/tls/certs/ca-bundle.crt
-{{- end }}
 #logfile ~/.config/msmtp/msmtp.log
 {{  range $profile_a := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail }}
 {{- $aliases := ($profile_a.alias) }}

@@ -23,3 +23,10 @@
     executable = true
     url = "https://vault.bitwarden.com/download/?app=desktop&platform=linux"
     refreshPeriod = "168h"
+
+[".asdf"]
+    type = "archive"
+    url = "https://codeload.github.com/asdf-vm/asdf/tar.gz/refs/tags/v0.14.0"
+    exact = true
+    stripComponents = 1
+    refreshPeriod = "168h"
