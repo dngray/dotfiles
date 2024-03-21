@@ -1,0 +1,3 @@
+{{- if and (.state.private) (.state.cli_mail) -}}
+{{- template "mutt/account" dict "profile" .profiles.b "accIdx" 1 }}
+{{- end }}

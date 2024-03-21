@@ -1,6 +1,5 @@
 defaults
-auth on
-tls on
+auth login
 tls_starttls off
 tls_trust_file /etc/ssl/cert.pem
 #logfile ~/.config/msmtp/msmtp.log
@@ -10,23 +9,25 @@ tls_trust_file /etc/ssl/cert.pem
 account {{ .accountName }}
 host {{ .smtpHost }}
 port {{ .smtpPort }}
+tls {{ if .tls }}on{{ else }}off{{ end }}
 from {{ (index ($aliases) 0) }}
-user {{ .username }}
+user {{ .username }}@{{ .hostname }}
 passwordeval "gopass -o mail/{{ .accountName }}"
 # dsn_notify success
-{{-   end -}}
-{{- end -}}
+{{    end -}}
+{{  end -}}
 
-{{- if .state.private -}}
+{{- if .state.private }}
 {{-   range $profile_b := (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail }}
 {{-   $aliases := ($profile_b.alias) }}
-{{      if .enabled }}
+{{-     if .enabled }}
 account {{ .accountName }}
 host {{ .smtpHost }}
 port {{ .smtpPort }}
+tls {{ if .tls }}on{{ else }}off{{ end }}
 from {{ (index ($aliases) 0) }}
-user {{ .username }}
+user {{ .username }}@{{ .hostname }}
 passwordeval "gopass -o mail/{{ .accountName }}"
-{{-     end }}
-{{-   end -}}
-{{- end }}
+{{      end -}}
+{{    end -}}
+{{  end -}}

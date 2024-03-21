@@ -1,8 +1,27 @@
-{{- if .state.cli_mail }}
 #!/bin/sh
-mbsync -a
+{{-  if and (.state.private) (.state.cli_mail) }}
+{{- $profile := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.profile }}
+{{-  range $v, $profile_a := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail }}
+{{-    if .enabled }}
+mbsync {{ .accountName }}
+{{-    end -}}
+{{   end -}}
+{{- $profile := (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.profile }}
+{{-  range $v, $profile_b := (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail }}
+{{-    if .enabled }}
+mbsync {{ .accountName }}
+{{-    end -}}
+{{   end }}
 i=1; while [ $i -le 2 ]; do
   NOTMUCH_PROFILE="$i" notmuch new
   i=$(( i + 1 ))
 done
-{{- end }}
+{{-  else if and (not .state.private) (.state.cli_mail) }}
+{{- $profile := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.profile }}
+{{-  range $v, $profile_a := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail }}
+{{-    if .enabled }}
+mbsync {{ .accountName }}
+{{-    end -}}
+{{   end }}
+NOTMUCH_PROFILE="1" notmuch new
+{{ end -}}

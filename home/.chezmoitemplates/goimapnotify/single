@@ -9,7 +9,7 @@
     "tlsOptions": {
       "rejectUnauthorized": true
     },
-    "username": "{{ $account.username }}",
+    "username": "{{ $account.username }}@{{ $account.hostname }}",
     "alias": "{{ $account.shortAccountName }}",
     "passwordCmd": "gopass -o mail/{{ $account.accountName }}",
     "boxes": [

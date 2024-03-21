@@ -10,10 +10,10 @@ Expunge Both
 
 IMAPAccount {{ .accountName }}
 Host {{ .imapHost }}
-User {{ .username }}
+User {{ .username }}@{{ .hostname }}
 AuthMechs LOGIN
 PassCmd "gopass -o mail/{{ .accountName }}"
-TLSType IMAPS
+TLSType {{ if .tls }}IMAPS{{ else }}none{{ end }}
 CertificateFile /etc/ssl/cert.pem
 Port {{ .imapPort }}
 Timeout 120
@@ -59,10 +59,10 @@ Channel {{ .accountName }}-folders
 
 IMAPAccount {{ .accountName }}
 Host {{ .imapHost }}
-User {{ .username }}
+User {{ .username }}@{{ .hostname }}
 AuthMechs LOGIN
 PassCmd "gopass -o mail/{{ .accountName }}"
-TLSType IMAPS
+TLSType {{ if .tls }}IMAPS{{ else }}none{{ end }}
 CertificateFile /etc/ssl/cert.pem
 Port {{ .imapPort }}
 Timeout 120

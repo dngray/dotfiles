@@ -19,7 +19,7 @@ function Main()
   local password = GetPass({{ $account.accountName | quote }}, {{ $profile | quote }})
   local {{ $account.accountName }} = IMAP({
     server = '{{ $account.imapHost }}',
-    username = '{{ $account.username }}',
+    username = '{{ $account.username }}@{{ $account.hostname }}',
     password = password,
     ssl = 'tls13'
   })

@@ -1,10 +1,10 @@
 # Aerc main configuration. For detailed information type "man aerc"
 # Read `man 5 aerc-accounts` for reference.
 
-{{ $profile := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.profile }}
+{{- $profile := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.profile }}
 {{- range $v, $account := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail }}
 {{-   $aliases := ($account.alias) }}
-{{-   if .enabled -}}
+{{-   if .enabled }}
 [{{ .shortAccountName }}]
 source                    = maildir://~/.local/share/mail/{{ $profile }}/{{ .accountName }}
 check-mail-cmd            = mbsync -a {{ .shortAccountName }}
@@ -16,16 +16,19 @@ address-book-cmd          = khard email -f %s -p --remove-first-line -a
 {{- if hasKey $account "addressbooks" }}
 {{-   range $v, $abook := $account.addressbooks}}
 {{-     if $v }},{{ end -}}
-{{        .name }}
+{{-       .name }}
 {{-   end }}
 {{- end }}
-pgp-key-id                = {{ if eq (hasKey $account "keyID") true }}{{ .keyID }}{{ end }}
+signature-file            = ~/.config/email-common/{{ $profile }}/signatures/{{ .accountNumber }}.txt
+{{      if eq (hasKey $account "keyID") true -}}pgp-key-id                = {{ .keyID }}
 pgp-auto-sign             = true
 pgp-opportunistic-encrypt = false
-signature-file            = ~/.config/email-common/{{ $profile }}/signatures/{{ .accountNumber }}.signature
-{{-   end }}
-{{- end }}
-{{  if .state.private }}
+pgp-self-encrypt          = true
+{{      end -}}
+{{    end -}}
+{{  end -}}
+
+{{ if .state.private -}}
 {{- $profile := (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.profile }}
 {{-   range $v, $account := (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail }}
 {{-     $aliases := ($account.alias) }}
@@ -41,42 +44,33 @@ address-book-cmd          = khard email -f %s -p --remove-first-line -a
 {{- if hasKey $account "addressbooks" }}
 {{-   range $v, $abook := $account.addressbooks}}
 {{-     if $v }},{{ end -}}
-{{        .name }}
+{{-       .name }}
 {{-   end }}
 {{- end }}
-pgp-key-id                = {{ if eq (hasKey $account "keyID") true }}{{ .keyID }}{{ end }}
+signature-file            = ~/.config/email-common/{{ $profile }}/signatures/{{ .accountNumber }}.txt
+{{        if eq (hasKey $account "keyID") true }}pgp-key-id                = {{ .keyID }}
 pgp-auto-sign             = true
 pgp-opportunistic-encrypt = false
-signature-file            = ~/.config/email-common/{{ $profile }}/signatures/{{ .accountNumber }}.signature
-{{-     end }}
-{{    end }}
-{{- end }}
+pgp-self-encrypt          = true
+{{        end -}}
+{{      end -}}
+{{    end -}}
+{{ end -}}
+
 {{- $profile := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.profile }}
 {{- $account := index (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail 0 }}
-{{-   $aliases := ($account.alias) }}
-{{-   if $account.enabled }}
+{{- $aliases := ($account.alias) }}
+{{- if $account.enabled }}
 [nm-{{ $account.shortAccountName }}]
 source                    = notmuch://~/.local/share/mail/{{ $profile }}/
 maildir-store             = ~/.local/share/mail/{{ $profile }}/
-outgoing                  = msmtp -a {{ $account.accountName }}
-copy-to                   = {{ $account.accountName }}/Sent
 query-map                 = ~/.config/aerc/notmuchmap/{{ $profile }}.conf
 default                   = Inbox
 folders-sort              = Inbox
 from                      = {{ $account.realName | quote }} <{{ (index ($aliases) 0) }}>
-address-book-cmd          = khard email -f %s -p --remove-first-line -a
-{{- if hasKey $account "addressbooks" }}
-{{-   range $v, $abook := $account.addressbooks}}
-{{-     if $v }},{{ end -}}
-{{        .name }}
-{{-   end }}
-{{- end }}
-pgp-key-id                = {{ if eq (hasKey $account "keyID") true }}{{ $account.keyID }}{{ end }}
-pgp-auto-sign             = true
-pgp-opportunistic-encrypt = false
-signature-file            = ~/.config/email-common/{{ $profile }}/signatures/{{ $account.accountNumber }}.signature
-{{-   end }}
-{{  if .state.private }}
+{{    end -}}
+
+{{- if .state.private }}
 {{-   $profile := (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.profile }}
 {{-   $account := index (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail 0 }}
 {{-   $aliases := ($account.alias) }}
@@ -84,22 +78,9 @@ signature-file            = ~/.config/email-common/{{ $profile }}/signatures/{{ 
 [nm-{{ $account.shortAccountName }}]
 source                    = notmuch://~/.local/share/mail/{{ $profile }}/
 maildir-store             = ~/.local/share/mail/{{ $profile }}/
-outgoing                  = msmtp -a {{ $account.accountName }}
-copy-to                   = {{ $account.accountName }}/Sent
 query-map                 = ~/.config/aerc/notmuchmap/{{ $profile }}.conf
 default                   = Inbox
 folders-sort              = Inbox
 from                      = {{ $account.realName | quote }} <{{ (index ($aliases) 0) }}>
-address-book-cmd          = khard email -f %s -p --remove-first-line -a
-{{- if hasKey $account "addressbooks" }}
-{{-   range $v, $abook := $account.addressbooks}}
-{{-     if $v }},{{ end -}}
-{{        .name }}
-{{-   end }}
-{{- end }}
-pgp-key-id                = {{ if eq (hasKey $account "keyID") true }}{{ $account.keyID }}{{ end }}
-pgp-auto-sign             = true
-pgp-opportunistic-encrypt = false
-signature-file            = ~/.config/email-common/{{ $profile }}/signatures/{{ $account.accountNumber }}.signature
-{{-   end }}
-{{- end }}
+{{    end -}}
+{{  end -}}

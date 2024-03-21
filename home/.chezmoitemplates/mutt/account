@@ -6,10 +6,10 @@
 set realname = "{{ $account.realName }}"
 set from = "{{ (index ($aliases) 0) }}"
 set hostname={{ $account.hostname }}
-set my_sendmail_h = "$HOME/.local/bin/sendmail {{ $account.accountName }}"
+set my_sendmail_h = "~/.local/bin/sendmail {{ $account.accountName }}"
 set my_sendmail_p = "msmtp -a {{ $account.accountName }}"
-set my_signature_p = ~/.config/email-common/{{ $profile }}/signatures/{{ $account.accountNumber }}.signature
-set my_signature_h = ~/.config/email-common/{{ $profile }}/signatures/{{ $account.accountNumber }}_html.signature
+set my_signature_p = ~/.config/email-common/{{ $profile }}/signatures/{{ $account.accountNumber }}.txt
+set my_signature_h = ~/.config/email-common/{{ $profile }}/signatures/{{ $account.accountNumber }}.html
 {{- range $k, $aliases }}
 alias alias{{ add $k 1 }} = {{ $account.realName}} <{{ $k }}>
 {{- end }}

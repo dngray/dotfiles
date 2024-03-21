@@ -1,7 +1,17 @@
 {{- if .state.private }}
+{{- $account := index (vault (printf "kv/users/%s/mail" .profiles.b )).data.data.mail 0 }}
 {{- template "git/user" dict "profile" .profiles.b "accIdx" 0 }}
 [filter "clean"]
 	clean = sed --file=$XDG_CONFIG_HOME/git/clean.sed
 	smudge = sed --file=$XDG_CONFIG_HOME/git/smudge.sed
 	required
+
+[sendemail]
+	smtpserver = {{ $account.hostname }}
+	smtpuser = {{ $account.username }}
+	smtpencryption = ssl
+	smtpserverport = {{ $account.smtpPort }}
+
+[credential "smtp://{{ $account.username }}@{{ $account.hostname }}:{{ $account.smtpPort }}"]
+	helper = gopass
 {{- end }}
