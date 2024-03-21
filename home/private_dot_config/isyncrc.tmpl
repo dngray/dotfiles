@@ -13,7 +13,7 @@ Host {{ .imapHost }}
 User {{ .username }}
 AuthMechs LOGIN
 PassCmd "gopass -o mail/{{ .accountName }}"
-TLSType IMAPS
+TLSType {{ if .tls }}IMAPS{{ else }}none{{ end }}
 CertificateFile /etc/ssl/cert.pem
 Port {{ .imapPort }}
 Timeout 120
@@ -62,7 +62,7 @@ Host {{ .imapHost }}
 User {{ .username }}
 AuthMechs LOGIN
 PassCmd "gopass -o mail/{{ .accountName }}"
-TLSType IMAPS
+TLSType {{ if .tls }}IMAPS{{ else }}none{{ end }}
 CertificateFile /etc/ssl/cert.pem
 Port {{ .imapPort }}
 Timeout 120
