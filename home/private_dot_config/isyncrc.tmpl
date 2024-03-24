@@ -10,7 +10,7 @@ Expunge Both
 
 IMAPAccount {{ .accountName }}
 Host {{ .imapHost }}
-User {{ .username }}
+User {{ .username }}@{{ .hostname }}
 AuthMechs LOGIN
 PassCmd "gopass -o mail/{{ .accountName }}"
 TLSType {{ if .tls }}IMAPS{{ else }}none{{ end }}
@@ -59,7 +59,7 @@ Channel {{ .accountName }}-folders
 
 IMAPAccount {{ .accountName }}
 Host {{ .imapHost }}
-User {{ .username }}
+User {{ .username }}@{{ .hostname }}
 AuthMechs LOGIN
 PassCmd "gopass -o mail/{{ .accountName }}"
 TLSType {{ if .tls }}IMAPS{{ else }}none{{ end }}

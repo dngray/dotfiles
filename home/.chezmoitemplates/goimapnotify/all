@@ -11,7 +11,7 @@
     "tlsOptions": {
       "rejectUnauthorized": true
     },
-    "username": "{{ $account1.username }}",
+    "username": "{{ $account1.username }}@{{ $account1.hostname }}",
     "alias": "{{ $account1.shortAccountName }}",
     "passwordCmd": "gopass -o mail/{{ $account1.accountName }}",
     "boxes": [
@@ -29,7 +29,7 @@
     "tlsOptions": {
       "rejectUnauthorized": true
     },
-    "username": "{{ $account2.username }}",
+    "username": "{{ $account2.username }}@{{ $account2.hostname }}",
     "alias": "{{ $account2.shortAccountName }}",
     "passwordCmd": "gopass -o mail/{{ $account2.accountName }}",
     "boxes": [
@@ -47,7 +47,7 @@
     "tlsOptions": {
       "rejectUnauthorized": true
     },
-    "username": "{{ $account3.username }}",
+    "username": "{{ $account3.username }}@{{ $account3.hostname }}",
     "alias": "{{ $account3.shortAccountName }}",
     "passwordCmd": "gopass -o mail/{{ $account3.accountName }}",
     "boxes": [

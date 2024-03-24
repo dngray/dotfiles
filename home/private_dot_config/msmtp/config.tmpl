@@ -11,7 +11,7 @@ host {{ .smtpHost }}
 port {{ .smtpPort }}
 tls {{ if .tls }}on{{ else }}off{{ end }}
 from {{ (index ($aliases) 0) }}
-user {{ .username }}
+user {{ .username }}@{{ .hostname }}
 passwordeval "gopass -o mail/{{ .accountName }}"
 # dsn_notify success
 {{    end -}}
@@ -26,7 +26,7 @@ host {{ .smtpHost }}
 port {{ .smtpPort }}
 tls {{ if .tls }}on{{ else }}off{{ end }}
 from {{ (index ($aliases) 0) }}
-user {{ .username }}
+user {{ .username }}@{{ .hostname }}
 passwordeval "gopass -o mail/{{ .accountName }}"
 {{      end -}}
 {{    end -}}
