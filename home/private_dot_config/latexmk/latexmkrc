@@ -4,3 +4,5 @@
 $dvi_previewer = 'start xdvi -watchfile 1.5';
 $ps_previewer  = 'start gv --watch';
 $pdf_previewer = 'start evince';
+$pdf_mode = 4;
+set_tex_cmds('-synctex=1 -interaction=nonstopmode --shell-escape %O %S');

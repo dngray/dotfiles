@@ -2,7 +2,7 @@
     "height": 35,
     "modules-left": ["sway/workspaces", "sway/mode", "sway/window"],
     "modules-center": [],
-    "modules-right": ["pulseaudio", "backlight", "network", "temperature", "cpu", "memory", "battery", "clock", "tray"],
+    "modules-right": ["pulseaudio", "backlight", "network", "temperature", "cpu", "memory", "battery", "clock", {{ if eq .profiles.main "profile02" }}"sway/language",{{ end }} "tray"],
     "sway/mode": {
         "format": "<span style=\"italic\">{}</span>"
     },
@@ -84,5 +84,9 @@
             "default": ["", "", ""]
         },
         "on-click": "pavucontrol"
+    },
+    "sway/language": {
+      "tooltip": true,
+      "format": "{short} {variant} {flag}",
     }
 }

@@ -34,4 +34,9 @@ user_pref("browser.sessionstore.restore_tabs_lazily", false);
 /* 9003: Enable root certs for local CA ***/
 user_pref("security.enterprise_roots.enabled", true);
 
+/* Disable the Privacy-Preserving Attribution
+ * https://github.com/mozilla/explainers/tree/main/ppa-experiment
+ * https://github.com/arkenfox/user.js/issues/1854 */
+user_pref("dom.private-attribution.submission.enabled", false); // [FF128+]
+
 user_pref("_user.js.parrot", "overrides section successful");
