@@ -12,10 +12,9 @@ sleep 1
 #
 # $  ps axc -o user,command | grep pulseaudio
 # user pulseaudio
-for user in `ps axc -o user,command | grep pulseaudio | cut -f1 -d' ' | sort | uniq`;
-do
-    su $user -c "pacmd set-default-sink alsa_output.usb-device_name.analog-stereo >/dev/null 2>&1"
-    #su $user -c "pacmd dump >>/tmp/debug.log"
+for user in $(ps axc -o user,command | grep pulseaudio | cut -f1 -d' ' | sort | uniq); do
+	su $user -c "pacmd set-default-sink alsa_output.usb-device_name.analog-stereo >/dev/null 2>&1"
+	#su $user -c "pacmd dump >>/tmp/debug.log"
 done
 
 #echo matched at `date` >>/tmp/debug.log

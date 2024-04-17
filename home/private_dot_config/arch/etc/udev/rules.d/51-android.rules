@@ -1,28 +1,75 @@
-# https://wiki.archlinux.org/index.php/Android_Debug_Bridge
-SUBSYSTEM=="usb",ATTR{idVendor}=="22b8", MODE="0660", GROUP="adbusers"
-SUBSYSTEM=="usb",ATTR{idVendor}=="22b8",ATTR{idProduct}=="2e76",SYMLINK+="android_adb"
-SUBSYSTEM=="usb",ATTR{idVendor}=="22b8",ATTR{idProduct}=="2e76",SYMLINK+="android_fastboot"
-SUBSYSTEM=="usb",ATTR{idVendor}=="04e8", MODE="0660", GROUP="adbusers"
-SUBSYSTEM=="usb",ATTR{idVendor}=="04e8",ATTR{idProduct}=="685c",SYMLINK+="android_adb"
-SUBSYSTEM=="usb",ATTR{idVendor}=="04e8",ATTR{idProduct}=="685c",SYMLINK+="android_fastboot"
-SUBSYSTEM=="usb",ATTR{idVendor}=="2717", MODE="0660", GROUP="adbusers"
-SUBSYSTEM=="usb",ATTR{idVendor}=="2717",ATTR{idProduct}=="ff40",SYMLINK+="android_adb"
-SUBSYSTEM=="usb",ATTR{idVendor}=="2717",ATTR{idProduct}=="ff40",SYMLINK+="android_fastboot"
-SUBSYSTEM=="usb",ATTR{idVendor}=="2717", MODE="0660", GROUP="adbusers"
-SUBSYSTEM=="usb",ATTR{idVendor}=="2717",ATTR{idProduct}=="ff08",SYMLINK+="android_adb"
-SUBSYSTEM=="usb",ATTR{idVendor}=="2717",ATTR{idProduct}=="ff08",SYMLINK+="android_fastboot"
-SUBSYSTEM=="usb",ATTR{idVendor}=="05c6", MODE="0660", GROUP="adbusers"
-SUBSYSTEM=="usb",ATTR{idVendor}=="05c6",ATTR{idProduct}=="9091",SYMLINK+="android_adb"
-SUBSYSTEM=="usb",ATTR{idVendor}=="05c6",ATTR{idProduct}=="9091",SYMLINK+="android_fastboot"
-SUBSYSTEM=="usb",ATTR{idVendor}=="18d1", MODE="0660", GROUP="adbusers"
-SUBSYSTEM=="usb",ATTR{idVendor}=="18d1",ATTR{idProduct}=="d00d",SYMLINK+="android_adb"
-SUBSYSTEM=="usb",ATTR{idVendor}=="18d1",ATTR{idProduct}=="d00d",SYMLINK+="android_fastboot"
-SUBSYSTEM=="usb",ATTR{idVendor}=="18d1", MODE="0660", GROUP="adbusers"
-SUBSYSTEM=="usb",ATTR{idVendor}=="18d1",ATTR{idProduct}=="4ee7",SYMLINK+="android_adb"
-SUBSYSTEM=="usb",ATTR{idVendor}=="18d1",ATTR{idProduct}=="4ee7",SYMLINK+="android_fastboot"
-SUBSYSTEM=="usb",ATTR{idVendor}=="05c6", MODE="0660", GROUP="adbusers"
-SUBSYSTEM=="usb",ATTR{idVendor}=="05c6",ATTR{idProduct}=="9039",SYMLINK+="android_adb"
-SUBSYSTEM=="usb",ATTR{idVendor}=="05c6",ATTR{idProduct}=="9039",SYMLINK+="android_fastboot"
-SUBSYSTEM=="usb",ATTR{idVendor}=="18d1", MODE="0660", GROUP="adbusers"
-SUBSYSTEM=="usb",ATTR{idVendor}=="18d1",ATTR{idProduct}=="4ee0",SYMLINK+="android_adb"
-SUBSYSTEM=="usb",ATTR{idVendor}=="18d1",ATTR{idProduct}=="4ee0",SYMLINK+="android_fastboot"
+# SPDX-FileCopyrightText: 2012-2023 JoesCat, M0Rf30 and contributors
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+# Latest version can be found at:
+# <https://github.com/M0Rf30/android-udev-rules>
+
+# These rules refer to:
+# <https://developer.android.com/studio/run/device.html>
+# and include many suggestions from Arch Linux, GitHub and other Communities.
+
+
+# Skip testing for android devices if device is not add, or usb
+ACTION!="add", ACTION!="bind", GOTO="android_usb_rules_end"
+SUBSYSTEM!="usb", GOTO="android_usb_rules_end"
+
+# Skip testing for unexpected devices like hubs, controllers or printers
+ATTR{bDeviceClass}=="09", GOTO="android_usb_rules_end"
+ENV{ID_MODEL}=="Controller", GOTO="android_usb_rules_end"
+ENV{ID_USB_INTERFACES}=="*:0701??:*", GOTO="android_usb_rules_end"
+
+# Devices listed here are connected by USB
+
+# Google
+ATTR{idVendor}!="18d1", GOTO="not_Google"
+#   Nexus, Pixel (/XL/2/2XL) (4ee1=mtp 4ee2=mtp,adb 4ee3=rndis 4ee4=rndis,adb 4ee5=ptp 4ee6=ptp,adb 4ee7=adb 4ee8=midi 4ee9=midi,adb 2d00=accessory 2d01=accessory,adb 2d03=audio,adb 2d05=accessory,audio,adb)
+#   See https://android.googlesource.com/device/google/wahoo/+/master/usb/UsbGadget.cpp
+#   OnePlus 6 (4ee1=charging 4ee2=mtp,adb 4ee6=ptp,adb 4ee7=charging,adb)
+#   Onda V972 (0001=mass_storage 0006=mtp 0007=ptp 0008=camera)
+#   Pico i.MX7 Dual Development Board 4ee7=debug
+#   PinePhone (v1.2) (4ee0=fast 4ee1=mtp 4ee2=mtp,adb 4ee3=rndis 4ee4=rndis,adb 4ee5=ptp 4ee6=ptp,adb 4ee7=adb)
+#   Yandex Phone 4ee7=debug
+#   Fairphone3 (4ee1=mtp)
+#   Motorola G3 (2d02=audio 2d03=audio,adb 4ee8=midi 4ee9=midi,adb)
+ATTR{idProduct}=="4ee0", GOTO="adbfast"
+ATTR{idProduct}=="4ee2", GOTO="adbmtp"
+ATTR{idProduct}=="4ee4", GOTO="adbrndis"
+ATTR{idProduct}=="4ee6", GOTO="adbptp"
+ATTR{idProduct}=="4ee7", GOTO="adb"
+ATTR{idProduct}=="4ee8", GOTO="midi"
+ATTR{idProduct}=="4ee9", GOTO="adbmidi"
+
+# XiaoMi
+ATTR{idVendor}!="2717", GOTO="not_XiaoMi"
+#   Mi3
+ATTR{idProduct}=="0368", GOTO="adbmtp"
+#   RedMi 1S WCDMA (MTP+Debug)
+ATTR{idProduct}=="1268", GOTO="adbmtp"
+#   RedMi 1S / RedMi / RedMi Note WCDMA (1210=ptp 1218=ptp,adb 1220=CDrom 1228=usb,adb 1240=mtp 1248=mtp,adb)
+ATTR{idProduct}=="1218", GOTO="adbptp"
+ATTR{idProduct}=="1228", GOTO="adb"
+ATTR{idProduct}=="1248", GOTO="adbmtp"
+#   RedMi / RedMi Note 4G WCDMA (1311=ptp,adb 1328=usb,adb 1368=mtp,adb)
+ATTR{idProduct}=="1318", GOTO="adbptp"
+ATTR{idProduct}=="1328", GOTO="adb"
+ATTR{idProduct}=="1368", GOTO="adbmtp"
+#   Mi2 (f003=mtp,mass_storage 9039=mtp,adb,mass_storage 904d=ptp 904e=ptp,adb f000=mass_storage 9015=mass_storage,adb f00e=ndis 9024=ndis,adb f00f=ndis 803e=ndis,adb)
+#   Mi2A / Mi2S (9039=mtp,adb, 904e=adb,ptp)
+ATTR{idProduct}=="9039", GOTO="adbmtp"
+ATTR{idProduct}=="904e", GOTO="adbptp"
+ATTR{idProduct}=="9015", GOTO="adbmass"
+ATTR{idProduct}=="9024", GOTO="adb"
+ATTR{idProduct}=="803e", GOTO="adb"
+#   Redmi Note 3 (ff08=adb)
+#   Mi/Redmi (ff10=ptp ff18=ptp,adb ff40=mtp ff48=mtp,adb ff80=rndis ff88=rndis,adb)
+#   Mi Mix / A1 (ff18=ptp,adb ff28=storage,adb ff48=mtp,adb ff88=rndis,adb)
+ATTR{idProduct}=="ff08", GOTO="adb"
+ATTR{idProduct}=="ff18", GOTO="adbptp"
+ATTR{idProduct}=="ff28", GOTO="adbmass"
+ATTR{idProduct}=="ff40", GOTO="mtp"
+ATTR{idProduct}=="ff48", GOTO="adbmtp"
+ATTR{idProduct}=="ff88", GOTO="adbrndis"
+#   RedMi / RedMi Note 4G CDMA (ff68=usb,adb) / Mi4c / Mi5
+ATTR{idProduct}=="ff68", GOTO="adb"
+GOTO="android_usb_rules_end"
+LABEL="not_XiaoMi"
