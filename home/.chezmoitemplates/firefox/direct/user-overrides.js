@@ -7,6 +7,14 @@ user_pref("network.proxy.socks", "localhost");
 user_pref("network.proxy.socks_port", 8881);
 user_pref("network.proxy.socks_remote_dns", true);
 
+/* Use resistFingerprinting on 128 */
+user_pref("privacy.resistFingerprinting", true);
+user_pref("privacy.resistFingerprinting.letterboxing", true); // optional
+user_pref("webgl.disabled", true); // optional
+user_pref("privacy.spoof_english", 2); // optional
+   // ^ I have en-US app lang and a non-matching en-** OS
+  //  so my locale without spoof_english is the same as OS which is not desirable
+
 /* Disable DoH */
 user_pref("network.trr.mode", 5); // 0710
 

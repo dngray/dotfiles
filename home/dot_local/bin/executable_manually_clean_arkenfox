@@ -5,7 +5,8 @@ TEMPLATE_DIR="$CHEZMOI_ROOT/.chezmoitemplates/firefox"
 USER_JS="$TEMPLATE_DIR/default/user.js"
 
 # Cleanup old files in Mozilla/Flatpak dir
-rm -rf "$HOME"/.mozilla/firefox/{default,default-no-rfp,direct,direct-no-rfp}/{user.js,userjs_backups,presCleaner.sh}
+rm -rf "$HOME"/.mozilla/firefox/{default,default-no-rfp,direct,direct-no-rfp}/{user.js,userjs_backups,prefsCleaner.sh}
+rm -rf "$XDG_CONFIG_HOME"/mozilla/firefox/profiles/{default,default-no-rfp,direct,direct-no-rfp}/{user.js,userjs_backups,prefsCleaner.sh}
 rm -rf "$HOME"/.var/app/org.mozilla.firefox/.mozilla/firefox/{default,default-no-rfp,direct,direct-no-rfp}/{user.js,userjs_backups,prefsCleaner.sh}
 
 # Cleanup old files in Chezmoi staging area

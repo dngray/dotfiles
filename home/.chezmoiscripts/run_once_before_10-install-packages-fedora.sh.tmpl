@@ -15,7 +15,6 @@ set -eufo pipefail
      "mozilla-openh264"
      "neovim"
      "qemu"
-     "ripgrep"
      "starship"
      "swtpm"
      "syncthing"
@@ -28,7 +27,9 @@ set -eufo pipefail
 
 {{/* Lazyvim dependencies */}}
 {{   $ostreeOverlay = concat $ostreeOverlay (list
-       "gcc-c++" ) -}}
+       "fd-find"
+       "gcc-c++"
+       "ripgrep" ) -}}
 
 {{-    if (eq .chezmoi.osRelease.variant "Silverblue")  -}}
 {{       $ostreeOverlay = concat $ostreeOverlay (list

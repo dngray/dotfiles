@@ -1,10 +1,10 @@
 [".local/share/fonts/Meslo"]
     type = "archive"
-    url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/Meslo.tar.xz"
+    url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.tar.xz"
     #exact = true
     #stripComponents = 1
     refreshPeriod = "168h"
-    checksum.sha512 = "27614d1fedc652102cbfb400e4a5f662d40d323c3fd514636c84de641f18bd212676efdd8095ade9d6fd6af52694bc455d0cc83421ed00a371493cba930ca493"
+    checksum.sha512 = "5364b31502e54884e4dc0dac61e19c026cfac5b1f9a02053d57ecdba2ec249851e2766f252952ff3afdf51ca59bc705422715f6942836312333f6b2000e3402a"
 
 [".tmux/plugins/tpm"]
     type = "archive"
