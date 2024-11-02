@@ -22,7 +22,7 @@ export TERM="xterm-256color"
 
 export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
 
-export PATH="$PATH:$HOME/.local/bin:$HOME/.asdf/bin:$HOME/.asdf/shims:$HOME/.npm-global/bin:$ANDROID_SDK_ROOT/platform-tools"
+export PATH="$PATH:$HOME/.local/bin:$HOME/.asdf/bin:$HOME/.asdf/shims:$HOME/.npm-global/bin:$ANDROID_SDK_ROOT/platform-tools:$HOME/.cargo/bin"
 export NPM_CONFIG_PREFIX="$HOME/.npm-global"
 export VAULT_ADDR="https://vault.den.home.arpa"
 
