@@ -1,10 +1,8 @@
 [".local/share/fonts/Meslo"]
     type = "archive"
-    url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.tar.xz"
-    #exact = true
-    #stripComponents = 1
+    url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/Meslo.tar.xz"
     refreshPeriod = "168h"
-    checksum.sha512 = "5364b31502e54884e4dc0dac61e19c026cfac5b1f9a02053d57ecdba2ec249851e2766f252952ff3afdf51ca59bc705422715f6942836312333f6b2000e3402a"
+    checksum.sha512 = "67f31d10bb3b6e139c031f1bd6b15c945537b27f4348e32772455999235b67657252617ebfd28f05bfa801dedcb8a841c34d0c4e807902249d9e6319437f821f"
 
 [".tmux/plugins/tpm"]
     type = "archive"
@@ -12,11 +10,13 @@
     exact = true
     stripComponents = 1
     refreshPeriod = "168h"
+    checksum.sha512 = "c290cee9276ba09134409353c8bc6e4cbce56e9195ccaaba45a9e35f96709c6c3bbdbd650c2f92b0d8f7f710ffab04ddb4a8b877514c53c38885aa5d7479d17d"
 
 [".tmux/plugins/tmux-sensible/sensible.tmux"]
     type = "file"
     url = "https://raw.githubusercontent.com/tmux-plugins/tmux-sensible/master/sensible.tmux"
     refreshPeriod = "168h"
+    checksum.sha512 = "8d04eac89167fce3435f09a286754412d0cd80f390e7808068af6e964f14bf417a71d51d0ae622d7ba58aefca28d26b349cde74438d4fd7ca83669a83e4f23ce"
 
 [".local/bin/bitwarden-x86_64.appimage"]
     type = "file"
@@ -27,19 +27,20 @@
 [".local/bin/nvim"]
     type = "file"
     executable = true
-    url = "https://github.com/neovim/neovim/releases/latest/download/nvim.appimage"
+    url = "https://github.com/neovim/neovim/releases/download/v0.10.3/nvim.appimage"
     refreshPeriod = "168h"
+    checksum.sha512 = "b68b7430108caa721fba7731b39c47dbdaaef9e5af28e0c6fb9f0d6a01ea6f14ed7b34be0ee8d2d9dd728c15dd72755d5b629d58926481381a640841d7b570f9"
 
 [".asdf"]
     type = "archive"
-    url = "https://codeload.github.com/asdf-vm/asdf/tar.gz/refs/tags/v0.14.0"
     exact = true
     stripComponents = 1
-    refreshPeriod = "168h"
+    url = "https://codeload.github.com/asdf-vm/asdf/tar.gz/refs/tags/v0.15.0"
+    checksum.sha512 = "e577bfe8a0590585d2c84d63a49b29c4c5936cc4883f4e833f1108af39504b683fa79c7cb57cbc9fcfa4d7343a282f87e29b3cdbd8cdf32e2e81b50269e25ec3"
 
 [".local/bin/fastfetch"]
     type = "archive-file"
     executable = true
-    url = "https://github.com/fastfetch-cli/fastfetch/releases/download/2.28.0/fastfetch-linux-amd64.tar.gz"
-    checksum.sha512 = "95fed5fa0c88aca601d095022e25868bfd3cb4f5114eb1de0448c588fdcf6ef46a3b3d1ba6c7c5557a17f7294fb2adeedb7481b8d1c60e8d54d53752dd8a3457"
+    url = "https://github.com/fastfetch-cli/fastfetch/releases/download/2.34.1/fastfetch-linux-amd64.tar.gz"
     path = "fastfetch-linux-amd64/usr/bin/fastfetch"
+    checksum.sha512 = "f3ede6b9eac0b2eff05c894128ef5c337f86f1ee5a23e37e3832078cc861376c38d84d34eefa9c164cb9232b7b42e12a3225ff386d8752038b220936c539b9be"

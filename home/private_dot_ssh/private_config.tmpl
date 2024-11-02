@@ -27,6 +27,9 @@ Host {{ .Host }}
 {{- if (hasKey $host "IdentitiesOnly") }}
   IdentitiesOnly {{ $host.IdentitiesOnly }}
 {{- end }}
+{{- if (hasKey $host "Ciphers") }}
+  Ciphers {{ $host.Ciphers }}
+{{- end }}
 {{- if (hasKey $host "KexAlgorithms") }}
   KexAlgorithms {{ $host.KexAlgorithms }}
 {{- end }}
@@ -40,6 +43,9 @@ Host {{ .Host }}
 {{- end }}
 {{- if (hasKey $host "PasswordAuthentication") }}
   PasswordAuthentication {{ $host.PasswordAuthentication }}
+{{- end }}
+{{- if (hasKey $host "PubkeyAuthentication") }}
+  PubkeyAuthentication {{ $host.PubkeyAuthentication }}
 {{- end }}
 {{ end }}
 

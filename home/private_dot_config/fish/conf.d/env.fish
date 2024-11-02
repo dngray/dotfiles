@@ -22,6 +22,6 @@ set -gx TERM xterm-256color
 
 set -gx ANDROID_SDK_ROOT "$HOME/Android/Sdk"
 
-set -gx PATH "$PATH:$HOME/.local/bin $HOME/.asdf/bin $HOME/.asdf/shims $HOME/.npm-global/bin $ANDROID_SDK_ROOT/platform-tools"
+set -gx PATH "$PATH:$HOME/.local/bin $HOME/.asdf/bin $HOME/.asdf/shims $HOME/.npm-global/bin $ANDROID_SDK_ROOT/platform-tools $HOME/.cargo/bin"
 set -gx NPM_CONFIG_PREFIX "$HOME/.npm-global"
 set -gx VAULT_ADDR "https://vault.den.home.arpa"

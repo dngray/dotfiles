@@ -25,8 +25,8 @@ path = ~/.local/share/address-book/{{ .name }}/
 debug = no
 default_action = list
 # These are either strings or comma seperated lists
-editor = nvim, -i, NONE
-merge_editor = 'nvim -d'
+editor = nvim, -i, NONE, --cmd, 'let g:email=v:true'
+merge_editor = 'nvim -d', --cmd, 'let g:email=v:true'
 
 [contact table]
 # display names by first or last name: first_name / last_name / formatted_name

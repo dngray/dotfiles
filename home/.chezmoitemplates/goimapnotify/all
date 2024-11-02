@@ -3,59 +3,52 @@
 {{- $account1 := index (vault (printf "kv/users/%s/mail" .profile1)).data.data.mail 0 -}}
 {{- $account2 := index (vault (printf "kv/users/%s/mail" .profile2)).data.data.mail 0 -}}
 {{- $account3 := index (vault (printf "kv/users/%s/mail" .profile2)).data.data.mail 1 -}}
-[
-  {
-    "host": "{{ $account1.imapHost }}",
-    "port": 993,
-    "tls": true,
-    "tlsOptions": {
-      "rejectUnauthorized": true
-    },
-    "username": "{{ $account1.username }}@{{ $account1.hostname }}",
-    "alias": "{{ $account1.shortAccountName }}",
-    "passwordCmd": "gopass -o mail/{{ $account1.accountName }}",
-    "boxes": [
-      {
-        "mailbox": "Inbox",
-        "onNewMail": "mbsync {{ $account1.accountName }}-inbox",
-        "onNewMailPost": "NOTMUCH_PROFILE={{ $profile1 }} notmuch new"
-      }
-    ]
-  },
-  {
-    "host": "{{ $account2.imapHost }}",
-    "port": 993,
-    "tls": true,
-    "tlsOptions": {
-      "rejectUnauthorized": true
-    },
-    "username": "{{ $account2.username }}@{{ $account2.hostname }}",
-    "alias": "{{ $account2.shortAccountName }}",
-    "passwordCmd": "gopass -o mail/{{ $account2.accountName }}",
-    "boxes": [
-      {
-        "mailbox": "Inbox",
-        "onNewMail": "mbsync {{ $account2.accountName }}-inbox",
-        "onNewMailPost": "NOTMUCH_PROFILE={{ $profile2 }} notmuch new"
-      }
-    ]
-  },
-  {
-    "host": "{{ $account3.imapHost }}",
-    "port": 993,
-    "tls": true,
-    "tlsOptions": {
-      "rejectUnauthorized": true
-    },
-    "username": "{{ $account3.username }}@{{ $account3.hostname }}",
-    "alias": "{{ $account3.shortAccountName }}",
-    "passwordCmd": "gopass -o mail/{{ $account3.accountName }}",
-    "boxes": [
-      {
-        "mailbox": "Inbox",
-        "onNewMail": "mbsync {{ $account3.accountName }}-inbox",
-        "onNewMailPost": "NOTMUCH_PROFILE={{ $profile2 }} notmuch new"
-      }
-    ]
-  }
-]
+configurations:
+    -
+        host: {{ $account1.imapHost }}
+        port: 993
+        tls: true
+        tlsOptions:
+            rejectUnauthorized: true
+            starttls: false
+        username: {{ $account1.username }}@{{ $account1.hostname }}
+        alias: {{ $account1.shortAccountName }}
+        passwordCmd: gopass -o mail/{{ $account1.accountName }}
+        xoAuth2: false
+        boxes:
+            -
+                mailbox: Inbox
+                onNewMail: 'mbsync {{ $account1.accountName }}-inbox'
+                onNewMailPost: NOTMUCH_PROFILE={{ $profile1 }} notmuch new
+    -
+        host: {{ $account2.imapHost }}
+        port: 993
+        tls: true
+        tlsOptions:
+            rejectUnauthorized: true
+            starttls: false
+        username: {{ $account2.username }}@{{ $account2.hostname }}
+        alias: {{ $account2.shortAccountName }}
+        passwordCmd: gopass -o mail/{{ $account2.accountName }}
+        xoAuth2: false
+        boxes:
+            -
+                mailbox: Inbox
+                onNewMail: 'mbsync {{ $account2.accountName }}-inbox'
+                onNewMailPost: NOTMUCH_PROFILE={{ $profile2 }} notmuch new
+    -
+        host: {{ $account3.imapHost }}
+        port: 993
+        tls: true
+        tlsOptions:
+            rejectUnauthorized: true
+            starttls: false
+        username: {{ $account3.username }}@{{ $account3.hostname }}
+        alias: {{ $account3.shortAccountName }}
+        passwordCmd: gopass -o mail/{{ $account3.accountName }}
+        xoAuth2: false
+        boxes:
+            -
+                mailbox: Inbox
+                onNewMail: 'mbsync {{ $account3.accountName }}-inbox'
+                onNewMailPost: NOTMUCH_PROFILE={{ $profile2 }} notmuch new

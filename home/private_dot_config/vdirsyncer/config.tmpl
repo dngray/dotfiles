@@ -28,7 +28,7 @@ metadata = ["displayname"]
 #   `null` - abort when collisions occur (default)
 #   `"a wins"` - assume a's items to be more up-to-date
 #   `"b wins"` - assume b's items to be more up-to-date
-conflict_resolution = ["command", "nvim", "-d"]
+conflict_resolution = ["command", "nvim", "-d", "--cmd", "let g:email=v:true"]
 
 [storage contacts_local]
 # A storage references actual data on a remote server or on the local disk.

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -eufo pipefail
+
+{{ $golang_pkgs := list
+     "github.com/jesseduffield/lazygit@latest" -}}
+
+{{ $rust_pkgs := list
+     "tree-sitter-cli" -}}
+
+{{- if (vault (printf "kv/users/%s/packages" .profiles.a)).data.data.golang_pkgs }}
+{{    range $golang_pkgs }}
+
+go install  {{ . }}
+
+{{-   end }}
+{{- end }}
+
+{{- if (vault (printf "kv/users/%s/packages" .profiles.a)).data.data.rust_pkgs }}
+{{    range $rust_pkgs }}
+
+cargo install {{ . }}
+
+{{-   end }}
+{{- end }}
