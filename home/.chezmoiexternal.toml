@@ -1,8 +1,6 @@
 [".local/share/fonts/Meslo"]
     type = "archive"
     url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Meslo.tar.xz"
-    #exact = true
-    #stripComponents = 1
     refreshPeriod = "168h"
     checksum.sha512 = "5364b31502e54884e4dc0dac61e19c026cfac5b1f9a02053d57ecdba2ec249851e2766f252952ff3afdf51ca59bc705422715f6942836312333f6b2000e3402a"
 
@@ -32,14 +30,14 @@
 
 [".asdf"]
     type = "archive"
-    url = "https://codeload.github.com/asdf-vm/asdf/tar.gz/refs/tags/v0.14.0"
     exact = true
     stripComponents = 1
-    refreshPeriod = "168h"
+    url = "https://codeload.github.com/asdf-vm/asdf/tar.gz/refs/tags/v0.14.1"
+    checksum.sha512 = "8c3501ea9b15f486dc969e3f97b7a7340f951ff75de49ab0eabb3a5d7635d24ed8bd47788cc106746ba026a9731149a5010e5aca325fecb242f1ca6515669d2b"
 
 [".local/bin/fastfetch"]
     type = "archive-file"
     executable = true
     url = "https://github.com/fastfetch-cli/fastfetch/releases/download/2.28.0/fastfetch-linux-amd64.tar.gz"
-    checksum.sha512 = "95fed5fa0c88aca601d095022e25868bfd3cb4f5114eb1de0448c588fdcf6ef46a3b3d1ba6c7c5557a17f7294fb2adeedb7481b8d1c60e8d54d53752dd8a3457"
     path = "fastfetch-linux-amd64/usr/bin/fastfetch"
+    checksum.sha512 = "95fed5fa0c88aca601d095022e25868bfd3cb4f5114eb1de0448c588fdcf6ef46a3b3d1ba6c7c5557a17f7294fb2adeedb7481b8d1c60e8d54d53752dd8a3457"
