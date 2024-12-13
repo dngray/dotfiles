@@ -1,25 +1,22 @@
 {{- $profile := (vault (printf "kv/users/%s/mail" .profile)).data.data.profile -}}
 {{- range $account := (vault (printf "kv/users/%s/mail" .profile)).data.data.mail -}}
 {{-   if .enabled -}}
-[
-  {
-    "host": "{{ $account.imapHost }}",
-    "port": 993,
-    "tls": true,
-    "tlsOptions": {
-      "rejectUnauthorized": true
-    },
-    "username": "{{ $account.username }}@{{ $account.hostname }}",
-    "alias": "{{ $account.shortAccountName }}",
-    "passwordCmd": "gopass -o mail/{{ $account.accountName }}",
-    "boxes": [
-      {
-        "mailbox": "Inbox",
-        "onNewMail": "mbsync {{ $account.accountName }}-inbox",
-        "onNewMailPost": "NOTMUCH_PROFILE={{ $profile }} notmuch new"
-      }
-    ]
-  }
-]
+configurations:
+    -
+        host: {{ $account.imapHost }}
+        port: 993
+        tls: true
+        tlsOptions:
+            rejectUnauthorized: true
+            starttls: false
+        username: {{ $account.username }}@{{ $account.hostname }}
+        alias: {{ $account.shortAccountName }}
+        passwordCmd: gopass -o mail/{{ $account.accountName }}
+        xoAuth2: false
+        boxes:
+            -
+                mailbox: Inbox
+                onNewMail: mbsync {{ $account.accountName }}-inbox
+                onNewMailPost: NOTMUCH_PROFILE={{ $profile }} notmuch new
 {{-   end -}}
 {{- end -}}
