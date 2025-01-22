@@ -12,7 +12,7 @@ IMAPAccount {{ .accountName }}
 Host {{ .imapHost }}
 User {{ .username }}@{{ .hostname }}
 AuthMechs LOGIN
-PassCmd "gopass -o mail/{{ .accountName }}"
+PassCmd "gopass -o mail/{{ .accountName }} mailPassword"
 TLSType {{ if .tls }}IMAPS{{ else }}none{{ end }}
 CertificateFile /etc/ssl/cert.pem
 Port {{ .imapPort }}
@@ -53,53 +53,109 @@ Channel {{ .accountName }}-folders
 {{-  end }}
 
 {{- if .state.private -}}
-{{- $profile := (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.profile -}}
-{{-  range $v, $profile_b := (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail }}
-{{-    if .enabled }}
+{{- $account := index (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail 0 }}
+{{-   if $account.enabled }}
 
-IMAPAccount {{ .accountName }}
-Host {{ .imapHost }}
-User {{ .username }}@{{ .hostname }}
+IMAPAccount {{ $account.accountName }}
+Host {{ $account.imapHost }}
+User {{ $account.username }}@{{ $account.hostname }}
 AuthMechs LOGIN
-PassCmd "gopass -o mail/{{ .accountName }}"
-TLSType {{ if .tls }}IMAPS{{ else }}none{{ end }}
+PassCmd "gopass -o mail/{{ $account.accountName }} mailPassword"
+TLSType {{ if $account.tls }}IMAPS{{ else }}none{{ end }}
 CertificateFile /etc/ssl/cert.pem
-Port {{ .imapPort }}
+Port {{ $account.imapPort }}
 Timeout 120
 
-IMAPStore {{ .accountName }}-remote
-Account {{ .accountName }}
+IMAPStore {{ $account.accountName }}-remote
+Account {{ $account.accountName }}
 
-MaildirStore {{ .accountName }}-local
+MaildirStore {{ $account.accountName }}-local
 Subfolders Verbatim
-Path ~/.local/share/mail/{{ $profile }}/{{ .accountName }}/
-Inbox ~/.local/share/mail/{{ $profile }}/{{ .accountName }}/Inbox
+Path ~/.local/share/mail/2/{{ $account.accountName }}/
+Inbox ~/.local/share/mail/2/{{ $account.accountName }}/Inbox
 Flatten .
 
-Channel {{ .accountName }}-folders
-Far :{{ .accountName }}-remote:
-Near :{{ .accountName }}-local:
+Channel {{ $account.accountName }}-folders
+Far :{{ $account.accountName }}-remote:
+Near :{{ $account.accountName }}-local:
 Patterns * !INBOX !Archive*
 
-Channel {{ .accountName }}-inbox
-Far ":{{ .accountName }}-remote:INBOX"
-Near ":{{ .accountName }}-local:Inbox"
+Channel {{ $account.accountName }}-inbox
+Far ":{{ $account.accountName }}-remote:INBOX"
+Near ":{{ $account.accountName }}-local:Inbox"
 
-Channel {{ .accountName }}-archive
-Far ":{{ .accountName }}-remote:Archive"
-Near ":{{ .accountName }}-local:Archive"
+Channel {{ $account.accountName }}-archive
+Far ":{{ $account.accountName }}-remote:Archive"
+Near ":{{ $account.accountName }}-local:Archive"
 Patterns *
 
-Group {{ .accountName }}
-Channel {{ .accountName }}-inbox
-Channel {{ .accountName }}-folders
-Channel {{ .accountName }}-archive
+Group {{ $account.accountName }}
+Channel {{ $account.accountName }}-inbox
+Channel {{ $account.accountName }}-folders
+Channel {{ $account.accountName }}-archive
 
-Group {{ .accountName }}-fast
-Channel {{ .accountName }}-inbox
-Channel {{ .accountName }}-folders
+Group {{ $account.accountName }}-fast
+Channel {{ $account.accountName }}-inbox
+Channel {{ $account.accountName }}-folders
 {{-    end }}
-{{-  end }}
+
+{{- $account := index (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail 1 }}
+{{-   if $account.enabled }}
+
+IMAPAccount {{ $account.accountName }}
+Host {{ $account.imapHost }}
+User {{ $account.username }}@{{ $account.hostname }}
+AuthMechs LOGIN
+PassCmd "gopass -o mail/{{ $account.accountName }} mailPassword"
+TLSType {{ if $account.tls }}IMAPS{{ else }}none{{ end }}
+CertificateFile /etc/ssl/cert.pem
+Port {{ $account.imapPort }}
+Timeout 120
+
+IMAPStore {{ $account.accountName }}-remote
+Account {{ $account.accountName }}
+
+MaildirStore {{ $account.accountName }}-local
+Subfolders Verbatim
+Path ~/.local/share/mail/2/{{ $account.accountName }}/
+Inbox ~/.local/share/mail/2/{{ $account.accountName }}/Inbox
+Flatten .
+
+Channel {{ $account.accountName }}-folders
+Far :{{ $account.accountName }}-remote:
+Near :{{ $account.accountName }}-local:
+Patterns * !INBOX !Archive* !"Junk Mail" !"Deleted Items"
+
+Channel {{ $account.accountName }}-inbox
+Far ":{{ $account.accountName }}-remote:INBOX"
+Near ":{{ $account.accountName }}-local:Inbox"
+
+Channel {{ $account.accountName }}-archive
+Far ":{{ $account.accountName }}-remote:Archive"
+Near ":{{ $account.accountName }}-local:Archive"
+Patterns *
+
+Channel {{ $account.accountName }}-junk
+Far ":{{ $account.accountName }}-remote:Junk Mail"
+Near ":{{ $account.accountName }}-local:Junk"
+Patterns *
+
+Channel {{ $account.accountName }}-trash
+Far ":{{ $account.accountName }}-remote:Deleted Items"
+Near ":{{ $account.accountName }}-local:Trash"
+Patterns *
+
+Group {{ $account.accountName }}
+Channel {{ $account.accountName }}-inbox
+Channel {{ $account.accountName }}-folders
+Channel {{ $account.accountName }}-archive
+Channel {{ $account.accountName }}-junk
+Channel {{ $account.accountName }}-trash
+
+Group {{ $account.accountName }}-fast
+Channel {{ $account.accountName }}-inbox
+Channel {{ $account.accountName }}-folders
+{{-    end }}
 {{-  end }}
 
 Group inboxes

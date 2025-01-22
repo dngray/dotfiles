@@ -20,6 +20,6 @@ go install  {{ . }}
 {{    range $rust_pkgs }}
 
 cargo install {{ . }}
-
 {{-   end }}
+cargo install --git https://github.com/starship/starship --no-default-features --features=battery,notify
 {{- end }}
