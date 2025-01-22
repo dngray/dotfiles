@@ -1,0 +1,37 @@
+{{- if (eq .chezmoi.osRelease.id "debian" "ubuntu") -}}
+#!/usr/bin/env bash
+
+#==============================================================================
+# Installing Neovim
+#==============================================================================
+
+readonly NEOVIM_URL="https://github.com/neovim/neovim/archive"
+readonly VER_NUM="0.11.3"
+readonly NEOVIM_VERSION="v${VER_NUM}"
+readonly OUTPUT="${NEOVIM_VERSION}".tar.gz
+
+CURRENT_DIR="$(pwd)"
+TEMP="/tmp"
+
+install_neovim() {
+  # check if neovim is already installed
+  if command -v nvim >/dev/null 2>&1; then
+    echo "neovim is already installed"
+    exit
+  fi
+  echo "neovim not found, installing..."
+  # download neovim
+  curl -L "$1" -o "$2" || exit
+  # compile neovim
+  tar xzvf "$2" -C "$TEMP" || exit
+  cd /tmp/neovim-"${VER_NUM}"
+  # install neovim
+  make CMAKE_BUILD_TYPE=RelWithDebInfo
+  cd build
+  cpack -G DEB || exit
+  sudo dpkg -i nvim-linux-x86_64.deb || exit
+  rm -rf "$2" "$TEMP"/neovim-"${VER_NUM}"
+}
+
+install_neovim "$NEOVIM_URL/$NEOVIM_VERSION/$OUTPUT" "$TEMP/$OUTPUT"
+{{- end }}

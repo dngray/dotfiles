@@ -3,10 +3,12 @@
 set -eufo pipefail
 
 {{ $golang_pkgs := list
-     "github.com/jesseduffield/lazygit@latest" -}}
+     "github.com/gopasspw/gopass@latest" -}}
 
-{{ $rust_pkgs := list
-     "tree-sitter-cli" -}}
+{{- if and (eq .chezmoi.osRelease.id "debian") (eq .chezmoi.username "user") -}}
+{{-   $golang_pkgs = concat $golang_pkgs (list
+        "github.com/gopasspw/git-credential-gopass@latest") -}}
+{{- end }}
 
 {{- if (vault (printf "kv/users/%s/packages" .profiles.a)).data.data.golang_pkgs }}
 {{    range $golang_pkgs }}
@@ -20,6 +22,6 @@ go install  {{ . }}
 {{    range $rust_pkgs }}
 
 cargo install {{ . }}
-
 {{-   end }}
+cargo install --git https://github.com/starship/starship --no-default-features --features=battery,notify
 {{- end }}

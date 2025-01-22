@@ -1,8 +1,8 @@
 [".local/share/fonts/Meslo"]
     type = "archive"
-    url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/Meslo.tar.xz"
+    url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Meslo.tar.xz"
     refreshPeriod = "168h"
-    checksum.sha512 = "67f31d10bb3b6e139c031f1bd6b15c945537b27f4348e32772455999235b67657252617ebfd28f05bfa801dedcb8a841c34d0c4e807902249d9e6319437f821f"
+    checksum.sha512 = "084fd36a8a89e8a59e2c465c420ef50a9ef69f6f27c81af7b64308719c2c8d2f78b5aa7291d1bd21a51718bc162474734e15ab04c34a786e66fe882f3dbe8aac"
 
 [".tmux/plugins/tpm"]
     type = "archive"
@@ -18,29 +18,9 @@
     refreshPeriod = "168h"
     checksum.sha512 = "8d04eac89167fce3435f09a286754412d0cd80f390e7808068af6e964f14bf417a71d51d0ae622d7ba58aefca28d26b349cde74438d4fd7ca83669a83e4f23ce"
 
-[".local/bin/bitwarden-x86_64.appimage"]
-    type = "file"
-    executable = true
-    url = "https://vault.bitwarden.com/download/?app=desktop&platform=linux"
-    refreshPeriod = "168h"
-
-[".local/bin/nvim"]
-    type = "file"
-    executable = true
-    url = "https://github.com/neovim/neovim/releases/download/v0.10.3/nvim.appimage"
-    refreshPeriod = "168h"
-    checksum.sha512 = "b68b7430108caa721fba7731b39c47dbdaaef9e5af28e0c6fb9f0d6a01ea6f14ed7b34be0ee8d2d9dd728c15dd72755d5b629d58926481381a640841d7b570f9"
-
-[".asdf"]
-    type = "archive"
-    exact = true
-    stripComponents = 1
-    url = "https://codeload.github.com/asdf-vm/asdf/tar.gz/refs/tags/v0.15.0"
-    checksum.sha512 = "e577bfe8a0590585d2c84d63a49b29c4c5936cc4883f4e833f1108af39504b683fa79c7cb57cbc9fcfa4d7343a282f87e29b3cdbd8cdf32e2e81b50269e25ec3"
-
-[".local/bin/fastfetch"]
+[".local/bin/asdf"]
     type = "archive-file"
     executable = true
-    url = "https://github.com/fastfetch-cli/fastfetch/releases/download/2.34.1/fastfetch-linux-amd64.tar.gz"
-    path = "fastfetch-linux-amd64/usr/bin/fastfetch"
-    checksum.sha512 = "f3ede6b9eac0b2eff05c894128ef5c337f86f1ee5a23e37e3832078cc861376c38d84d34eefa9c164cb9232b7b42e12a3225ff386d8752038b220936c539b9be"
+    url = "https://github.com/asdf-vm/asdf/releases/download/v0.18.0/asdf-v0.18.0-linux-amd64.tar.gz"
+    path = "asdf"
+    checksum.sha512 = "b1b9a0b1d93af112f170f68e45151f45a9c555003b40785643777c9086aab668f3b56cb7384319ebcd5f64ad0a3ea33da3269f56d9ffee87867b92ea23e7a841"

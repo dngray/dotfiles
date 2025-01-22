@@ -5,43 +5,55 @@
 # It makes inactive windows transparent. Use `transparency_val` variable to control
 # transparency strength in range of 0…1 or use the command line argument -o.
 
+# https://github.com/OctopusET/sway-contrib/blob/master/inactive-windows-transparency.py
+# Moved from swaywm / sway in https://github.com/swaywm/sway/pull/7541
+
 import argparse
-import i3ipc
 import signal
 import sys
 from functools import partial
 
-def on_window_focus(inactive_opacity, ipc, event):
-    global prev_focused
-    global prev_workspace
+import i3ipc
 
-    focused_workspace = ipc.get_tree().find_focused()
 
-    if focused_workspace == None:
+def on_window(args, ipc, event):
+    global focused_set
+
+    # To get the workspace for a container, we need to have received its
+    # parents, so fetch the whole tree
+    tree = ipc.get_tree()
+
+    focused = tree.find_focused()
+    if focused is None:
         return
 
-    focused = event.container
-    workspace = focused_workspace.workspace().num
+    focused_workspace = focused.workspace()
 
-    if focused.id != prev_focused.id:  # https://github.com/swaywm/sway/issues/2859
-        focused.command("opacity 1")
-        if workspace == prev_workspace:
-            prev_focused.command("opacity " + inactive_opacity)
-        prev_focused = focused
-        prev_workspace = workspace
+    focused.command("opacity " + args.focused)
+    focused_set.add(focused.id)
 
+    to_remove = set()
+    for window_id in focused_set:
+        if window_id == focused.id:
+            continue
+        window = tree.find_by_id(window_id)
+        if window is None:
+            to_remove.add(window_id)
+        elif args.global_focus or window.workspace() == focused_workspace:
+            window.command("opacity " + args.opacity)
+            to_remove.add(window_id)
 
-def remove_opacity(ipc):
+    focused_set -= to_remove
+
+def remove_opacity(ipc, focused_opacity):
     for workspace in ipc.get_tree().workspaces():
         for w in workspace:
-            w.command("opacity 1")
+            w.command("opacity " + focused_opacity)
     ipc.main_quit()
     sys.exit(0)
 
 
 if __name__ == "__main__":
-    transparency_val = "0.80"
-
     parser = argparse.ArgumentParser(
         description="This script allows you to set the transparency of unfocused windows in sway."
     )
@@ -49,21 +61,34 @@ if __name__ == "__main__":
         "--opacity",
         "-o",
         type=str,
-        default=transparency_val,
-        help="set opacity value in range 0...1",
+        default="0.80",
+        help="set inactive opacity value in range 0...1",
+    )
+    parser.add_argument(
+        "--focused",
+        "-f",
+        type=str,
+        default="1.0",
+        help="set focused opacity value in range 0...1",
+    )
+    parser.add_argument(
+        "--global-focus",
+        "-g",
+        action="store_true",
+        help="only have one opaque window across all workspaces",
     )
     args = parser.parse_args()
 
     ipc = i3ipc.Connection()
-    prev_focused = None
-    prev_workspace = ipc.get_tree().find_focused().workspace().num
+    focused_set = set()
 
     for window in ipc.get_tree():
         if window.focused:
-            prev_focused = window
+            focused_set.add(window.id)
+            window.command("opacity " + args.focused)
         else:
             window.command("opacity " + args.opacity)
     for sig in [signal.SIGINT, signal.SIGTERM]:
-        signal.signal(sig, lambda signal, frame: remove_opacity(ipc))
-    ipc.on("window::focus", partial(on_window_focus, args.opacity))
+        signal.signal(sig, lambda signal, frame: remove_opacity(ipc, args.focused))
+    ipc.on("window", partial(on_window, args))
     ipc.main()

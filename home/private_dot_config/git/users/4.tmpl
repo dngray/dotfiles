@@ -1,0 +1,9 @@
+{{- if .state.private }}
+{{- template "git/user" dict "profile" .profiles.b "accIdx" 2 }}
+[filter "clean"]
+	clean = sed --file=$XDG_CONFIG_HOME/git/clean.sed
+	smudge = sed --file=$XDG_CONFIG_HOME/git/smudge.sed
+	required
+[credential]
+	helper = gopass
+{{- end }}

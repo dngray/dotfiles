@@ -1,0 +1,52 @@
+network:
+    version: 2
+    ethernets:
+        eno1: {}
+        eno2: {}
+    bonds:
+        bond0:
+            interfaces:
+            - eno1
+            - eno2
+            parameters:
+                lacp-rate: fast
+                mode: 802.3ad
+                transmit-hash-policy: layer2+3
+    vlans:
+      vlan51:
+        id: 51
+        link: bond0
+        accept-ra: false
+        link-local: []
+    bridges:
+      br0:
+        # See https://bugs.launchpad.net/netplan/+bug/1782221
+        macaddress: xx:xx:xx:xx:xx:xx
+        interfaces: [bond0]
+        parameters:
+          stp: false
+          forward-delay: 0
+        dhcp4: false
+        accept-ra: true
+        addresses: [192.0.50.253/24]
+        routes:
+          - to: default
+            via: 192.0.50.1
+        nameservers:
+          addresses: [192.0.50.1]
+          search: [opnsense.winter.home.arpa]
+      br51:
+       # vlan51/br51 can be removed in libvirtd11
+       # https://libvirt.org/news.html#v11-0-0-2025-01-15
+       # see <vlan> option
+       #
+       # Already works with Incus
+       # https://discuss.linuxcontainers.org/t/incus-networking-for-network-engineers/18405/5
+       macaddress: xx:xx:xx:xx:xx:xx
+       interfaces: [vlan51]
+       parameters:
+         stp: false
+         forward-delay: 0
+       dhcp4: false
+       accept-ra: false
+       link-local: []

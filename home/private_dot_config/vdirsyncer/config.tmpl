@@ -39,18 +39,19 @@ fileext = ".vcf"
 
 [storage contacts_remote]
 type = "carddav"
-url = "{{ (vault "kv/shared/dav").data.data.davURL }}"
+url = "{{ (index $account.dav 0).url }}"
 verify = "/etc/ssl/cert.pem"
-username = "{{ $account.username }}@{{ $account.hostname }}"
+username = "{{ (index $account.dav 0).username }}"
 # The password can also be fetched from the system password storage, netrc or a
 # custom command. See http://vdirsyncer.pimutils.org/en/stable/keyring.html
-password.fetch = ["command", "gopass", "mail/{{ $account.accountName }}"]
+password.fetch = ["command", "gopass", "mail/{{ $account.accountName }}", "davPassword"]
 
 # CALDAV
 [pair calendar]
 a = "calendar_local"
 b = "calendar_remote"
 collections = ["from a", "from b"]
+conflict_resolution = ["command", "nvim", "-d", "--cmd", "let g:email=v:true"]
 
 # Calendars also have a color property
 metadata = ["color"]
@@ -62,7 +63,7 @@ fileext = ".ics"
 
 [storage calendar_remote]
 type = "caldav"
-url = "{{ (vault "kv/shared/dav").data.data.davURL }}"
+url = "{{ (index $account.dav 0).url }}"
 verify = "/etc/ssl/cert.pem"
-username = "{{ $account.username }}@{{ $account.hostname }}"
-password.fetch = ["command", "gopass", "mail/{{ $account.accountName }}"]
+username = "{{ (index $account.dav 0).username }}"
+password.fetch = ["command", "gopass", "mail/{{ $account.accountName }}", "davPassword"]

@@ -2,17 +2,30 @@
 
 asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
 asdf install nodejs latest
-asdf global nodejs latest
+asdf set nodejs latest
 
-asdf plugin-add rust https://github.com/asdf-community/asdf-rust.git
+asdf plugin add rust https://github.com/asdf-community/asdf-rust.git
 asdf install rust latest
-asdf global rust latest
+asdf set rust latest
 
-asdf plugin-add deno https://github.com/asdf-community/asdf-deno.git
+asdf plugin add deno https://github.com/asdf-community/asdf-deno.git
 asdf install deno latest
-asdf global deno latest
+asdf set deno latest
 
 asdf plugin add golang https://github.com/asdf-community/asdf-golang.git
 asdf install golang latest
-asdf global golang latest
-asdf reshim golang
+asdf set golang latest
+
+asdf plugin add lua https://github.com/Stratus3D/asdf-lua.git
+asdf install lua latest
+asdf set lua latest
+
+asdf plugin add rye https://github.com/Azuki-bar/asdf-rye
+asdf install rye latest
+asdf set rye latest
+
+asdf plugin add bun https://github.com/cometkim/asdf-bun.git
+asdf install bun latest
+asdf set bun latest
+
+asdf reshim

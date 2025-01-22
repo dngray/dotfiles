@@ -27,8 +27,11 @@
 .config/git/smudge.sed
 .config/git/users/2
 .config/git/users/3
-.local/share/applications/im.riot.Riot_*
-.local/share/applications/io.github.NhekoReborn.Nheko_*
+.local/share/applications/im.riot.Riot*
+.local/share/applications/im.nheko.Nheko*
+{{-  if not (ne .chezmoi.osRelease.name "secureblue") }}
+.local/share/applications/org.mozilla.firefox.*
+{{-  end }}
 {{- end }}
 
 {{- if not .system.graphics.wayland }}
@@ -106,3 +109,5 @@
 .asdf/plugins/**
 .asdf/shims
 .asdf/shims/**
+.asdf/repository/**
+.asdf/tmp/**

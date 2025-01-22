@@ -150,8 +150,12 @@ Keywords[uk]=Internet;WWW;Browser;Web;Explorer;Інтернет;мережа;п�
 Keywords[vi]=Internet;WWW;Browser;Web;Explorer;Trình duyệt;Trang web
 Keywords[zh_CN]=Internet;WWW;Browser;Web;Explorer;网页;浏览;上网;火狐;Firefox;ff;互联网;网站;
 Keywords[zh_TW]=Internet;WWW;Browser;Web;Explorer;網際網路;網路;瀏覽器;上網;網頁;火狐
-#Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=firefox --file-forwarding org.mozilla.firefox -P {{ .profile_name }} @@u %u @@
+{{- if (eq .osRelName "secureblue") }}
+Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=firefox --file-forwarding org.mozilla.firefox -P {{ .profile_name }} @@u %u @@
+{{- else }}
 Exec=/usr/bin/firefox  -P {{ .profile_name }} %u
+{{- end }}
+
 Icon=firefox
 Terminal=false
 Type=Application
@@ -160,7 +164,6 @@ StartupNotify=true
 Categories=Network;WebBrowser;
 Actions=new-window;new-private-window;profile-manager-window;
 StartupWMClass=firefox
-
 
 [Desktop Action new-window]
 Name=Open a New Window
@@ -268,7 +271,11 @@ Name[wo]=Palanteer bu bees
 Name[xh]=Ifestile entsha
 Name[zh_CN]=新建窗口
 Name[zh_TW]=開新視窗
-Exec=/usr/lib/firefox/firefox --new-window %u
+{{- if (eq .osRelName "secureblue") }}
+Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=firefox --file-forwarding org.mozilla.firefox --new-window -P {{ .profile_name }} @@u %u @@
+{{- else }}
+Exec=/usr/lib/firefox/firefox --new-window -P {{ .profile_name }} %u
+{{- end }}
 
 [Desktop Action new-private-window]
 Name=Open a New Private Window
@@ -376,8 +383,11 @@ Name[wo]=Panlanteeru biir bu bees
 Name[xh]=Ifestile yangasese entsha
 Name[zh_CN]=新建隐私浏览窗口
 Name[zh_TW]=新增隱私視窗
-#Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=firefox --file-forwarding org.mozilla.firefox --private-window -P {{ .profile_name }} @@u %u @@
+{{- if (eq .osRelName "secureblue") }}
+Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=firefox --file-forwarding org.mozilla.firefox --private-window -P {{ .profile_name }} @@u %u @@
+{{- else }}
 Exec=/usr/lib/firefox/firefox --private-window -P {{ .profile_name }} %u
+{{- end }}
 
 [Desktop Action profile-manager-window]
 Name=Open the Profile Manager
@@ -385,5 +395,8 @@ Name[cs]=Správa profilů
 Name[de]=Profilverwaltung öffnen
 Name[es]=Abrir el Gestor de Perfiles
 Name[fr]=Ouvrir le gestionnaire de profils
-#Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=firefox org.mozilla.firefox --ProfileManager
+{{- if (eq .osRelName "secureblue") }}
+Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=firefox org.mozilla.firefox --ProfileManager
+{{- else }}
 Exec=/usr/lib/firefox/firefox --ProfileManager
+{{- end }}

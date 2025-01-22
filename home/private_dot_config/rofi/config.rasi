@@ -1,29 +1,17 @@
-/* Nord Theme from
- * https://github.com/undiabler/nord-rofi-theme
- */
-
-configuration {
-    font: "MesloLGS Nerd Font Mono 14";
-    modes: "window,drun,run,ssh,combi";
-    combi-modes: "window,run";
-    line-margin: 10;
-
-    display-ssh:    "";
-    display-run:    "";
-    display-drun:   "";
-    display-window: "";
-    display-combi:  "";
-    show-icons:     true;
+configuration{
+    modi: "run,drun,window";
+    icon-theme: "Oranchelo";
+    show-icons: true;
     terminal: "footclient";
+    drun-display-format: "{icon} {name}";
+    location: 1;
+    disable-history: false;
+    hide-scrollbar: true;
+    display-drun: "   Apps ";
+    display-run: "   Run ";
+    display-window: " 󰕰  Window";
+    display-Network: " 󰤨  Network";
+    sidebar-mode: true;
 }
 
-@theme "~/.config/rofi/nord.rasi"
-
-listview {
-	lines: 6;
-	columns: 1;
-}
-
-window {
-	width: 50%;
-}
+@theme "catppuccin-mocha"
