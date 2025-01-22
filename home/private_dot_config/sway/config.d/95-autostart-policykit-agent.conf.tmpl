@@ -1,0 +1,12 @@
+# Start graphical authentication agent for PolicyKit.
+#
+# Certain applications may require this to request elevated privileges:
+#   GParted, virt-manager, anything that uses pkexec
+#
+# Requires: lxqt-policykit
+
+{{- if eq .chezmoi.osRelease.id "fedora" }}
+exec /usr/libexec/lxqt-policykit-agent
+{{- else if eq .chezmoi.osRelease.id "arch" "alpine" }}
+exec /usr/bin/lxqt-policykit-agent
+{{- end }}

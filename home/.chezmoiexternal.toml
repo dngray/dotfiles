@@ -24,6 +24,12 @@
     url = "https://vault.bitwarden.com/download/?app=desktop&platform=linux"
     refreshPeriod = "168h"
 
+[".local/bin/Wootility.AppImage"]
+    type = "file"
+    executable = true
+    url = "https://api.wooting.io/public/wootility/download?os=linux"
+    refreshPeriod = "168h"
+
 [".local/bin/nvim"]
     type = "file"
     executable = true

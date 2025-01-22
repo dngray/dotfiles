@@ -75,24 +75,21 @@ Host {{ .Host }}
   PasswordAuthentication {{ $host.PasswordAuthentication }}
 {{- end }}
 {{- if (hasKey $host "Ciphers") }}
-   Ciphers {{ $host.Ciphers }}
+  Ciphers {{ $host.Ciphers }}
 {{- end }}
 {{- if (hasKey $host "HostkeyAlgorithms") }}
-   HostkeyAlgorithms {{ $host.HostkeyAlgorithms }}
+  HostkeyAlgorithms {{ $host.HostkeyAlgorithms }}
 {{- end }}
 {{- if (hasKey $host "PubkeyAcceptedAlgorithms") }}
-   PubkeyAcceptedAlgorithms {{ $host.PubkeyAcceptedAlgorithms }}
+  PubkeyAcceptedAlgorithms {{ $host.PubkeyAcceptedAlgorithms }}
 {{- end }}
 {{- if (hasKey $host "PubkeyAcceptedKeyTypes") }}
-   PubkeyAcceptedKeyTypes {{ $host.PubkeyAcceptedKeyTypes }}
+  PubkeyAcceptedKeyTypes {{ $host.PubkeyAcceptedKeyTypes }}
 {{- end }}
-{{- if (hasKey $host "PubkeyAcceptedKeyTypes") }}
-   PubkeyAcceptedKeyTypes {{ $host.PubkeyAcceptedKeyTypes }}
+{{/* if and (hasKey $host "RSAMinSize") (eq $redhat "fedora") }}
+{{ RSAMinSize {{ $host.RSAMinSize }} }}
+{{- end */}}
 {{- end }}
-{{- if and (hasKey $host "RSAMinSize") (eq $redhat "fedora") }}
-   RSAMinSize {{ $host.RSAMinSize }}
-{{- end }}
-{{ end }}
 
 Host *
   ForwardAgent no
