@@ -1,99 +1,166 @@
-@import "nord.css";
-
-window {
-    background-color: transparent;
-}
+@import "themes/mocha.css";
 
 * {
-    font-family: Cantarell;
+    font-family: 'MesloLGS Nerd Font Mono', 'Font Awesome 6 Free', 'Font Awesome 6 Brands', monospace;
     font-size: 14px;
-    font-weight: 600;
-    margin-top: 2px;
 }
 
-/*
-* Left part
-*/
-#mode {
-    color: @nord0;
-    background-color: @nord13;
-    margin-left: 8px;
-    border-radius: 5px;
-    padding: 0px 6px;
+window#waybar {
+    background-color: rgba(43, 48, 59, 0);
+    /*border-bottom: 3px solid rgba(100, 114, 125, 0.5);*/
+    color: #ffffff;
+    transition-property: background-color;
+    transition-duration: .5s;
+}
+
+#workspaces {
+	border-radius: 20px;
+	background-color: @crust;
+	margin: 5px;
+	padding: 2px;
+	margin-left: 1rem;
+}
+
+#pulseaudio:hover {
+    background-color: @mauve;
+    color: @crust;
 }
 
 #workspaces button {
-    margin-left: 8px;
-    background-color: @nord3;
-    padding: 0px 4px;
-    color: @nord6;
-    margin-top: 0;
+    padding: 0 5px;
+    color: @text;
+    margin-left: 1px;
+    margin-right: 1px;
+    border-radius: 20px;
+    transition: all 300ms;
 }
 
 #workspaces button:hover {
-  background: rgba(0, 0, 0, 0.2);
-  box-shadow: inherit;
+    background: @pink;
+    color: @crust;
+    border-radius: 20px;
 }
 
 #workspaces button.focused {
-    color: @nord0;
-    background-color: @nord8;
+    background-color: @mauve;
+    color: @crust;
+    border-radius: 20px;
 }
 
 #workspaces button.urgent {
-  border-bottom: 3px solid @nord11;
+    background-color: @red;
+    color: @crust;
+    border-radius: 20px;
+}
+
+#clock,
+#battery,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#backlight,
+#network,
+#pulseaudio,
+#wireplumber,
+#custom-media,
+#tray,
+#mode,
+#idle_inhibitor,
+#scratchpad,
+#power-profiles-daemon,
+
+#window
+/* If workspaces is the leftmost module, omit left margin */
+.modules-left > widget:first-child > #workspaces {
+    margin-left: 0;
+}
+
+/* If workspaces is the rightmost module, omit right margin */
+.modules-right > widget:last-child > #workspaces {
+    margin-right: 0;
+}
+
+.modules-right {
+    margin: 5px;
+}
+
+@keyframes blink {
+    to {
+        background-color: #ffffff;
+        color: #000000;
+    }
+}
+
+label:focus {
+    background-color: #000000;
 }
 
 #window {
-    margin-left: 10px;
-    color: @nord6;
-    font-weight: bold;
-    padding: 0px 5px;
+    background-color: @crust;
+    color: @mauve;
+    margin: 5px;
+    border-radius: 20px;
+    padding-left: 10px;
+    padding-right: 13px;
 }
 
-button {
-    box-shadow: inset 0 -3px transparent;
+#waybar.empty #window {
+    background: none;
 }
 
-button:hover {
-    background: inherit;
-    box-shadow: inset 0 -3px @nord6;
-}
-
-/*
-* Right part
-*/
-#pulseaudio,
-#network,
-#temperature,
-#cpu,
-#memory,
-#backlight,
-#language,
-#battery,
-#clock,
 #tray {
-    background-color: @nord2;
-    padding: 0px 8px;
-    color: @nord6;
+    background-color: @crust;
+    border-radius: 20px;
+    color: @mauve;
+    padding-left: 10px;
+    padding-right: 13px;
 }
 
-#backlight,
-#language,
-#battery,
-#clock,
-#tray {
-    margin-right: 8px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+#tray menu {
+    background-color: @crust;
+    color: @mauve;
+    padding: 10px 5px;
 }
 
-#pulseaudio,
-#network,
-#clock,
-#tray {
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+#temperature {
+    background-color: @crust;
+    border-radius: 20px;
+    color: @mauve;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#clock {
+    background-color: @crust;
+    border-radius: 20px;
+    color: @mauve;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#language {
+    background-color: @crust;
+    border-radius: 20px;
+    color: @mauve;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#cpu {
+    background-color: @crust;
+    border-radius: 20px;
+    color: @mauve;
+    padding-left: 10px;
+    padding-right: 13px;
+}
+
+#memory {
+    background-color: @crust;
+    border-radius: 20px;
+    color: @mauve;
+    padding-left: 10px;
+    padding-right: 13px;
 }
 
 #tray > .passive {
@@ -102,45 +169,26 @@ button:hover {
 
 #tray > .needs-attention {
     -gtk-icon-effect: highlight;
-    background-color: @nord13;
+    background-color: #eb4d4b;
 }
 
-#pulseaudio.muted {
-    background-color: @nord13;
-    color: @nord3;
+#pulseaudio {
+  color: @mauve;
+  background-color: @crust;
+  border-radius: 20px;
+  padding-left: 10px;
+  padding-right: 13px;
+  transition: all 300ms;
 }
 
-#pulseaudio, #backlight {
-    background-color: @nord10;
+#network {
+  color: @mauve;
+  background-color: @crust;
+  border-radius: 20px;
+  padding-left: 10px;
+  padding-right: 13px;
 }
 
-#network, #temperature, #cpu, #memory, #battery {
-    background-color: @nord3;
-}
-
-#tray {
-    background-color: @nord1;
-}
-
-#network.disabled,
-#network.disconnected {
-    background-color: @nord13;
-    color: @nord0;
-}
-
-#battery.warning {
-    background-color: @nord13;
-    color: @nord0;
-}
-
-#battery.critical {
-    background-color: @nord11;
-    color: @nord0;
-}
-
-#tray menu {
-    background-color: @nord2;
-    color: @nord4;
-    padding: 10px 5px;
-    border: 2px solid @nord1;
+#custom-space {
+  padding-right: 280px;
 }
