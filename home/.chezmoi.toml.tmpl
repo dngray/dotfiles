@@ -51,7 +51,7 @@
 {{-     if (eq $hostname "snowfield") -}}
 {{-       $tpm = false -}}
 {{-     end -}}
-{{-   else if (eq $fqdnHostname "arch.den.home.arpa") -}}
+{{-   else if (eq $fqdnHostname "ubuntu.den.home.arpa") -}}
 {{-     $headless = true -}}
 {{-     $wayland = false -}}
 {{-     $personal = true -}}
@@ -83,13 +83,17 @@
 {{-       $cli_mail = true -}}
 {{-       $profile_a = "profile01" -}}
 {{-       $main_profile = $profile_a -}}
-{{-     else if or (or (and (eq $fqdnHostname "arch.den.home.arpa") (eq $username "1")) (eq $username "3")) -}}
+{{-     else if or (or (and (eq $fqdnHostname "ubuntu.den.home.arpa") (eq $username "1")) (eq $username "3")) -}}
 {{-       $cli_mail = true -}}
 {{-       $profile_a = "profile01" -}}
 {{-       $profile_b = "profile02" -}}
 {{-       $main_profile = $profile_b -}}
-{{-     else if and (eq $fqdnHostname "arch.den.home.arpa") (eq $username "2") -}}
+{{-     else if and (eq $fqdnHostname "ubuntu.den.home.arpa") (eq $username "2") -}}
 {{-       $profile_a = "profile11" -}}
+{{-       $main_profile = $profile_a -}}
+{{-       $cli_mail = false -}}
+{{-     else if and (eq $fqdnHostname "ubuntu.den.home.arpa") (eq $username "blue" "container-user") -}}
+{{-       $profile_a = "profile21" -}}
 {{-       $main_profile = $profile_a -}}
 {{-       $cli_mail = false -}}
 {{-     end -}}

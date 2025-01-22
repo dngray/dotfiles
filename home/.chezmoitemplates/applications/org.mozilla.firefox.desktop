@@ -268,7 +268,8 @@ Name[wo]=Palanteer bu bees
 Name[xh]=Ifestile entsha
 Name[zh_CN]=新建窗口
 Name[zh_TW]=開新視窗
-Exec=/usr/lib/firefox/firefox --new-window %u
+#Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=firefox --file-forwarding org.mozilla.firefox --new-window -P {{ .profile_name }} @@u %u @@
+Exec=/usr/lib/firefox/firefox --new-window -P {{ .profile_name }} %u
 
 [Desktop Action new-private-window]
 Name=Open a New Private Window
