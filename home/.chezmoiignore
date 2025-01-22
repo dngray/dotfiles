@@ -106,3 +106,5 @@
 .asdf/plugins/**
 .asdf/shims
 .asdf/shims/**
+.asdf/repository/**
+.asdf/tmp/**
