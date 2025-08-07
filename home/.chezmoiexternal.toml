@@ -24,10 +24,3 @@
     url = "https://github.com/asdf-vm/asdf/releases/download/v0.18.0/asdf-v0.18.0-linux-amd64.tar.gz"
     path = "asdf"
     checksum.sha512 = "b1b9a0b1d93af112f170f68e45151f45a9c555003b40785643777c9086aab668f3b56cb7384319ebcd5f64ad0a3ea33da3269f56d9ffee87867b92ea23e7a841"
-
-[".local/bin/fastfetch"]
-    type = "archive-file"
-    executable = true
-    url = "https://github.com/fastfetch-cli/fastfetch/releases/download/2.48.0/fastfetch-linux-amd64.tar.gz"
-    path = "fastfetch-linux-amd64/usr/bin/fastfetch"
-    checksum.sha512 = "6f5a76d844e0eb109a793c5fe7e8ab4f22ecc8284a41eb01f6579ad57eb0133011fe80756f2f1da6bf675b25ba19eeca9aea8f7a5eff7417e9d9df8818d00dd1"
