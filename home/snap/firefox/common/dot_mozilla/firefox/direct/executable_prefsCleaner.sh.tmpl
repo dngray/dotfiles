@@ -1,0 +1,3 @@
+{{- if not .state.headless }}
+{{- template "firefox/prefsCleaner.sh" . -}}
+{{- end }}

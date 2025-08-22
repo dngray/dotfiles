@@ -13,7 +13,7 @@ configurations:
             starttls: false
         username: {{ $account1.username }}@{{ $account1.hostname }}
         alias: {{ $account1.shortAccountName }}
-        passwordCmd: gopass -o mail/{{ $account1.accountName }}
+        passwordCmd: gopass -o mail/{{ $account1.accountName }} mailPassword
         xoAuth2: false
         boxes:
             -
@@ -29,7 +29,7 @@ configurations:
             starttls: false
         username: {{ $account2.username }}@{{ $account2.hostname }}
         alias: {{ $account2.shortAccountName }}
-        passwordCmd: gopass -o mail/{{ $account2.accountName }}
+        passwordCmd: gopass -o mail/{{ $account2.accountName }} mailPassword
         xoAuth2: false
         boxes:
             -
@@ -45,7 +45,7 @@ configurations:
             starttls: false
         username: {{ $account3.username }}@{{ $account3.hostname }}
         alias: {{ $account3.shortAccountName }}
-        passwordCmd: gopass -o mail/{{ $account3.accountName }}
+        passwordCmd: gopass -o mail/{{ $account3.accountName }} mailPassword
         xoAuth2: false
         boxes:
             -

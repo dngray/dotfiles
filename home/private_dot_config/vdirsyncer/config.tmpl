@@ -28,7 +28,7 @@ metadata = ["displayname"]
 #   `null` - abort when collisions occur (default)
 #   `"a wins"` - assume a's items to be more up-to-date
 #   `"b wins"` - assume b's items to be more up-to-date
-conflict_resolution = ["command", "nvim", "-d", "--cmd", "let g:email=v:true"]
+conflict_resolution = ["command", "nvim", "-d", "-u", "~/.config/nvim/lazy-email.lua"]
 
 [storage contacts_local]
 # A storage references actual data on a remote server or on the local disk.
@@ -40,7 +40,7 @@ fileext = ".vcf"
 [storage contacts_remote]
 type = "carddav"
 url = "{{ (index $account.dav 0).url }}"
-verify = "/etc/ssl/cert.pem"
+verify = "/etc/ssl/certs/ca-certificates.crt"
 username = "{{ (index $account.dav 0).username }}"
 # The password can also be fetched from the system password storage, netrc or a
 # custom command. See http://vdirsyncer.pimutils.org/en/stable/keyring.html
@@ -51,7 +51,7 @@ password.fetch = ["command", "gopass", "mail/{{ $account.accountName }}", "davPa
 a = "calendar_local"
 b = "calendar_remote"
 collections = ["from a", "from b"]
-conflict_resolution = ["command", "nvim", "-d", "--cmd", "let g:email=v:true"]
+conflict_resolution = ["command", "nvim", "-d", "-u", "~/.config/nvim/lazy-email.lua"]
 
 # Calendars also have a color property
 metadata = ["color"]
@@ -64,6 +64,6 @@ fileext = ".ics"
 [storage calendar_remote]
 type = "caldav"
 url = "{{ (index $account.dav 0).url }}"
-verify = "/etc/ssl/cert.pem"
+verify = "/etc/ssl/certs/ca-certificates.crt"
 username = "{{ (index $account.dav 0).username }}"
 password.fetch = ["command", "gopass", "mail/{{ $account.accountName }}", "davPassword"]
