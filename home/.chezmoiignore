@@ -29,6 +29,7 @@
 .config/git/users/3
 .local/share/applications/im.riot.Riot*
 .local/share/applications/im.nheko.Nheko*
+.config/rclone/rclone.conf
 {{-  if not (ne .chezmoi.osRelease.name "secureblue") }}
 .local/share/applications/org.mozilla.firefox.*
 {{-  end }}
