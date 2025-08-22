@@ -19,6 +19,7 @@
 .config/notmuch/3
 .config/notmuch/3/**
 .config/imapfilter/2.lua
+.config/rclone/rclone.conf
 {{-   end }}
 {{- end }}
 
