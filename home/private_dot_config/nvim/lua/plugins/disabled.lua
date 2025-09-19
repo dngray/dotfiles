@@ -10,8 +10,4 @@ return {
     "saghen/blink.cmp",
     cond = shouldLoadPlugin,
   },
-  {
-    "lervag/vimtex",
-    cond = shouldLoadPlugin,
-  },
 }
