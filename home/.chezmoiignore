@@ -33,6 +33,9 @@
 {{-  if not (ne .chezmoi.osRelease.name "secureblue") }}
 .local/share/applications/org.mozilla.firefox.*
 {{-  end }}
+{{-    if not (eq .profiles.a "profile11") }}
+.config/containers/systemd/syncthing.container
+{{-    end }}
 {{- end }}
 
 {{- if not .system.graphics.wayland }}
