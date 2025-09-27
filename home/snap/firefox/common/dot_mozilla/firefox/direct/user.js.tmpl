@@ -1,0 +1,3 @@
+{{- if not .state.headless }}
+{{- template "firefox/direct/user.js" . -}}
+{{- end }}

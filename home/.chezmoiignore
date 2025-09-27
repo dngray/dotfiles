@@ -58,28 +58,26 @@
 {{- if .state.headless }}
 .config/Element/**
 .config/GIMP/**
+.config/dunst/dunstrc
 .config/gtk-2.0/*
 .config/gtk-3.0/*
 .config/kitty/kitty.conf
 .config/mpv/mpv.conf
 .config/qutebrowser
+.config/rofi/**
 .config/termite/config
 .config/tridactyl/tridactylrc
-.config/dunst/dunstrc
-.config/rofi/**
-.var/app/**
-.mozilla/**
+.config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml
 .conkyrc
+.mozilla/**
+.var/app/**
 
 {{- if (ne .chezmoi.osRelease.id "alpine") }}
 .config/alpine/**
-.config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml
 {{- end }}
 
 {{- if (ne .chezmoi.osRelease.id "arch") }}
 .config/arch/**
-.config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml
-.config/arch/etc/sysctl.d/40-hugepage.conf
 
 {{-   if (ne .chezmoi.fqdnHostname "snowcone.den.home.arpa") }}
 .config/arch/etc/lxc/default.conf
@@ -99,6 +97,10 @@
 .config/environment.d/*
 .bashrc.d/toolbox
 {{-   end }}
+{{- end }}
+
+{{- if (ne .chezmoi.osRelease.id "ubuntu") }}
+snap
 {{- end }}
 
 {{ if ne .chezmoi.os "windows" }}
