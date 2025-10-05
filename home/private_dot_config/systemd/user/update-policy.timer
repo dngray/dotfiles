@@ -1,0 +1,9 @@
+[Unit]
+Description=Run update-policy.service daily
+
+[Timer]
+OnBootSec=10min
+OnUnitActiveSec=1d
+
+[Install]
+WantedBy=timers.target
