@@ -1,0 +1,1 @@
+{{- template "firefox/profiles.ini" dict "headless" .state.headless "installType" "snap" "os" .chezmoi.os "homeDir" .chezmoi.homeDir "osRelId" .chezmoi.osRelease.id }}

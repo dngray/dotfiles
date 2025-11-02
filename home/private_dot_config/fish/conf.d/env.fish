@@ -20,8 +20,8 @@ set -gx SVN_EDITOR nvim
 set -gx MC_SKIN "$XDG_DATA_HOME/mc/skins/nord16M.ini"
 set -gx TERM xterm-256color
 
+set -gx NPM_CONFIG_PREFIX "$HOME/.npm-global"
 set -gx ANDROID_SDK_ROOT "$HOME/Android/Sdk"
 
 set -gx PATH "$PATH:$HOME/.local/bin $HOME/.npm-global/bin $ANDROID_SDK_ROOT/platform-tools $HOME/.cargo/bin"
-set -gx NPM_CONFIG_PREFIX "$HOME/.npm-global"
 set -gx VAULT_ADDR "https://vault.den.home.arpa"

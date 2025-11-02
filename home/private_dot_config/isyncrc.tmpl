@@ -14,7 +14,7 @@ User {{ .username }}@{{ .hostname }}
 AuthMechs LOGIN
 PassCmd "gopass -o mail/{{ .accountName }} mailPassword"
 TLSType {{ if .tls }}IMAPS{{ else }}none{{ end }}
-CertificateFile /etc/ssl/cert.pem
+CertificateFile /etc/ssl/certs/ca-certificates.crt
 Port {{ .imapPort }}
 Timeout 120
 
@@ -62,7 +62,7 @@ User {{ $account.username }}@{{ $account.hostname }}
 AuthMechs LOGIN
 PassCmd "gopass -o mail/{{ $account.accountName }} mailPassword"
 TLSType {{ if $account.tls }}IMAPS{{ else }}none{{ end }}
-CertificateFile /etc/ssl/cert.pem
+CertificateFile /etc/ssl/certs/ca-certificates.crt
 Port {{ $account.imapPort }}
 Timeout 120
 
@@ -108,7 +108,7 @@ User {{ $account.username }}@{{ $account.hostname }}
 AuthMechs LOGIN
 PassCmd "gopass -o mail/{{ $account.accountName }} mailPassword"
 TLSType {{ if $account.tls }}IMAPS{{ else }}none{{ end }}
-CertificateFile /etc/ssl/cert.pem
+CertificateFile /etc/ssl/certs/ca-certificates.crt
 Port {{ $account.imapPort }}
 Timeout 120
 

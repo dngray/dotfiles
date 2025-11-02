@@ -1,7 +1,7 @@
 defaults
 auth login
 tls_starttls off
-tls_trust_file /etc/ssl/cert.pem
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
 #logfile ~/.config/msmtp/msmtp.log
 {{  range $profile_a := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail }}
 {{- $aliases := ($profile_a.alias) }}

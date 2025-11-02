@@ -2,4 +2,4 @@
 # .config/fish/conf.d/fish.fish
 
 set -U fish_greeting
-starship init fish | source
+$HOME/.cargo/bin/starship init fish | source

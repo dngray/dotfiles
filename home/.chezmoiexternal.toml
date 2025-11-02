@@ -1,8 +1,22 @@
 [".local/share/fonts/Meslo"]
     type = "archive"
     url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Meslo.tar.xz"
-    refreshPeriod = "168h"
     checksum.sha512 = "084fd36a8a89e8a59e2c465c420ef50a9ef69f6f27c81af7b64308719c2c8d2f78b5aa7291d1bd21a51718bc162474734e15ab04c34a786e66fe882f3dbe8aac"
+
+[".local/share/fonts/CascadiaCode"]
+    type = "archive"
+    url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/CascadiaCode.tar.xz"
+    checksum.sha512 = "add0cee2e2bbe85568bc108bb1ac4b1a4b87a5cc7c869a225b53fd1de17902ee5710fa0144126b62e902528aec0e2c3a720054d384fa5f94ff0981fee2bd4030"
+
+[".local/share/fonts/fontawesome-free-7.1.0-desktop"]
+    type = "archive"
+    url = "https://use.fontawesome.com/releases/v7.1.0/fontawesome-free-7.1.0-desktop.zip"
+    checksum.sha512 = "d9a3003e388fd3143c011cea7277e7a5b74496a130eaa2b79db43f97eb814d2fc6a1605cc6f4c84cb2148b0fbfbd3ead4d0bb5d9fad765f57640a0d8419271b5"
+
+[".local/share/fonts/Lexend[wght].ttf"]
+    type = "file"
+    url = "https://github.com/google/fonts/raw/refs/heads/main/ofl/lexend/Lexend%5Bwght%5D.ttf"
+    checksum.sha512 = "758a3218814a0f012bd2c6cab6b1169b6481f4860be0332b40a6f199281ff348acd672f20e25053902f0788850ba12fca987b68b08baea2e4cbbf277fb5cf273"
 
 [".tmux/plugins/tpm"]
     type = "archive"

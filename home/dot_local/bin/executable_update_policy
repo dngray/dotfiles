@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# Ensure the script is passed at least one argument
+if [ "$#" -lt 1 ]; then
+  echo "Usage: $0 <repository1> <repository2> ... <repositoryN>"
+  exit 1
+fi
+
+# Copy the original policy.json to the correct location
+cp /usr/etc/containers/policy.json "$HOME"/.config/containers/policy.json
+
+# Initialize the jq filter
+jq_filter="."
+
+# Loop through all arguments (repositories) and build the jq filter
+for repo in "$@"; do
+  jq_filter="$jq_filter | .transports.docker[\"$repo\"] = [{\"type\": \
+\"insecureAcceptAnything\"}]"
+done
+
+# Execute the jq command with the constructed filter
+jq "$jq_filter" "$HOME"/.config/containers/policy.json >/tmp/tmp.json &&
+  mv /tmp/tmp.json "$HOME"/.config/containers/policy.json
+
+echo "Policy updated for the specified repositories."

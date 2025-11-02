@@ -1,0 +1,10 @@
+[Unit]
+Description=Update container policy
+
+[Service]
+Type=simple
+EnvironmentFile=%h/.config/update-policy.env
+ExecStart=%h/.local/bin/update_policy $CONTAINERS
+
+[Install]
+WantedBy=default.target
