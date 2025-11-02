@@ -20,12 +20,10 @@ eval "$(dircolors $HOME/.dir_colors)"
 export MC_SKIN="$XDG_DATA_HOME/mc/skins/nord16M.ini"
 export TERM="xterm-256color"
 
+export NPM_CONFIG_PREFIX="$HOME/.npm-global"
 export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
 
 export PATH="$PATH:$HOME/.local/bin:${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH:$HOME/.npm-global/bin:$ANDROID_SDK_ROOT/platform-tools:$HOME/.cargo/bin"
-export NPM_CONFIG_PREFIX="$HOME/.npm-global"
+
 export VAULT_ADDR="https://vault.den.home.arpa"
-
-export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
-
 export TERMINAL="/usr/bin/footclient"
