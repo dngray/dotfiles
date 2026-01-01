@@ -1,0 +1,87 @@
+# vim: filetype=sh
+# .bashrc.d/00_env
+
+# ==============================================================================
+# 1. USER & XDG BASE DIRECTORIES
+# ==============================================================================
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+
+# ==============================================================================
+# 2. CORE APPLICATION CONFIGURATION
+# ==============================================================================
+export EDITOR='nvim'
+export VAULT_ADDR="https://vault.den.home.arpa"
+export TERM="xterm-256color"
+export TERMINAL="alacritty-msg"
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
+
+# Ingest variables directly from your clean containers layout
+if [ -f "$XDG_CONFIG_HOME/containers/containers.env" ]; then
+  while IFS= read -r line || [ -n "$line" ]; do
+    # POSIX compliant comment and empty line skipping
+    case "$line" in
+    \#* | "") continue ;;
+    *)
+      # Securely strip outer quotes so path expansion does not fracture
+      _clean_line=$(printf '%s' "$line" | tr -d '"')
+      export "$_clean_line"
+      ;;
+    esac
+  done <"$XDG_CONFIG_HOME/containers/containers.env"
+fi
+
+# ==============================================================================
+# 3. SYSTEM PATH TREE (POSIX Compliant)
+# ==============================================================================
+
+# Base user tool paths
+case ":$PATH:" in
+*":$HOME/.local/bin:"*) ;;
+*) export PATH="$HOME/.local/bin:$PATH" ;;
+esac
+
+# Cargo binaries tool path
+case ":$PATH:" in
+*":$HOME/.cargo/bin:"*) ;;
+*) [ -d "$HOME/.cargo/bin" ] && export PATH="$HOME/.cargo/bin:$PATH" ;;
+esac
+
+# ASDF environment manager shims
+case ":$PATH:" in
+*":${ASDF_DATA_DIR:-$HOME/.asdf}/shims:"*) ;;
+*) [ -d "${ASDF_DATA_DIR:-$HOME/.asdf}/shims" ] && export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH" ;;
+esac
+
+# Container repository tool path
+case ":$PATH:" in
+*":$CONTAINER_REPO_PATH/bin:"*) ;;
+*) [ -d "$CONTAINER_REPO_PATH/bin" ] && export PATH="$CONTAINER_REPO_PATH/bin:$PATH" ;;
+esac
+
+# ==============================================================================
+# 4. INTERACTIVE TERMINAL UTILITIES
+# ==============================================================================
+# Only run if the shell is interactive (prevents errors in non-interactive scripts)
+if [ -n "$BASH_VERSION" ] && [ -t 0 ]; then
+  set -o vi
+fi
+
+# Set Terminal Colors (Catppuccin Theme)
+# The static color file below was generated using 'vivid'.
+# To regenerate, change flavors, or update it without installing vivid permanently:
+#
+#   cargo install vivid --root /tmp/vivid-temp
+#   /tmp/vivid-temp/bin/vivid generate catppuccin-mocha > "${XDG_CONFIG_HOME:-$HOME/.config}/dircolors/ls_colors"
+#   rm -rf /tmp/vivid-temp
+#
+if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/dircolors/ls_colors" ]; then
+  export LS_COLORS=$(cat "${XDG_CONFIG_HOME:-$HOME/.config}/dircolors/ls_colors")
+else
+  # Fallback to default system dircolors if the file is missing
+  if command -v dircolors >/dev/null 2>&1; then
+    eval "$(dircolors -b)"
+  fi
+fi

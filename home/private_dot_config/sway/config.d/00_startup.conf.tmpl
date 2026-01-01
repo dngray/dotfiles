@@ -1,0 +1,17 @@
+# SwayWM startup configuration. For detailed information type "man 5 sway"
+
+## Environment & Session Setup
+# Share the native SSH agent socket with systemd so graphical apps can authenticate
+exec systemctl --user import-environment SSH_AUTH_SOCK
+
+## Autostart Applications
+exec udiskie --no-automount --tray
+
+# Network Manager widget
+exec "nm-applet --indicator"
+
+# Desktop Utilities
+exec wlsunset -l {{ (vault "kv/shared/location").data.data.latitude }} -L {{ (vault "kv/shared/location").data.data.longitude }}
+exec inactive-windows-transparency.py -o 0.8
+exec dunst
+exec alacritty --daemon

@@ -1,0 +1,40 @@
+[connection]
+id={{ .id }}
+uuid={{ .uuid }}
+type=wifi
+autoconnect=false
+interface-name=wlp2s0
+permissions=
+
+[wifi]
+bssid={{ .bssid }}
+hidden={{ .hidden }}
+mac-address={{ .mac_address }}
+mac-address-blacklist=
+mode=infrastructure
+seen-bssids={{ .bssid }};
+ssid={{ .id }}
+
+[wifi-security]
+key-mgmt={{ .key_mgmt }}
+{{ if eq .key_mgmt "wpa-psk" }}{{ if eq (hasKey . "psk") true }}psk={{ .psk }}{{ end }}{{ end }}
+
+{{- if eq .key_mgmt "wpa-eap" }}
+[802-1x]
+{{ if eq (hasKey . "ca_cert_path") true }}ca-cert={{ .ca_cert_path }}{{ end }}
+{{ if eq (hasKey . "client_cert_path") true }}client-cert={{ .client_cert_path }}{{ end }}
+{{ if eq (hasKey . "domain_suffix_match") true }}domain_suffix_match={{ .domain_suffix_match }}{{ end }}
+eap=tls;
+identity={{ .identity }}
+{{ if eq (hasKey . "private_key_path") true }}private-key={{ .private_key_path }}{{ end }}
+{{ if eq (hasKey . "private_key_password") true }}private-key-password={{ .private_key_password }}{{ end }}{{ end }}
+
+[ipv4]
+dns-search=
+method=auto
+
+[ipv6]
+addr-gen-mode=stable-privacy
+dns-search=
+ip6-privacy=0
+method=auto

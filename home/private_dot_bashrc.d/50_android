@@ -1,0 +1,27 @@
+# vim: filetype=sh
+# .bashrc.d/50_android
+
+# 1. The SDK Binaries (Shared, read-only applications/tools)
+export ANDROID_HOME="$XDG_DATA_HOME/android/sdk"
+export ANDROID_SDK_ROOT="$ANDROID_HOME"
+
+# 2. User Settings & Global Preferences
+export ANDROID_USER_HOME="$XDG_CONFIG_HOME/android"
+
+# 3. Emulator Engine Preferences
+export ANDROID_EMULATOR_HOME="$XDG_DATA_HOME/android/emulator"
+
+# 4. Virtual Device Images (Massive disk-image state files)
+export ANDROID_AVD_HOME="$XDG_STATE_HOME/android/avd"
+
+# 5. Path Injection for SDK command-line utilities (Duplicate-Free)
+if [ -d "$ANDROID_HOME" ]; then
+  # Inject platform-tools (adb, fastboot)
+  if [[ ":$PATH:" != *":$ANDROID_HOME/platform-tools:"* ]]; then
+    export PATH="$ANDROID_HOME/platform-tools:$PATH"
+  fi
+  # Inject build-tools / emulator binary paths if you use them
+  if [[ ":$PATH:" != *":$ANDROID_HOME/emulator:"* ]] && [ -d "$ANDROID_HOME/emulator" ]; then
+    export PATH="$ANDROID_HOME/emulator:$PATH"
+  fi
+fi

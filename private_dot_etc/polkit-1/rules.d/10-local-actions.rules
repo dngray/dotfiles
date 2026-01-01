@@ -1,0 +1,28 @@
+// private_dot_etc/polkit-1/rules.d/10-local-actions.rules
+// Unified userspace authorizations for storage, power, network, and virt-manager
+
+polkit.addRule(function(action, subject) {
+    // 1. AUTOMATED USERSPACE USB MOUNTING (For headless udiskie loops)
+    if (action.id.match("org.freedesktop.udisks2.") && subject.isInGroup("storage")) {
+        return polkit.Result.YES;
+    }
+
+    // 2. DESKTOP POWER MANAGEMENT (Reboot / Shutdown without sudo)
+    if (action.id.match("org.freedesktop.login1.") && subject.isInGroup("power")) {
+        return polkit.Result.YES;
+    }
+    if (action.id.match("org.freedesktop.upower.") && subject.isInGroup("power")) {
+        return polkit.Result.YES;
+    }
+
+    // 3. NETWORK CONNECTIONS MANAGEMENT
+    if (action.id.match("org.freedesktop.NetworkManager.") && subject.isInGroup("users")) {
+        return polkit.Result.YES;
+    }
+
+    // 4. VIRT-MANAGER DEPLOYMENTS (Allows local VM mapping without root passwords)
+    if (action.id == "org.libvirt.unix.manage" && subject.isInGroup("libvirt")) {
+        return polkit.Result.YES;
+    }
+});
+

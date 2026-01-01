@@ -1,0 +1,28 @@
+[Unit]
+Description=Snapcast Client
+Wants=network-online.target sound.target
+After=network-online.target
+
+[Service]
+Restart=on-failure
+RestartSec=5
+
+[Container]
+Image=localhost/snapclient:latest
+AutoUpdate=local
+Network=host
+SecurityLabelType=snapclient_t
+SecurityLabelLevel=s0
+Environment=SNAPCAST_HOST=snapcast.den.home.arpa
+Environment=PULSE_SERVER=unix:/run/user/%U/pulse/native
+Environment=PULSE_COOKIE=/tmp/pulse-cookie
+Environment=SNAPCAST_LATENCY=20
+
+Environment=PULSE_BUFFER_TIME=20
+
+Volume=/run/user/%U/pulse:/run/user/%U/pulse
+Volume=%h/.config/pulse/cookie:/tmp/pulse-cookie
+UserNS=keep-id
+
+[Install]
+WantedBy=default.target

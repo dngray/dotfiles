@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Clear Clipboard (xsel)
+Comment=Clear Clipboard with xsel
+Exec=/usr/bin/xsel -psbc
+Terminal=false
+Type=Application
+Categories=Utility;Clipboard;

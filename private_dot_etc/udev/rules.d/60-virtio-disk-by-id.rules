@@ -1,0 +1,1 @@
+KERNEL=="vd*", ATTR{serial}!="", SYMLINK+="disk/by-id/virtio-serial-%s{serial}"

@@ -1,0 +1,123 @@
+#!/bin/bash
+set -eufo pipefail
+
+true
+
+{{/* =============================================================================
+1. GLOBAL PACKAGE TOGGLES
+============================================================================= */}}
+{{- $pkg := (vault (printf "kv/users/%s/packages" .profiles.a)).data.data }}
+
+{{/* =============================================================================
+2. PACKAGE DEFINITIONS (DECLARATIVE LAYERS)
+============================================================================= */}}
+
+{{- $baseOstree := list
+  "fish"
+  "gvfs-mtp"
+  "neovim"
+  "udiskie"
+  "gcc-c++"
+-}}
+
+{{- $fedoraAtomic := list
+  "fzf"
+  "gammastep"
+  "gstreamer1-plugin-openh264"
+  "gvfs-smb"
+  "make"
+  "mozilla-openh264"
+  "qemu"
+  "starship"
+  "swtpm"
+  "syncthing"
+  "tmux"
+  "vault"
+  "virt-install"
+  "virt-manager"
+  "wl-clipboard"
+-}}
+
+{{- $silverblue := list
+  "dunst"
+  "network-manager-applet"
+  "python-i3ipc"
+  "sway"
+  "waybar"
+-}}
+
+{{- $flatpaks := list
+  "com.bitwarden.desktop"
+  "io.gitlab.news_flash.NewsFlash"
+  "io.mpv.Mpv"
+  "org.gimp.GIMP"
+  "org.gnome.Loupe"
+  "org.gnome.Papers"
+  "org.inkscape.Inkscape"
+  "org.libreoffice.LibreOffice"
+  "org.torproject.torbrowser-launcher"
+  "im.riot.Riot"
+-}}
+
+{{- $rustPkgs := list
+  "starship"
+  "tree-sitter-cli"
+  "fd-find"
+  "ripgrep"
+  "rumdl"
+  "typos-cli"
+  "bottom"
+  "zellij"
+-}}
+
+{{- $goPkgs := list
+  "github.com/gopasspw/gopass@latest"
+  "github.com/gopasspw/git-credential-gopass@latest"
+-}}
+
+{{/* =============================================================================
+3. OSTREE PACKAGE SELECTION LOGIC
+============================================================================= */}}
+
+{{- $ostree := $baseOstree }}
+
+{{- if and (eq .chezmoi.osRelease.id "fedora") (eq .chezmoi.osRelease.variant "Sway Atomic") }}
+  {{- $ostree = concat $ostree $fedoraAtomic }}
+{{- else if and (eq .chezmoi.osRelease.id "fedora") (eq .chezmoi.osRelease.variant "Silverblue") }}
+  {{- $ostree = concat $ostree $silverblue }}
+{{- end }}
+
+{{- $ostree = uniq $ostree }}
+
+{{/* =============================================================================
+4. INSTALLATION PHASES (DRY EXECUTION)
+============================================================================= */}}
+
+{{- if and (eq .chezmoi.osRelease.id "fedora") $pkg.rpmostree }}
+echo "Installing rpm-ostree packages..."
+{{- range $ostree }}
+rpm-ostree install --idempotent {{ . }}
+{{- end }}
+{{- end }}
+
+{{- if $pkg.flatpak }}
+echo "Installing flatpaks..."
+{{- range $flatpaks }}
+flatpak --user install --noninteractive flathub {{ . }}
+{{- end }}
+{{- end }}
+
+{{- if $pkg.rust_pkgs }}
+echo "Installing Rust tooling..."
+{{- range $rustPkgs }}
+cargo install {{ . }} --locked
+{{- end }}
+cargo install --force yazi-build
+{{- end }}
+
+{{- if and .state.private $pkg.golang_pkgs }}
+echo "Installing Go tooling..."
+{{- range $goPkgs }}
+go install {{ . }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,118 @@
+{{/* Profiles */}}
+{{- $profile_a := "" -}}
+{{- $profile_b := "" -}}
+{{- $main_profile := "" -}}
+{{/* State */}}
+{{- $headless := false -}} {{/* true if this machine does not have a screen and keyboard */}}
+{{- $ephemeral := false -}}{{/* true if this machine is ephemeral, e.g. a cloud or VM instance */}}
+{{- $personal := false -}} {{/* true if this machine should have personal secrets from vault */}}
+{{- $private := false -}}  {{/* true if second private profile is set */}}
+{{- $cli_mail := false -}}
+{{- $vault_access := (output "sh" "-c" "ping -c 1 vault.den.home.arpa > /dev/null && printf true || printf false") -}}
+
+{{/* System */}}
+{{- $luksUUID := (output "sh" "-c" "lsblk -o FSTYPE,UUID 2>/dev/null | awk '/^crypto_LUKS/ { printf $NF; exit }'") -}}
+{{- $rootUUID := (output "sh" "-c" "findmnt / -nro UUID 2>/dev/null | tr -d '\n'" ) -}}
+{{- $espUUID  := (output "sh" "-c" "findmnt /boot -o UUID -nr 2>/dev/null | tr -d '\n'" ) -}}
+{{- $swapUUID := (output "sh" "-c" "lsblk -o FSTYPE,UUID 2>/dev/null | awk '/^swap/ { printf $NF; exit }'") -}}
+
+{{/* Hardware */}}
+{{- $tpm := false -}}
+{{- $cpu := "" -}}
+{{-  if eq (output "awk" "/^vendor_id[[:blank:]]:/ { printf $NF; exit }" "/proc/cpuinfo") "GenuineIntel" -}}
+{{-    $cpu = "intel" -}}
+{{-  else if eq (output "awk" "/^vendor_id[[:blank:]]:/ { printf $NF; exit }" "/proc/cpuinfo") "AuthenticAMD" -}}
+{{-    $cpu = "amd" -}}
+{{-  end -}}
+
+{{/* Local */}}
+{{- $hostname := .chezmoi.hostname -}}
+{{- $fqdnHostname := .chezmoi.fqdnHostname -}}
+{{- $username := .chezmoi.username -}}
+
+{{/* detect GitHub codespaces, VSCode remote containers, Docker containers, and Vagrant boxes */}}
+{{- if or (env "CODESPACES") (env "REMOTE_CONTAINERS_IPC") (eq $username "root" "vagrant" "vscode") -}}
+{{-   $headless = true -}}
+{{-   $ephemeral = true -}}
+{{- end -}}
+
+{{/* Set state */}}
+{{- if not $ephemeral -}}
+{{-   if or (eq $hostname "icefloe" "snowfield" "cavern" "iceberg" "ocean" "icecube") -}}
+{{-     $personal = true -}}
+{{-     $tpm = true -}}
+{{-     if (eq $hostname "snowfield") -}}
+{{-       $tpm = false -}}
+{{-     end -}}
+{{-   else if (eq $fqdnHostname "snowcone") -}}
+{{-     $headless = true -}}
+{{-     $personal = true -}}
+{{-   else if stdinIsATTY -}}
+{{-     if hasKey . "headless" -}}
+{{-       $headless = .headless -}}
+{{-     else -}}
+{{-       $headless = promptBool "headless" -}}
+{{-     end -}}
+{{-     if hasKey . "ephemeral" -}}
+{{-       $ephemeral = .ephemeral -}}
+{{-     else -}}
+{{-       $ephemeral = promptBool "ephemeral" -}}
+{{-     end -}}
+{{-   else -}}
+{{-     $headless = true -}}
+{{-     $ephemeral = true -}}
+{{-   end -}}
+{{- end -}}
+
+{{/* Set profile for each host */}}
+{{- if $personal -}}
+{{-   if eq $vault_access "true" -}}
+{{-     if eq $hostname "snowfield" "cavern" "icecube" -}}
+{{-       $profile_a = "profile11" -}}
+{{-       $main_profile = $profile_a -}}
+{{-     else if or (and (eq $username "1") (eq $hostname "iceberg" "icefloe")) -}}
+{{-       $cli_mail = true -}}
+{{-       $profile_a = "profile01" -}}
+{{-       $main_profile = $profile_a -}}
+{{-     else if or (or (and (eq $fqdnHostname "snowcone") (eq $username "1")) (eq $username "d")) -}}
+{{-       $cli_mail = true -}}
+{{-       $profile_a = "profile01" -}}
+{{-       $profile_b = "profile02" -}}
+{{-       $main_profile = $profile_b -}}
+{{-     else if and (eq $fqdnHostname "snowcone") (eq $username "2") -}}
+{{-       $profile_a = "profile11" -}}
+{{-       $main_profile = $profile_a -}}
+{{-       $cli_mail = false -}}
+{{-     else if and (eq $fqdnHostname "snowcone") (eq $username "blue" "container-user") -}}
+{{-       $profile_a = "profile21" -}}
+{{-       $main_profile = $profile_a -}}
+{{-       $cli_mail = false -}}
+{{-     end -}}
+{{-     if eq $main_profile "profile02" -}}
+{{-       $private = true -}}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+
+[data]
+  [data.profiles]
+    a = {{ $profile_a | quote }}
+    b = {{ $profile_b | quote }}
+    main = {{ $main_profile | quote }}
+
+  [data.state]
+    headless = {{ $headless }}
+    ephemeral = {{ $ephemeral }}
+    personal = {{ $personal }}
+    private = {{ $private }}
+    cli_mail = {{ $cli_mail }}
+
+    [data.system.storage]
+      root_uuid = {{ $rootUUID | quote }}
+      luks_uuid = {{ $luksUUID | quote }}
+      esp_uuid = {{ $espUUID | quote }}
+      swap_uuid = {{ $swapUUID | quote }}
+
+    [data.system.hw]
+      cpu = {{ $cpu | quote }}
+      tpm = {{ $tpm }}

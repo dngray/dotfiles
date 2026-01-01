@@ -1,0 +1,20 @@
+[Unit]
+Description=OpenSSH Agent socket
+Documentation=man:ssh-agent(1)
+
+[Socket]
+SocketMode=0600
+{{- if or (eq .chezmoi.osRelease.id "debian") (eq .chezmoi.osRelease.id "ubuntu") }}
+ListenStream=%t/openssh_agent
+ExecStartPost=/usr/bin/systemctl --user set-environment SSH_AUTH_SOCK=%t/openssh_agent
+ExecStopPre=/usr/bin/systemctl --user unset-environment SSH_AUTH_SOCK
+{{- else }}
+ListenStream=%t/ssh-agent.socket
+Service=ssh-agent.service
+Priority=6
+Backlog=5
+DirectoryMode=0700
+{{- end }}
+
+[Install]
+WantedBy=sockets.target

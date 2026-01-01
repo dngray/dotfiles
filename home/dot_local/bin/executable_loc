@@ -1,0 +1,3 @@
+#!/bin/sh
+# A safer, faster locate alternative using fd
+exec fd --hidden --exclude .git "$@"

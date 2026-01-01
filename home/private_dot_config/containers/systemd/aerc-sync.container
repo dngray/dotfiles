@@ -1,0 +1,35 @@
+[Unit]
+Description=Headless Goimapnotify & Mbsync Mail Automation Daemon
+After=aerc-mail-pod.service
+Requires=aerc-mail-pod.service
+
+[Container]
+ContainerName=aerc-sync
+Pod=aerc-mail.pod
+Image=localhost/mail-sync:latest
+SecurityLabelType=aerc_t
+
+#Environment=SYNC_DEBUG=1
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/%U/bus
+
+# ── Read-Write Storage & Socket Mounts ──
+Volume=%h/.local/share/mail:/home/mail-sync/.local/share/mail:rw
+Volume=%h/.local/state/vdirsyncer:/home/mail-sync/.local/state/vdirsyncer:rw
+Volume=%h/.local/state/isync:/home/mail-sync/.local/state/isync:rw
+Volume=%h/.gnupg:/home/mail-sync/.gnupg:rw
+Volume=/run/user/%U/bus:/run/user/%U/bus:rw
+Volume=/run/user/%U/gnupg/S.gpg-agent:/home/mail-sync/.gnupg/S.gpg-agent:rw
+Volume=/run/user/%U/gnupg/S.gpg-agent.extra:/home/mail-sync/.gnupg/S.gpg-agent.extra:rw
+Volume=/run/pcscd/pcscd.comm:/run/pcscd/pcscd.comm:rw
+
+# ── Read-Only Configuration & Secrets Mounts ──
+Volume=%h/.config/goimapnotify/goimapnotify.yaml:/home/mail-sync/.config/goimapnotify/goimapnotify.yaml:ro
+Volume=%h/.config/isyncrc:/home/mail-sync/.config/isyncrc:ro
+Volume=%h/.config/notmuch:/home/mail-sync/.config/notmuch:ro
+Volume=%h/.config/vdirsyncer/config:/home/mail-sync/.config/vdirsyncer/config:ro
+Volume=%h/.config/gopass:/home/mail-sync/.config/gopass:ro
+Volume=%h/.local/share/gopass:/home/mail-sync/.local/share/gopass:ro
+
+[Service]
+StandardOutput=null
+StandardError=null

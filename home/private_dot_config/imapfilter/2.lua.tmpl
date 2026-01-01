@@ -1,0 +1,4 @@
+{{/* File 2: Private/Profile B Account Layout */}}
+{{- if .state.private }}
+{{-   template "imapfilter/config" dict "profile" .profiles.b "personal" .state.personal "mainUserAcc" (index (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail 0).accountName }}
+{{- end }}

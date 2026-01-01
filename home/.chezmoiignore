@@ -1,0 +1,58 @@
+# ~/.local/share/chezmoi/home/.chezmoiignore
+
+../private_dot_etc/**
+.asdf/installs/**
+.asdf/downloads/**
+.asdf/plugins/**
+.asdf/shims/**
+.asdf/repository/**
+.asdf/tmp/**
+
+{{- if not .state.cli_mail }}
+.config/aerc/**
+.config/email-common/**
+.config/goimapnotify/goimapnotify.conf
+.config/isyncrc
+.config/khard/khard.conf
+.config/msmtp/config
+.config/mutt/**
+.config/notmuch/**
+.config/vdirsyncer/config
+{{-   if not .state.private -}}
+.config/imapfilter/2.lua
+{{-   end }}
+{{- end }}
+
+{{- if not .state.private -}}
+.config/git/clean.sed
+.config/git/smudge.sed
+.config/git/users/2
+.config/git/users/3
+.config/rclone/rclone.conf
+{{-  if eq .chezmoi.osRelease.name "secureblue" }}
+.local/share/applications/org.mozilla.firefox.*
+{{-  end }}
+{{-  if eq .profiles.a "profile11" }}
+.config/containers/systemd/syncthing.container
+{{-  end }}
+{{- end }}
+
+{{- if .state.headless }}
+.config/alacritty/**
+.config/dunst/dunstrc
+.config/gtk-3.0/**
+.config/mpv/mpv.conf
+.config/rofi/**
+.config/sway/**
+.config/waybar/**
+.config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml
+.var/app/**
+{{- end }}
+
+{{-  if ne .chezmoi.osRelease.id "ubuntu" }}
+snap
+{{-  end }}
+
+{{ if ne .chezmoi.os "windows" }}
+.config/powershell/**
+{{- end }}
