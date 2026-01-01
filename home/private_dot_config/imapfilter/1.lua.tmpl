@@ -1,0 +1,2 @@
+{{/* File 1: Main/Profile A Account Layout */}}
+{{- template "imapfilter/config" dict "profile" .profiles.a "personal" .state.personal "mainUserAcc" (index (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail 0).accountName }}

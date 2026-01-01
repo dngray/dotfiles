@@ -1,0 +1,31 @@
+# vim: filetype=sh
+# .bashrc - Multi-distro modular layout (RHEL/Fedora/Arch/Debian)
+
+# 1. Dynamic platform source for system-wide configurations
+if [ -f /etc/bashrc ]; then
+  . /etc/bashrc # Targets Red Hat & Fedora
+elif [ -f /etc/bash.bashrc ]; then
+  . /etc/bash.bashrc # Targets Arch Linux & Debian
+fi
+
+# 2. Maintain localized binary user lookup paths (Fixed expansion)
+case ":$PATH:" in
+*":$HOME/.local/bin:"*) ;;
+*) PATH="$HOME/.local/bin:$PATH" ;;
+esac
+
+case ":$PATH:" in
+*":$HOME/bin:"*) ;;
+*) PATH="$HOME/bin:$PATH" ;;
+esac
+export PATH
+
+# 3. Modular configuration engine (Loads scripts sequentially)
+dir="$HOME/.bashrc.d"
+
+[ -d "$dir" ] || return 0
+
+for rc in "$dir"/*; do
+  [ -f "$rc" ] || continue
+  . "$rc"
+done

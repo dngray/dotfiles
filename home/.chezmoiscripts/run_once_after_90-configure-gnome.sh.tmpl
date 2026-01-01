@@ -1,0 +1,43 @@
+{{ if (and (eq .chezmoi.osRelease.id "fedora") (not .state.ephemeral) (not .state.headless)) -}}
+#!/bin/bash
+
+# Exit immediately if a pipeline fails
+set -eufo pipefail
+
+echo "Applying universal GTK and window manager configurations..."
+
+# Modern universal GTK file picker refinements
+gsettings set org.gtk.Settings.FileChooser show-hidden true
+gsettings set org.gtk.Settings.FileChooser sort-directories-first true
+
+# Clean layout: removes legacy window menu icons, matches minimalism
+gsettings set org.gnome.desktop.wm.preferences button-layout ':'
+
+# Forcefully flush and index newly installed local custom fonts
+if [ -d "$HOME/.local/share/fonts" ]; then
+    echo "Updating user font cache matrix..."
+    fc-cache -f "$HOME/.local/share/fonts"
+fi
+
+{{   if (eq .chezmoi.osRelease.variant "Silverblue") -}}
+echo "Applying Fedora Silverblue desktop profiles..."
+
+# Safe profile resolution fallback for GNOME Terminal
+if gsettings get org.gnome.Terminal.ProfilesList default >/dev/null 2>&1; then
+    profile=$(gsettings get org.gnome.Terminal.ProfilesList default | tr -d "'")
+    gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles/:"${profile}"/ font "MesloLGS NF"
+fi
+
+# Modern Nautilus List View configurations
+gsettings set org.gnome.nautilus.preferences default-folder-viewer 'list-view'
+gsettings set org.gnome.nautilus.preferences show-hidden-files true
+
+# Zoom level small key is valid, but nested properties require strict strings
+gsettings set org.gnome.nautilus.list-view default-zoom-level 'small'
+
+# MODERN GNOME DARK MODE SYSTEM SETTING (Replaces outdated gtk-theme override)
+# Prefer-dark (1) maps to the system-wide Dark Style setting natively
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
+{{-   end }}
+{{ end -}}

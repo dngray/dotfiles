@@ -1,0 +1,29 @@
+#!/bin/bash
+# This satisfies the Neovim plugin's binary check
+# and safely multiplexes interactive and non-interactive container streams.
+
+if [ -z "$FORTRESS_PATH" ]; then
+  echo "❌ FORTRESS_PATH is not set in your environment." >&2
+  exit 1
+fi
+
+PROJECT_ID=$(basename "$FORTRESS_PATH")
+POD_NAME="ai-fortress-pod-$PROJECT_ID"
+
+# Locate the active opencode jail container inside the project's pod
+CONTAINER_NAME=$(podman ps --filter "pod=$POD_NAME" --filter "name=ai-jail-opencode" --format "{{.Names}}" | head -n 1)
+
+if [ -z "$CONTAINER_NAME" ]; then
+  echo "🛡️ Fortress not active. Run 'code-fortress' first." >&2
+  exit 1
+fi
+
+# DYNAMIC TTY DETECTION: Prevents Neovim UI from hanging on interactive splits
+if [ -t 1 ]; then
+  PODMAN_FLAGS="-it"
+else
+  PODMAN_FLAGS="-i"
+fi
+
+# Forward the exact call, ensuring stderr passes correctly back to Neovim
+exec podman exec $PODMAN_FLAGS "$CONTAINER_NAME" opencode "$@"

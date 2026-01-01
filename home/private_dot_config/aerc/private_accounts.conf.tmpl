@@ -1,0 +1,96 @@
+# Aerc main configuration. For detailed information type "man aerc"
+# Read `man 5 aerc-accounts` for reference.
+
+{{- /* -----------------------------------------------------------------
+       HELPER DEFINITION: Standard Maildir Account Component Block
+   --------------------------------------------------------------------- */}}
+{{- define "aerc/account-block" }}
+{{-   $profile := .profile }}
+{{-   $account := .account }}
+{{-   $aliases := $account.alias }}
+[{{ $account.shortAccountName }}]
+source                    = maildir://~/.local/share/mail/{{ $profile }}/{{ $account.accountName }}
+check-mail-cmd            = mbsync -a {{ $account.accountName }}
+outgoing                  = msmtp -a {{ $account.accountName }}
+copy-to                   = Sent
+default                   = Inbox
+from                      = {{ $account.realName | quote }} <{{ index $aliases 0 }}>
+address-book-cmd          = khard email -f %s -p --remove-first-line -a{{ "" -}}
+{{-   if hasKey $account "addressbooks" -}}
+{{-     range $v, $abook := $account.addressbooks -}}
+{{-       if $v }},{{ end }}{{ $abook.name -}}
+{{-     end -}}
+{{-   end }}
+signature-file            = ~/.config/email-common/{{ $profile }}/signatures/{{ $account.accountNumber }}.txt
+{{-   if hasKey $account "keyID" }}
+pgp-key-id                = {{ $account.keyID }}
+pgp-auto-sign             = true
+pgp-opportunistic-encrypt = false
+pgp-self-encrypt          = true
+{{-   end }}
+{{ end -}}
+
+{{- /* -----------------------------------------------------------------
+       HELPER DEFINITION: Core Notmuch Query Architecture Block
+   --------------------------------------------------------------------- */}}
+{{- define "aerc/notmuch-block" }}
+{{-   $profile := .profile }}
+{{-   $account := .account }}
+{{-   $aliases := $account.alias }}
+[nm-{{ $account.shortAccountName }}]
+source                    = notmuch://~/.local/share/mail/{{ $profile }}/
+maildir-store             = ~/.local/share/mail/{{ $profile }}/
+query-map                 = ~/.config/aerc/notmuchmap/{{ $profile }}.conf
+default                   = Inbox
+folders-sort              = Inbox
+from                      = {{ $account.realName | quote }} <{{ index $aliases 0 }}>
+{{ end -}}
+
+
+{{- /* -----------------------------------------------------------------
+       EXECUTION CHANNEL: Master Profile A (Core Main Accounts Loop)
+   --------------------------------------------------------------------- */}}
+{{- $vaultA := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data }}
+{{- $profileA := $vaultA.profile }}
+{{- $mailDataA := $vaultA.mail }}
+
+{{- range $account := $mailDataA }}
+{{-   if .enabled }}
+{{-     template "aerc/account-block" dict "profile" $profileA "account" $account }}
+{{-   end }}
+{{- end }}
+
+
+{{- /* -----------------------------------------------------------------
+       EXECUTION CHANNEL: Optional Profile B (Private Workspace Accounts)
+   --------------------------------------------------------------------- */}}
+{{- $mailDataB := list }}
+{{- $profileB := "" }}
+{{- if .state.private }}
+{{-   $vaultB := (vault (printf "kv/users/%s/mail" .profiles.b)).data.data }}
+{{-   $profileB = $vaultB.profile }}
+{{-   $mailDataB = $vaultB.mail }}
+{{-   range $account := $mailDataB }}
+{{-     if .enabled }}
+{{-       template "aerc/account-block" dict "profile" $profileB "account" $account }}
+{{-     end }}
+{{-   end }}
+{{- end }}
+
+
+{{- /* -----------------------------------------------------------------
+       VIRTUAL INDEX GENERATION: Notmuch Mapping Anchors
+   --------------------------------------------------------------------- */}}
+{{- if $mailDataA }}
+{{-   $mainAccA := index $mailDataA 0 }}
+{{-   if $mainAccA.enabled }}
+{{-     template "aerc/notmuch-block" dict "profile" $profileA "account" $mainAccA }}
+{{-   end }}
+{{- end }}
+
+{{- if and .state.private $mailDataB }}
+{{-   $mainAccB := index $mailDataB 0 }}
+{{-   if $mainAccB.enabled }}
+{{-     template "aerc/notmuch-block" dict "profile" $profileB "account" $mainAccB }}
+{{-   end }}
+{{- end }}

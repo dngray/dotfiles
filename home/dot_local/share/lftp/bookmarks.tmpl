@@ -1,0 +1,13 @@
+bleachbit  	https://www.bleachbit.org/download/
+mozilla  	https://ftp.mozilla.org/pub/firefox/releases/
+videolan  	https://download.videolan.org/pub/videolan/vlc/
+7zip  	https://7-zip.org
+npp  	https://github.com/notepad-plus-plus/notepad-plus-plus/releases/
+{{- if .state.private  -}}
+{{-   range $lftp_hosts := (vault (printf "kv/users/%s/resources" .profiles.main)).data.data.lftp }}
+{{-   $host := index ($lftp_hosts) }}
+{{      .Host }}   	{{ if (hasKey $host "env_password") }} {{ if ($host.env_password) }}--env-password {{ end }} {{- end }}
+{{-     .Protocol }}://{{- if (hasKey $host "User") }}{{ if ($host.User) }}{{ .User }}@{{ end }}{{- end }}{{.Hostname }}
+{{- if (hasKey $host "execute_commands") }} -e {{ $host.execute_commands | squote }} {{- end }}
+{{-   end }}
+{{- end }}

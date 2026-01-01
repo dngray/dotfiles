@@ -1,0 +1,114 @@
+# Global Defaults
+Create Both
+Sync Full
+Remove Both
+Expunge Both
+
+{{/* 1. Fetch Vault data ONCE upfront to prevent redundant network calls */}}
+{{- $profileAData := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data }}
+{{- $profileAName := $profileAData.profile }}
+{{- $accountsA    := $profileAData.mail }}
+
+{{- $accountsB := list }}
+{{- if .state.private }}
+  {{- $accountsB = (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail }}
+{{- end }}
+
+{{/* 2. Define a reusable macro to generate the block for ANY account */}}
+{{- define "mbsync_account" }}
+  {{- $acc := .account }}
+  {{- $prof := .profileName }}
+
+IMAPAccount {{ $acc.accountName }}
+Host {{ $acc.imapHost }}
+User {{ $acc.username }}@{{ $acc.hostname }}
+AuthMechs LOGIN
+PassCmd "gopass -o mail/{{ $acc.accountName }} mailPassword"
+TLSType {{ if $acc.tls }}IMAPS{{ else }}none{{ end }}
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+Port {{ $acc.imapPort }}
+Timeout 120
+
+IMAPStore {{ $acc.accountName }}-remote
+Account {{ $acc.accountName }}
+
+MaildirStore {{ $acc.accountName }}-local
+Subfolders Verbatim
+Path ~/.local/share/mail/{{ $prof }}/{{ $acc.accountName }}/
+Inbox ~/.local/share/mail/{{ $prof }}/{{ $acc.accountName }}/Inbox
+Flatten .
+
+Channel {{ $acc.accountName }}-folders
+Far :{{ $acc.accountName }}-remote:
+Near :{{ $acc.accountName }}-local:
+{{- if eq .index 1 }}
+Patterns * !INBOX !Archive* !"Junk Mail" !"Deleted Items"
+{{- else }}
+Patterns * !INBOX !Archive*
+{{- end }}
+
+Channel {{ $acc.accountName }}-inbox
+Far ":{{ $acc.accountName }}-remote:INBOX"
+Near ":{{ $acc.accountName }}-local:Inbox"
+
+Channel {{ $acc.accountName }}-archive
+Far ":{{ $acc.accountName }}-remote:Archive"
+Near ":{{ $acc.accountName }}-local:Archive"
+Patterns *
+
+{{- if eq .index 1 }}
+
+Channel {{ $acc.accountName }}-junk
+Far ":{{ $acc.accountName }}-remote:Junk Mail"
+Near ":{{ $acc.accountName }}-local:Junk"
+Patterns *
+
+Channel {{ $acc.accountName }}-trash
+Far ":{{ $acc.accountName }}-remote:Deleted Items"
+Near ":{{ $acc.accountName }}-local:Trash"
+Patterns *
+{{- end }}
+
+Group {{ $acc.accountName }}
+Channel {{ $acc.accountName }}-inbox
+Channel {{ $acc.accountName }}-folders
+Channel {{ $acc.accountName }}-archive
+{{- if eq .index 1 }}
+Channel {{ $acc.accountName }}-junk
+Channel {{ $acc.accountName }}-trash
+{{- end }}
+
+Group {{ $acc.accountName }}-fast
+Channel {{ $acc.accountName }}-inbox
+Channel {{ $acc.accountName }}-folders
+{{- end }}
+
+{{/* 3. Render Profile A Accounts */}}
+{{- range $acc := $accountsA }}
+  {{- if $acc.enabled }}
+    {{- template "mbsync_account" (dict "account" $acc "profileName" $profileAName "index" -1) }}
+  {{- end }}
+{{- end }}
+
+{{/* 4. Render Profile B Accounts (Private State) */}}
+{{- if .state.private }}
+  {{- range $i, $acc := $accountsB }}
+    {{- if $acc.enabled }}
+      {{- template "mbsync_account" (dict "account" $acc "profileName" "2" "index" $i) }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+Group inboxes
+{{- range $accountsA }}
+  {{- if .enabled }}
+Channel {{ .accountName }}-inbox
+  {{- end }}
+{{- end }}
+{{- if .state.private }}
+  {{- range $accountsB }}
+    {{- if .enabled }}
+Channel {{ .accountName }}-inbox
+    {{- end }}
+  {{- end }}
+{{- end }}

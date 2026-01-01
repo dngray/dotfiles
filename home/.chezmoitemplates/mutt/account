@@ -1,0 +1,88 @@
+# vim: filetype=neomuttrc
+{{- $profile := (vault (printf "kv/users/%s/mail" .profile)).data.data.profile -}}
+{{- $account := index (vault (printf "kv/users/%s/mail" .profile)).data.data.mail .accIdx }}
+{{- $aliases := ($account.alias) }}
+# muttrc file for account {{ $account.accountName }}
+set realname = "{{ $account.realName }}"
+set from = "{{ (index ($aliases) 0) }}"
+set hostname={{ $account.hostname }}
+set my_sendmail_h = "~/.local/bin/sendmail {{ $account.accountName }}"
+set my_sendmail_p = "msmtp -a {{ $account.accountName }}"
+set my_signature_p = ~/.config/email-common/{{ $profile }}/signatures/{{ $account.accountNumber }}.txt
+set my_signature_h = ~/.config/email-common/{{ $profile }}/signatures/{{ $account.accountNumber }}.html
+{{- range $k, $aliases }}
+alias alias{{ add $k 1 }} = {{ $account.realName}} <{{ $k }}>
+{{- end }}
+set folder = ~/.local/share/mail/{{ $profile }}/{{ $account.accountName }}
+set header_cache = ~/.cache/mutt-wizard/{{ $account.accountName }}/headers
+set message_cachedir = ~/.cache/mutt-wizard/{{ $account.accountName }}/bodies
+set mbox_type = Maildir
+{{ if eq (hasKey $account "keyID") true }}
+set pgp_self_encrypt = yes
+set pgp_default_key = {{ $account.keyID }}
+{{- end }}
+
+unbind index,pager h
+macro index,pager r '<enter-command>set sendmail="$my_sendmail_p"<enter><enter-command>set signature="$my_signature_p"<enter><enter-command>set sig_dashes = yes<enter><reply>'
+macro index,pager hr '<enter-command>set sendmail="$my_sendmail_h"<enter><enter-command>set signature="$my_signature_h"<enter><enter-command>set sig_dashes = no<enter><reply>'
+macro index,pager m '<enter-command>set sendmail="$my_sendmail_p"<enter><enter-command>set signature="$my_signature_p"<enter><enter-command>set sig_dashes = yes<enter><mail>'
+macro index,pager hm '<enter-command>set sendmail="$my_sendmail_h"<enter><enter-command>set signature="$my_signature_h"<enter><enter-command>set sig_dashes = no<enter><mail>'
+
+bind index,pager gg noop
+bind index,pager g noop
+bind index,pager M noop
+bind index,pager C noop
+bind index gg first-entry
+unmailboxes *
+
+set spoolfile = "+Inbox"
+set record = "+Sent"
+set postponed = "+Drafts"
+set trash = "+Trash"
+mailboxes `find ~/.local/share/mail/{{ $profile }}/{{ $account.accountName }} -type d -name cur | sort | sed -e 's:/cur/*$::' -e 's/ /\\ /g' | tr '\n' ' '`
+macro index,pager gi "<change-folder>=Inbox<enter>" "go to inbox"
+macro index,pager Mi ";<save-message>=Inbox<enter>" "move mail to inbox"
+macro index,pager Ci ";<copy-message>=Inbox<enter>" "copy mail to inbox"
+macro index,pager gs "<change-folder>=Sent<enter>" "go to sent"
+macro index,pager Ms ";<save-message>=Sent<enter>" "move mail to sent"
+macro index,pager Cs ";<copy-message>=Sent<enter>" "copy mail to sent"
+macro index,pager gd "<change-folder>=Drafts<enter>" "go to drafts"
+macro index,pager Md ";<save-message>=Drafts<enter>" "move mail to drafts"
+macro index,pager Cd ";<copy-message>=Drafts<enter>" "copy mail to drafts"
+macro index,pager gt "<change-folder>=Trash<enter>" "go to trash"
+macro index,pager Mt ";<save-message>=Trash<enter>" "move mail to trash"
+macro index,pager Ct ";<copy-message>=Trash<enter>" "copy mail to trash"
+macro index,pager gS "<change-folder>=Spam<enter>" "go to spam"
+macro index,pager MS ";<save-message>=Spam<enter>" "move mail to spam"
+macro index,pager CS ";<copy-message>=Spam<enter>" "copy mail to spam"
+macro index,pager gj "<change-folder>=Junk<enter>" "go to junk"
+macro index,pager Mj ";<save-message>=Junk<enter>" "move mail to junk"
+macro index,pager Cj ";<copy-message>=Junk<enter>" "copy mail to junk"
+
+macro index,pager v ";<decrypt-copy>~/.local/share/mail/{{ $profile }}/decrypted<enter>" "Save decrypted copy"
+macro index,pager gv "<change-folder>~/.local/share/mail/{{ $profile }}/decrypted<enter>" "go to decrypted dump"
+
+
+bind editor <Tab> complete-query
+{{- if (eq $profile "1") }}
+# https://khard.readthedocs.io/en/latest/scripting.html
+bind editor ^T    complete
+unset query_command
+set query_command = "khard email -f %s -p -a
+{{-   range $v, $abook := $account.addressbooks}}
+{{-     if $v }},{{ end -}}
+{{      .name }}
+{{-   end }}
+macro index,pager Z \
+  "<pipe-message>khard add-email<return>" \
+  "add the sender email address to khard"
+{{- else -}}
+# Unbind khard
+unset query_command
+set query_command = "khard email -f %s -p -a
+{{-   range $v, $abook := $account.addressbooks}}
+{{-     if $v }},{{ end -}}
+{{      .name }}
+{{-   end }}
+{{- end }}
+unmacro index,pager Z

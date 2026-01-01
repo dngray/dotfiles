@@ -1,0 +1,6 @@
+{{- $account := index (vault (printf "kv/users/%s/mail" .profile)).data.data.mail .accIdx }}
+{{- if not .html }}
+{{-   $account.realName }}
+{{- else if .html }}
+{{-   $account.realName }} <br>
+{{- end -}}

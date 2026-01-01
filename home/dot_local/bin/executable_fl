@@ -1,0 +1,3 @@
+#!/bin/sh
+# Interactive file finder using fd and fzf
+exec fd --type f --hidden --exclude .git "$@" | fzf

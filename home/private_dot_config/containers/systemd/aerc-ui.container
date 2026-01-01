@@ -1,0 +1,40 @@
+[Unit]
+Description=Aerc Terminal Mail Client UI Component
+After=aerc-mail-pod.service
+Requires=aerc-mail-pod.service
+
+[Container]
+ContainerName=aerc-ui
+Pod=aerc-mail.pod
+Image=localhost/aerc-ui:latest
+SecurityLabelType=aerc_t
+
+PodmanArgs=--entrypoint=/bin/sleep
+Exec=infinity
+
+# ── Read-Write Storage & Socket Mounts ──
+Volume=%h/.local/share/mail:/home/aerc/.local/share/mail:rw
+Volume=%h/.local/share/nvim:/home/aerc/.local/share/nvim:rw
+Volume=%h/.local/share/address-book:/home/aerc/.local/share/address-book:rw
+Volume=%h/.local/share/calendars:/home/aerc/.local/share/calendars:rw
+Volume=%h/Downloads:/home/aerc/Downloads:rw
+Volume=%h/.gnupg:/home/aerc/.gnupg:rw
+Volume=/run/user/%U/gnupg/S.gpg-agent:/home/aerc/.gnupg/S.gpg-agent:rw
+Volume=/run/user/%U/gnupg/S.gpg-agent.extra:/home/aerc/.gnupg/S.gpg-agent.extra:rw
+Volume=/run/pcscd/pcscd.comm:/run/pcscd/pcscd.comm:rw
+
+# ── Read-Only Configuration & Secrets Mounts ──
+Volume=%h/.config/aerc:/home/aerc/.config/aerc:ro
+Volume=%h/.config/email-common:/home/aerc/.config/email-common:ro
+Volume=%h/.config/nvim:/home/aerc/.config/nvim:ro
+Volume=%h/.config/khard:/home/aerc/.config/khard:ro
+Volume=%h/.config/msmtp:/home/aerc/.config/msmtp:ro
+Volume=%h/.config/mutt:/home/aerc/.config/mutt:ro
+
+# Fix: Mount gopass profiles and encrypted data vault under strict read-only parameters
+Volume=%h/.config/gopass:/home/aerc/.config/gopass:ro
+Volume=%h/.local/share/gopass:/home/aerc/.local/share/gopass:ro
+
+[Service]
+StandardOutput=null
+StandardError=null

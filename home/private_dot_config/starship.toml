@@ -1,0 +1,52 @@
+format = """
+$directory\
+$git_branch$git_state$git_status $cmd_duration\
+$line_break\
+\\($username@$hostname\\) $python$character
+"""
+
+[directory]
+style = "#cba6f7"
+
+[character]
+success_symbol = "[❯](#f2cdcd)"
+error_symbol = "[❯](#f38ba8)"
+vimcmd_symbol = "[❮](#fab387)"
+
+[username]
+show_always = true
+style_user = "#89dceb"
+format = "[$user]($style)"
+
+[hostname]
+trim_at = ""
+style = "#cba6f7"
+ssh_only = false
+format = "[$hostname]($style)"
+
+[git_branch]
+format = '\([$branch]($style)'
+style = "#89dceb"
+
+[git_status]
+format = '[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)\)'
+style = "cyan"
+conflicted = ""
+untracked = ""
+modified = ""
+staged = ""
+renamed = ""
+deleted = ""
+stashed = "≡"
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "bright-black"
+
+[cmd_duration]
+format = "[$duration]($style) "
+style = "#f5c2e7"
+
+[python]
+format = "[$virtualenv]($style) "
+style = "bright-black"

@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# Ensure the user provided all three arguments
+if [ "$#" -ne 3 ]; then
+    echo "Usage: $0 [preview | full] [gray | color | lineart] <output_file>"
+    exit 1
+fi
+
+MODE="$1"
+TYPE="$2"
+OUTPUT="$3"
+
+# 1. Set the resolution based on preview vs full
+case "$MODE" in
+    preview) RES=100 ;;
+    full)    RES=300 ;;
+    *) echo "Error: Choose 'preview' or 'full'"; exit 1 ;;
+esac
+
+# 2. Map your text entry to the exact SANE driver mode name
+case "$TYPE" in
+    gray)    SANE_MODE="Gray" ;;
+    color)   SANE_MODE="Color" ;;
+    lineart) SANE_MODE="Lineart" ;;
+    *) echo "Error: Choose 'gray', 'color', or 'lineart'"; exit 1 ;;
+esac
+
+echo "Scanning $MODE ($TYPE) at ${RES}dpi..."
+
+# 3. Single execution block
+scanimage -vp \
+          --device-name=hp \
+          --resolution "$RES" \
+          --mode "$SANE_MODE" \
+          --format=tiff \
+          --output-file "$OUTPUT"

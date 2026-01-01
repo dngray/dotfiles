@@ -1,0 +1,12 @@
+[user]
+{{- $gitUser := index (vault (printf "kv/users/%s/mail" .profile)).data.data.mail .accIdx }}
+	name = {{ $gitUser.realName }}
+	email = {{ index ($gitUser.alias) 0 }}
+	signingkey = {{ if eq (hasKey $gitUser "keyID") true }}{{ $gitUser.keyID }}{{ end }}
+[alias]
+	cf = commit -s --fixup
+	cm = commit -s --message
+	ss = commit -s --message snapshot --no-gpg-sign
+[commit]
+	gpgsign = true
+# vim: set filetype=gitconfig:

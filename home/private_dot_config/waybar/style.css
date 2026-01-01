@@ -1,0 +1,144 @@
+
+@import 'themes/mocha.css';
+
+/* Global Reset & Typography */
+* {
+    font-family: Lexend, "CaskaydiaCove Nerd Font", sans-serif;
+    font-size: 13px;
+    border: none;
+    border-radius: 0;
+}
+
+/* Master Bar Layer */
+window#waybar {
+    background-color: transparent;
+    color: @text;
+}
+
+window#waybar.hidden {
+    opacity: 0.2;
+}
+
+/* Outer Container Alignment Padding */
+.modules-left {
+    padding-left: 5px;
+    padding-top: 5px;
+}
+
+.modules-right {
+    padding-right: 5px;
+    padding-top: 5px;
+}
+
+/* Unified Block Capsules (The Core Theme Engine) */
+#clock,
+#cpu,
+#memory,
+#temperature,
+#network,
+#pulseaudio,
+#tray,
+#language,
+#mode,
+#scratchpad {
+    padding: 0 10px;
+    background-color: alpha(@mauve, 0.3);
+    color: @mauve;
+    border-radius: 10px;
+    margin: 0 2px;
+}
+
+#idle_inhibitor {
+    padding: 0 10px;
+    background-color: alpha(@mauve, 0.3);
+    color: @mauve;
+    border-radius: 10px;
+    margin: 0 2px;
+}
+
+/* Focused Window Header Title */
+#window {
+    background-color: @base;
+    padding: 0 10px;
+    border-radius: 10px;
+}
+
+window#waybar.empty #window {
+    background-color: transparent;
+}
+
+/* Workspaces Module Styling */
+#workspaces {
+    background-color: @base;
+    padding: 4px;
+    border-radius: 10px;
+}
+
+#workspaces button {
+    padding: 0 5px;
+    background-color: transparent;
+    color: @mauve;
+    border-radius: 10px;
+    margin-right: 5px;
+    box-shadow: none;
+}
+
+#workspaces button:last-child {
+    margin-right: 0;
+}
+
+#workspaces button:hover,
+#workspaces button.focused {
+    background: alpha(@mauve, 0.3);
+    color: @mauve;
+}
+
+#workspaces button.urgent {
+    background-color: @red;
+    color: @crust;
+}
+
+/* Contextual Module Modifications & States */
+#pulseaudio:hover {
+    background-color: alpha(@pink, 0.3);
+    color: @pink;
+}
+
+#pulseaudio.muted {
+    background-color: alpha(@surface1, 0.3);
+    color: @overlay0;
+}
+
+#network.disconnected {
+    background-color: alpha(@red, 0.3);
+    color: @red;
+}
+
+#temperature.critical {
+    background-color: alpha(@red, 0.4);
+    color: @red;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    background-color: @red;
+    color: @crust;
+}
+
+#scratchpad.empty {
+    background-color: transparent;
+}
+
+/* Privacy Monitoring Indicators */
+#privacy-item {
+    padding: 0 8px;
+    color: @text;
+    border-radius: 10px;
+}
+
+#privacy-item.screenshare { background-color: alpha(@maroon, 0.4); }
+#privacy-item.audio-in    { background-color: alpha(@green, 0.4); }
+#privacy-item.audio-out   { background-color: alpha(@blue, 0.4); }

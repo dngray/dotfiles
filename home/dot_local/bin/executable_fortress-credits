@@ -1,0 +1,41 @@
+#!/bin/bash
+# ~/.local/bin/fortress-credits
+
+# Set a safety boundary to alert you before your mid-workflow API token requests fail
+LOW_BALANCE_THRESHOLD=5.00
+
+while true; do
+  # Completely clear the active Zellij HUD pane boundary
+  printf "\033[2J\033[H"
+
+  if [ -z "$OPENROUTER_API_KEY" ]; then
+    echo -e "💰 \033[1;31mOpenRouter: [No Key Transferred]\033[0m"
+  else
+    # 1. Fetch raw accounting payload from the official credits endpoint
+    RAW_JSON=$(curl -s \
+      -H "Authorization: Bearer $OPENROUTER_API_KEY" \
+      -H "Accept: application/json" \
+      https://openrouter.ai/api/v1/credits)
+
+    # 2. Math via jq: Subtract total_usage from total_credits to extract accurate current balance
+    BAL=$(echo "$RAW_JSON" | jq -r 'if .data then (.data.total_credits - .data.total_usage) else "ERR" end' 2>/dev/null)
+
+    # 3. Process UI presentation strings based on structural return state
+    if [ "$BAL" == "ERR" ] || [ -z "$BAL" ]; then
+      echo -e "💰 \033[1;31mOpenRouter: \$?? [API Parse Error]\033[0m"
+    else
+      # Format raw float down to an exact 2-decimal fiat currency string
+      BAL_FORMATTED=$(printf "%.2f" "$BAL")
+
+      # 4. Threshold Evaluation: Turn output red if your balance dips too low
+      if (($(echo "$BAL < $LOW_BALANCE_THRESHOLD" | bc -l))); then
+        echo -e "💰 OpenRouter: \033[1;31m\$$BAL_FORMATTED\033[0m \033[5;31m(LOW)\033[0m"
+      else
+        echo -e "💰 OpenRouter: \033[1;32m\$$BAL_FORMATTED\033[0m"
+      fi
+    fi
+  fi
+
+  # Sleep for 5 minutes (300 seconds) to prevent hitting OpenRouter's baseline rate limits
+  sleep 300
+done
