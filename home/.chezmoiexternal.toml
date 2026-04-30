@@ -35,6 +35,6 @@
 [".local/bin/asdf"]
     type = "archive-file"
     executable = true
-    url = "https://github.com/asdf-vm/asdf/releases/download/v0.18.0/asdf-v0.18.0-linux-amd64.tar.gz"
+    url = "https://github.com/asdf-vm/asdf/releases/download/v0.19.0/asdf-v0.19.0-linux-amd64.tar.gz"
     path = "asdf"
-    checksum.sha512 = "b1b9a0b1d93af112f170f68e45151f45a9c555003b40785643777c9086aab668f3b56cb7384319ebcd5f64ad0a3ea33da3269f56d9ffee87867b92ea23e7a841"
+    checksum.sha512 = "50f8cf830debbb813f57b169db38b2119769e1c1acbb7c3558c2d0cc02af39b24e72c0d6fc45ce87dbe958226aab071771167491d7e8cd1beae225566f6a4c33"
