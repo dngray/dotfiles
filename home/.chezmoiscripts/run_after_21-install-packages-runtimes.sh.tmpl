@@ -5,11 +5,15 @@ set -eufo pipefail
 {{ $rust_pkgs := list
      "starship"
      "tree-sitter-cli"
+     "fd-find"
+     "ripgrep"
+     "bottom"
      "zellij" -}}
 
 {{- if (vault (printf "kv/users/%s/packages" .profiles.a)).data.data.rust_pkgs }}
 {{    range $rust_pkgs }}
 cargo install {{ . }} --locked
+cargo install --force yazi-build
 {{-   end }}
 {{- end }}
 

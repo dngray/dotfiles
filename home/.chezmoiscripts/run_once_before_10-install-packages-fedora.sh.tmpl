@@ -3,33 +3,38 @@
 
 set -eufo pipefail
 {{ $ostreeOverlay := list
-     "edk2-ovmf"
      "fish"
-     "fzf"
-     "gammastep"
-     "gstreamer1-plugin-openh264"
      "gvfs-mtp"
-     "gvfs-smb"
-     "lxqt-policykit"
-     "make"
-     "mozilla-openh264"
      "neovim"
-     "qemu"
-     "starship"
-     "swtpm"
-     "syncthing"
-     "tmux"
-     "udiskie"
-     "vault"
-     "virt-install"
-     "virt-manager"
-     "wl-clipboard" -}}
+     "udiskie" -}}
 
 {{/* Lazyvim dependencies */}}
 {{   $ostreeOverlay = concat $ostreeOverlay (list
-       "fd-find"
-       "gcc-c++"
-       "ripgrep" ) -}}
+       "gcc-c++") -}}
+
+{{ if (and (eq .chezmoi.osRelease.name "fedora") (eq .chezmoi.osRelease.variant "Sway Atomic"))}}
+{{   $ostreeOverlay = concat $ostreeOverlay (list
+       "fish"
+       "fzf"
+       "gammastep"
+       "gstreamer1-plugin-openh264"
+       "gvfs-mtp"
+       "gvfs-smb"
+       "lxqt-policykit"
+       "make"
+       "mozilla-openh264"
+       "neovim"
+       "qemu"
+       "starship"
+       "swtpm"
+       "syncthing"
+       "tmux"
+       "udiskie"
+       "vault"
+       "virt-install"
+       "virt-manager"
+       "wl-clipboard") -}}
+{{- end }}
 
 {{-    if (eq .chezmoi.osRelease.variant "Silverblue")  -}}
 {{       $ostreeOverlay = concat $ostreeOverlay (list
