@@ -1,0 +1,164 @@
+#!/bin/bash
+
+# 1. Identity & Path Resolution
+CUR_UID=$(id -u)
+CUR_GID=$(id -g)
+TARGET_PATH=$(realpath "${FORTRESS_PATH:-$HOME/src}")
+TOOL=${1:-"opencode"}
+shift
+
+# 2. Path Logic
+REL_PATH=$(echo "$TARGET_PATH" | sed 's|.*/src/||')
+PROJECT_ID=$(basename "$TARGET_PATH")
+POD_NAME="ai-fortress-pod-$PROJECT_ID"
+
+# 3. Surgical Tool Logic
+case "$TOOL" in
+"aider")
+  IMAGE="docker.io/paulgauthier/aider-full:latest"
+  JAIL_HOME="/home/appuser"
+  JAIL_WORK="$JAIL_HOME/workspace/$REL_PATH"
+
+  EXTRA_FLAGS=(--userns "keep-id")
+  EXTRA_FLAGS+=(
+    -v "$HOME/.cache/ai-fortress/aider:$JAIL_HOME/.cache"
+    -v "$HOME/.config/ai-fortress/aider:$JAIL_HOME/.config"
+    -v "$HOME/.local/share/ai-fortress/aider:$JAIL_HOME/.local/share"
+    -v "$HOME/.local/state/ai-fortress/aider:$JAIL_HOME/.local/state"
+    -v "$HOME/.config/git:$JAIL_HOME/.config/git:ro"
+    -v "$TARGET_PATH:$JAIL_WORK"
+    -w "$JAIL_WORK"
+    -e "AIDER_CHECK_UPDATE=false"
+    -e "AIDER_CHAT_HISTORY_FILE=$JAIL_HOME/.local/state/chats/$PROJECT_ID-chat.md"
+    -e "AIDER_INPUT_HISTORY_FILE=$JAIL_HOME/.local/share/$PROJECT_ID.history"
+    -e "GIT_CONFIG_GLOBAL=$JAIL_HOME/.config/git/config"
+  )
+  CMD_ARGS=(--no-gitignore --watch-files --no-analytics --no-check-update --config "$JAIL_HOME/.config/aider.conf.yml" --model "openrouter/anthropic/claude-3.5-sonnet" "$@")
+  ;;
+
+"opencode" | "shell")
+  # 🏰 POD CHECK: Simply confirm it exists
+  if ! podman pod exists "$POD_NAME"; then
+    echo "❌ Pod $POD_NAME not found! Launch via code-fortress."
+    exit 1
+  fi
+
+  JAIL_HOME="/home/opencode"
+  JAIL_WORK="$JAIL_HOME/workspace/$REL_PATH"
+
+  EXTRA_FLAGS=(
+    --pod "$POD_NAME"
+    --group-add keep-groups
+    -v "$HOME/.local/share/ai-fortress/opencode-volatile:$JAIL_HOME/.local"
+    -v "$HOME/.cache/ai-fortress/opencode:$JAIL_HOME/.cache"
+    -v "$HOME/.config/ai-fortress/opencode:$JAIL_HOME/.config/opencode"
+    -v "$TARGET_PATH:$JAIL_WORK"
+    -w "$JAIL_WORK"
+    --entrypoint /bin/sh
+  )
+
+  [ -f "$HOME/.config/update-policy.env" ] && . "$HOME/.config/update-policy.env"
+  REGISTRY="${REG_URL:-localhost}"
+  if [ "$TOOL" == "shell" ]; then
+    IMAGE="${REGISTRY}/opencode-tui:latest"
+    EXTRA_FLAGS+=(-e "OPENCODE_SERVER_PASSWORD=$OPENCODE_SERVER_PASSWORD")
+    CMD_ARGS=(-c "
+      echo '🛡️ Fortress Shell Active'
+      sleep 5
+      exec opencode attach http://127.0.0.1:4096 --password '$OPENCODE_SERVER_PASSWORD' || /bin/sh
+    ")
+  else
+    IMAGE="${REGISTRY}/opencode-server:latest"
+    EXTRA_FLAGS+=(-e "OPENCODE_SERVER_PASSWORD=$OPENCODE_SERVER_PASSWORD")
+    CMD_ARGS=(-c "exec opencode serve --port 4096 --hostname 0.0.0.0")
+  fi
+  ;;
+
+"goose" | "goose-shell")
+  [ -f "$HOME/.config/update-policy.env" ] && . "$HOME/.config/update-policy.env"
+  REGISTRY="${REG_URL:-localhost}"
+
+  JAIL_HOME="/home/goose"
+  JAIL_WORK="$JAIL_HOME/workspace/$REL_PATH"
+
+  G_MODE=${GOOSE_MODE:-"nanogpt"}
+  case "$G_MODE" in
+  "openrouter")
+    P_HOST="openrouter.ai"
+    P_KEY="$OPENROUTER_API_KEY"
+    P_MODEL="anthropic/claude-3.5-sonnet"
+    ;;
+  "nanogpt")
+    P_HOST="nano-gpt.com"
+    P_KEY="$OPENAI_API_KEY"
+    P_MODEL="gpt-4o"
+    ;;
+  *)
+    echo "❌ Unknown Goose Mode: $G_MODE"
+    exit 1
+    ;;
+  esac
+
+  EXTRA_FLAGS=(
+    --pod "$POD_NAME"
+    --group-add keep-groups
+    -v "$HOME/.cache/ai-fortress/goose:$JAIL_HOME/.cache"
+    -v "$HOME/.config/ai-fortress/goose:$JAIL_HOME/.config/goose"
+    -v "$TARGET_PATH:$JAIL_WORK"
+    -w "$JAIL_WORK"
+    -e "GOOSE_PROVIDER=openai"
+    -e "GOOSE_PATH=/api/v1"
+    -e "GOOSE_HOST=$P_HOST"
+    -e "GOOSE_PORT=443"
+    -e "GOOSE_MODEL=$P_MODEL"
+    -e "OPENAI_API_KEY=$P_KEY"
+    -e "GOOSE_TELEMETRY_ENABLED=false"
+  )
+
+  if [ "$TOOL" == "goose-shell" ]; then
+    IMAGE="${REGISTRY}/goose-cli:latest"
+    EXTRA_FLAGS+=(
+      --entrypoint /bin/sh
+      -e "GOOSE_URL=http://127.0.0.1:5005")
+    CMD_ARGS=(-c "
+      echo '⏳ Waiting for Goose Server...'
+      until curl -s http://127.0.0.1:5005 > /dev/null; do sleep 1; done
+      echo '🚀 Connecting to Goose Server...'
+      exec goose session
+    ")
+  else
+    IMAGE="${REGISTRY}/goose-server:latest"
+    # Use entrypoint sh to ensure the server starts clean
+    EXTRA_FLAGS+=(--entrypoint /bin/sh)
+    CMD_ARGS=(-c "echo '🏗️ Starting Goose Server on 5005...'; exec goose serve --port 5005 --host 0.0.0.0")
+  fi
+  ;;
+esac
+
+# 4. Common Security Baseline
+COMMON_FLAGS=(
+  --rm -it
+  --name "ai-jail-$TOOL-$(date +%s)"
+  --user "$CUR_UID:$CUR_GID"
+  --security-opt "label=type:fortress_agent_t"
+  --cap-add NET_RAW
+  --cap-add NET_ADMIN
+  --log-driver=none
+  --annotation "run.oci.keep_original_groups=1"
+  -e "HOME=$JAIL_HOME"
+  -e "PAGER=cat"
+  -e "GIT_CONFIG_NOSYSTEM=1"
+  -e "OPENROUTER_API_KEY=$OPENROUTER_API_KEY"
+  -e "OPENAI_API_KEY=$OPENAI_API_KEY"
+  -e "ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY"
+)
+
+# 5. Persistent Folder Prep
+mkdir -p "$HOME/.cache/ai-fortress/$TOOL" \
+  "$HOME/.config/ai-fortress/$TOOL" \
+  "$HOME/.local/share/ai-fortress/$TOOL" \
+  "$HOME/.local/state/ai-fortress/$TOOL/chats" \
+  "$HOME/.local/share/ai-fortress/opencode-volatile/share/opencode"
+
+# 6. Launch
+podman run "${COMMON_FLAGS[@]}" "${EXTRA_FLAGS[@]}" "$IMAGE" "${CMD_ARGS[@]}"

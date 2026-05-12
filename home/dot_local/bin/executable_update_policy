@@ -10,12 +10,11 @@ fi
 cp /usr/etc/containers/policy.json "$HOME"/.config/containers/policy.json
 
 # Initialize the jq filter
-jq_filter="."
+jq_filter=".transports[\"containers-storage\"][\"\"] = [{\"type\": \"insecureAcceptAnything\"}]"
 
 # Loop through all arguments (repositories) and build the jq filter
 for repo in "$@"; do
-  jq_filter="$jq_filter | .transports.docker[\"$repo\"] = [{\"type\": \
-\"insecureAcceptAnything\"}]"
+  jq_filter="$jq_filter | .transports.docker[\"$repo\"] = [{\"type\": \"insecureAcceptAnything\"}]"
 done
 
 # Execute the jq command with the constructed filter

@@ -1,0 +1,16 @@
+#!/bin/bash
+# This satisfies the Neovim plugin's binary check
+# but actually executes the command inside your running Fortress pod.
+
+# Find the active server container in your pod
+
+PROJECT_ID=$(basename "$FORTRESS_PATH")
+POD_NAME="ai-fortress-pod-$PROJECT_ID"
+CONTAINER_NAME=$(podman ps --filter "pod=$POD_NAME" --filter "name=ai-jail-opencode" --format "{{.Names}}")
+
+if [ -z "$CONTAINER_NAME" ]; then
+  echo "🛡️ Fortress not active. Run 'code-fortress' first."
+  exit 1
+fi
+
+exec podman exec -i "$CONTAINER_NAME" opencode "$@"

@@ -1,0 +1,36 @@
+layout {
+    // 💰 Credit HUD
+    pane size=2 borderless=true {
+        name "Credits"
+        command "fortress-credits"
+    }
+
+    pane split_direction="vertical" {
+        // Left: Native Editor
+        pane name="LazyVim" size="65%" {
+            command "bash"
+            args "-c" "nvim ."
+        }
+
+        // Right: The Goose Agent Jail
+        pane split_direction="horizontal" {
+            pane name="Goose Jail" {
+                // Top: The Background Server (Agent)
+                pane name="Goose Server" command="ai-secure" {
+                    args "goose" 
+                }
+
+                // Bottom: The Interactive Shell (Attach to Server)
+                pane name="Goose Session" command="ai-secure" {
+                    args "goose-shell"
+                    focus true
+                }
+            }
+        }
+    }
+
+    pane size=1 borderless=true {
+        plugin location="zellij:status-bar"
+    }
+}
+

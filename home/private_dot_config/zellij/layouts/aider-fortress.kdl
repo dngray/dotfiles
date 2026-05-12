@@ -1,0 +1,28 @@
+layout {
+    pane split_direction="vertical" {
+        // Avante lives inside this pane
+        pane name="LazyVim" command="nvim" size="65%"
+
+        // Aider handles the project-wide heavy lifting
+        pane name="Aider (Jailed)" command="ai-secure" {
+            args "aider"
+        }
+    }
+
+    pane size=1 borderless=true {
+        plugin location="zellij:status-bar"
+    }
+
+    floating_panes {
+        pane {
+            name "OpenRouter Credits ($)"
+            command "bash"
+            // Breaking args into separate lines helps KDL parse nested quotes
+            args "-c" "curl -s -H \"Authorization: Bearer $OPENROUTER_API_KEY\" -H \"Content-Type: application/json\" https://openrouter.ai/api/v1/credits | jq -r '.data.total_credits | \"Credits Remaining: $\" + .'"
+            x "30%"
+            y "35%"
+            width "40%"
+            height "15%"
+        }
+    }
+}

@@ -1,0 +1,22 @@
+#!/bin/bash
+# ~/.local/bin/fortress-hud
+
+while true; do
+  # Clear the small pane
+  printf "\033[2J\033[H"
+
+  if [ -z "$OPENROUTER_API_KEY" ]; then
+    echo "💰 OpenRouter: [No Key]"
+  else
+    # Added the Content-Type header back in
+    BAL=$(curl -s \
+      -H "Authorization: Bearer $OPENROUTER_API_KEY" \
+      -H "Content-Type: application/json" \
+      https://openrouter.ai/api/v1/credits | jq -r '.data.total_credits' 2>/dev/null)
+
+    # Display the result
+    echo "💰 OpenRouter: \$${BAL:-??}"
+  fi
+
+  sleep 300
+done

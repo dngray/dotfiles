@@ -1,0 +1,55 @@
+#!/bin/bash
+# ~/bin/code-fortress
+
+RAW_PATH=${1:-"$HOME/src"}
+export FORTRESS_PATH=$(realpath "$RAW_PATH")
+PROJECT_ID=$(basename "$FORTRESS_PATH")
+export POD_NAME="ai-fortress-pod-$PROJECT_ID"
+
+# 🛡️  Cleanup Logic
+cleanup_fortress() {
+  echo "🛡️  Dismantling Fortress components for $PROJECT_ID..."
+  podman pod rm -f -t 0 "$POD_NAME" 2>/dev/null
+  podman ps -a --format "{{.Names}}" | grep "^ai-jail-" | xargs -r podman rm -f -t 0 >/dev/null 2>&1
+  echo "🏰 Gates closed."
+}
+
+# 1. Proactive Clean & Create
+podman pod rm -f -t 0 "$POD_NAME" 2>/dev/null
+echo "🏗️  Initializing Fortress Pod (Shared Mode): $POD_NAME"
+podman pod create \
+  --name "$POD_NAME" \
+  --share net \
+  --userns keep-id \
+  --network bridge \
+  -p 127.0.0.1:4096:4096/tcp \
+  -p 127.0.0.1:5005:5005/tcp
+
+# 2. Set Trap: This only fires when the script (and zellij) exits
+trap cleanup_fortress EXIT
+
+export OPENCODE_SERVER_USERNAME="opencode"
+export OPENCODE_SERVER_PASSWORD=$(gopass show ai/opencode-server-pass)
+export OPENROUTER_API_KEY=$(gopass show ai/openrouter-api-key)
+export OPENAI_API_KEY=$(gopass show ai/openai-api-key)
+export ANTHROPIC_API_KEY=$(gopass show ai/anthropic-api-key)
+
+MODE=${2:-"opencode"}
+echo "🏰 Fortifying workspace in $MODE mode at: $FORTRESS_PATH"
+
+export GOOSE_MODE="${GOOSE_MODE:-nanogpt}"
+case "$MODE" in
+"aider")
+  zellij --layout aider-fortress
+  ;;
+"opencode")
+  zellij --layout opencode-fortress
+  ;;
+"goose")
+  zellij --layout goose-fortress
+  ;;
+*)
+  echo "❌ Usage: code-fortress <path> [aider|opencode|goose]"
+  exit 1
+  ;;
+esac
