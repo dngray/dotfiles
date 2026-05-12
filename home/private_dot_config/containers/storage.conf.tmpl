@@ -1,0 +1,10 @@
+{{-   if eq .chezmoi.hostname "arch-ai-node" }}
+[storage]
+driver = "overlay"
+graphroot = "/var/lib/containers/storage/ai-graph"
+runroot = "/run/user/1000/containers"
+
+[storage.options.overlay]
+# This helps with permission mapping in rootless mode
+mount_program = "/usr/bin/fuse-overlayfs"
+{{- end }}

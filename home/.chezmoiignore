@@ -92,6 +92,10 @@
 {{-   end }}
 {{- end }}
 
+{{-   if (ne .chezmoi.hostname "arch-ai-node") }}
+.config/containers/storage.conf
+{{- end }}
+
 {{-   if (ne .chezmoi.osRelease.id "fedora") }}
 .config/fedora/**
 .config/environment.d/*
