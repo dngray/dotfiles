@@ -22,17 +22,17 @@ Volume=%h/.config/syncthing:/var/syncthing/config
 {{- if (or (.state.private) (eq .profiles.main "profile11")) }}
 {{-   $volumes := index (vault (printf "kv/users/%s/resources" .profiles.main)).data.data.containers.syncthing.volumes.all -}}
 {{-   range $volumes }}
-Volume={{ . }}
+Volume={{ . }}:U
 {{-   end }}
 {{-   if (eq .chezmoi.hostname "cavern") }}
 {{-     $volumes := index (vault (printf "kv/users/%s/resources" .profiles.main)).data.data.containers.syncthing.volumes.host1 -}}
 {{-     range $volumes }}
-Volume={{ . }}
+Volume={{ . }}:U
 {{-     end }}
 {{-   end }}
 {{    if (eq .chezmoi.hostname "snowfield") }}
 {{-     $volumes := index (vault (printf "kv/users/%s/resources" .profiles.main)).data.data.containers.syncthing.volumes.host2 -}}
 {{-     range $volumes }}
-Volume={{ . }}
+Volume={{ . }}:U
 {{-     end }}
 {{-   end }}
