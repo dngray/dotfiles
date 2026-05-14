@@ -1,26 +1,26 @@
 layout {
-    // 💰 Credit HUD
+    // 💰 Credit HUD: Borderless 1-line header at the very top
     pane size=2 borderless=true {
         name "Credits"
         command "fortress-credits"
     }
 
     pane split_direction="vertical" {
-        // Left: Native Editor
-        pane name="LazyVim" size="65%" {
+        // Left: Your Native Trusted Editor
+        pane name="LazyVim" size="70%" {
             command "bash"
             args "-c" "nvim ."
         }
 
-        // Right: The Goose Agent Jail
+        // Right: The Stacked Agent Fortress
         pane split_direction="horizontal" {
-            pane name="Goose Jail" {
-                // Top: The Background Server (Agent)
+            pane name="Jail" stacked=true {
+                // Tab 1: Headless runtime background server daemon process
                 pane name="Goose Server" command="ai-secure" {
-                    args "goose" 
+                    args "goose"
                 }
 
-                // Bottom: The Interactive Shell (Attach to Server)
+                // Tab 2: Active, interactive workspace prompt panel
                 pane name="Goose Session" command="ai-secure" {
                     args "goose-shell"
                     focus true
@@ -29,8 +29,8 @@ layout {
         }
     }
 
+    // Modern Status Bar (Toggle with Ctrl-h)
     pane size=1 borderless=true {
         plugin location="zellij:status-bar"
     }
 }
-

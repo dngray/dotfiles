@@ -1,4 +1,5 @@
 #!/bin/bash
+# ~/.local/bin/ai-secure
 
 # 1. Identity & Path Resolution
 CUR_UID=$(id -u)
@@ -12,20 +13,21 @@ REL_PATH=$(echo "$TARGET_PATH" | sed 's|.*/src/||')
 PROJECT_ID=$(basename "$TARGET_PATH")
 POD_NAME="ai-fortress-pod-$PROJECT_ID"
 
-# 3. Surgical Tool Logic
+# 3. Tool Logic
 case "$TOOL" in
 "aider")
   IMAGE="docker.io/paulgauthier/aider-full:latest"
   JAIL_HOME="/home/appuser"
   JAIL_WORK="$JAIL_HOME/workspace/$REL_PATH"
 
-  EXTRA_FLAGS=(--userns "keep-id")
+  EXTRA_FLAGS=("-i" "--tty")
   EXTRA_FLAGS+=(
+    --userns "keep-id"
     -v "$HOME/.cache/ai-fortress/aider:$JAIL_HOME/.cache"
     -v "$HOME/.config/ai-fortress/aider:$JAIL_HOME/.config"
     -v "$HOME/.local/share/ai-fortress/aider:$JAIL_HOME/.local/share"
     -v "$HOME/.local/state/ai-fortress/aider:$JAIL_HOME/.local/state"
-    -v "$HOME/.config/git:$JAIL_HOME/.config/git:ro"
+    -v "$HOME/.config/git:$JAIL_HOME/.config/git:O"
     -v "$TARGET_PATH:$JAIL_WORK"
     -w "$JAIL_WORK"
     -e "AIDER_CHECK_UPDATE=false"
@@ -37,7 +39,6 @@ case "$TOOL" in
   ;;
 
 "opencode" | "shell")
-  # 🏰 POD CHECK: Simply confirm it exists
   if ! podman pod exists "$POD_NAME"; then
     echo "❌ Pod $POD_NAME not found! Launch via code-fortress."
     exit 1
@@ -46,31 +47,32 @@ case "$TOOL" in
   JAIL_HOME="/home/opencode"
   JAIL_WORK="$JAIL_HOME/workspace/$REL_PATH"
 
+  # Base shared flags array matching your volume isolation strategy
   EXTRA_FLAGS=(
     --pod "$POD_NAME"
     --group-add keep-groups
-    -v "$HOME/.local/share/ai-fortress/opencode-volatile:$JAIL_HOME/.local"
     -v "$HOME/.cache/ai-fortress/opencode:$JAIL_HOME/.cache"
-    -v "$HOME/.config/ai-fortress/opencode:$JAIL_HOME/.config/opencode"
+    -v "$HOME/.local/share/ai-fortress/opencode-volatile:$JAIL_HOME/.local"
     -v "$TARGET_PATH:$JAIL_WORK"
     -w "$JAIL_WORK"
-    --entrypoint /bin/sh
   )
 
   [ -f "$HOME/.config/update-policy.env" ] && . "$HOME/.config/update-policy.env"
   REGISTRY="${REG_URL:-localhost}"
+
   if [ "$TOOL" == "shell" ]; then
     IMAGE="${REGISTRY}/opencode-tui:latest"
     EXTRA_FLAGS+=(-e "OPENCODE_SERVER_PASSWORD=$OPENCODE_SERVER_PASSWORD")
-    CMD_ARGS=(-c "
-      echo '🛡️ Fortress Shell Active'
-      sleep 5
-      exec opencode attach http://127.0.0.1:4096 --password '$OPENCODE_SERVER_PASSWORD' || /bin/sh
-    ")
+    EXTRA_FLAGS+=("-i" "--tty")
+    EXTRA_FLAGS+=(-v "$HOME/.config/ai-fortress/opencode-tui:/home/opencode/.config/opencode")
+
+    CMD_ARGS=(attach "http://127.0.0.1:4096" --password "$OPENCODE_SERVER_PASSWORD" --dir ".")
   else
     IMAGE="${REGISTRY}/opencode-server:latest"
     EXTRA_FLAGS+=(-e "OPENCODE_SERVER_PASSWORD=$OPENCODE_SERVER_PASSWORD")
-    CMD_ARGS=(-c "exec opencode serve --port 4096 --hostname 0.0.0.0")
+    EXTRA_FLAGS+=(-v "$HOME/.config/ai-fortress/opencode:/home/opencode/.config/opencode")
+
+    CMD_ARGS=(serve --port 4096 --hostname 0.0.0.0)
   fi
   ;;
 
@@ -117,36 +119,29 @@ case "$TOOL" in
 
   if [ "$TOOL" == "goose-shell" ]; then
     IMAGE="${REGISTRY}/goose-cli:latest"
-    EXTRA_FLAGS+=(
-      --entrypoint /bin/sh
-      -e "GOOSE_URL=http://127.0.0.1:5005")
-    CMD_ARGS=(-c "
-      echo '⏳ Waiting for Goose Server...'
-      until curl -s http://127.0.0.1:5005 > /dev/null; do sleep 1; done
-      echo '🚀 Connecting to Goose Server...'
-      exec goose session
-    ")
+    EXTRA_FLAGS+=("-i" "--tty")
+    CMD_ARGS=(session)
   else
     IMAGE="${REGISTRY}/goose-server:latest"
-    # Use entrypoint sh to ensure the server starts clean
-    EXTRA_FLAGS+=(--entrypoint /bin/sh)
-    CMD_ARGS=(-c "echo '🏗️ Starting Goose Server on 5005...'; exec goose serve --port 5005 --host 0.0.0.0")
+    CMD_ARGS=(serve --port 5005 --host 0.0.0.0)
   fi
   ;;
 esac
 
 # 4. Common Security Baseline
 COMMON_FLAGS=(
-  --rm -it
-  --name "ai-jail-$TOOL-$(date +%s)"
+  --rm
   --user "$CUR_UID:$CUR_GID"
   --security-opt "label=type:fortress_agent_t"
-  --cap-add NET_RAW
-  --cap-add NET_ADMIN
+  --security-opt "no-new-privileges"
+  --cap-drop=ALL
+  --cap-add=SETUID
+  --cap-add=SETGID
   --log-driver=none
   --annotation "run.oci.keep_original_groups=1"
   -e "HOME=$JAIL_HOME"
   -e "PAGER=cat"
+  -e "TERM=xterm-256color"
   -e "GIT_CONFIG_NOSYSTEM=1"
   -e "OPENROUTER_API_KEY=$OPENROUTER_API_KEY"
   -e "OPENAI_API_KEY=$OPENAI_API_KEY"
@@ -155,10 +150,11 @@ COMMON_FLAGS=(
 
 # 5. Persistent Folder Prep
 mkdir -p "$HOME/.cache/ai-fortress/$TOOL" \
+  "$HOME/.config/ai-fortress/opencode-tui" \
   "$HOME/.config/ai-fortress/$TOOL" \
   "$HOME/.local/share/ai-fortress/$TOOL" \
   "$HOME/.local/state/ai-fortress/$TOOL/chats" \
   "$HOME/.local/share/ai-fortress/opencode-volatile/share/opencode"
 
-# 6. Launch
+# 6. Launch (Clean, unpiped native execution array passing)
 podman run "${COMMON_FLAGS[@]}" "${EXTRA_FLAGS[@]}" "$IMAGE" "${CMD_ARGS[@]}"

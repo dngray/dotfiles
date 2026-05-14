@@ -15,12 +15,12 @@ layout {
         // Right: The Stacked Fortress
         pane split_direction="horizontal" {
             pane name="Jail" stacked=true {
-                // Tab at the top for logs (hidden by default)
-                pane name="AI Server Logs" command="ai-secure" {
-                    args "opencode"
+                // Tab at the top for logs (Safely initializes inside a bash wrapper loop)
+                pane name="AI Server Logs" {
+                    command "bash"
+                    args "-c" "ai-secure opencode; exec bash"
                 }
-
-                // Active window (primary focus)
+                // Active window
                 pane name="OpenCode TUI" command="ai-secure" {
                     args "shell"
                     focus true

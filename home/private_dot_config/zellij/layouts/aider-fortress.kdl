@@ -1,28 +1,26 @@
 layout {
-    pane split_direction="vertical" {
-        // Avante lives inside this pane
-        pane name="LazyVim" command="nvim" size="65%"
+    // 💰 Credit HUD: Borderless 1-line header at the very top
+    pane size=2 borderless=true {
+        name "Credits"
+        command "fortress-credits"
+    }
 
-        // Aider handles the project-wide heavy lifting
+    pane split_direction="vertical" {
+        // Left: Your Native Trusted Editor
+        pane name="LazyVim" size="70%" {
+            command "bash"
+            args "-c" "nvim ."
+        }
+
+        // Right: The Jailed Aider workspace panel
         pane name="Aider (Jailed)" command="ai-secure" {
             args "aider"
+            focus true
         }
     }
 
+    // Modern Status Bar (Toggle with Ctrl-h)
     pane size=1 borderless=true {
         plugin location="zellij:status-bar"
-    }
-
-    floating_panes {
-        pane {
-            name "OpenRouter Credits ($)"
-            command "bash"
-            // Breaking args into separate lines helps KDL parse nested quotes
-            args "-c" "curl -s -H \"Authorization: Bearer $OPENROUTER_API_KEY\" -H \"Content-Type: application/json\" https://openrouter.ai/api/v1/credits | jq -r '.data.total_credits | \"Credits Remaining: $\" + .'"
-            x "30%"
-            y "35%"
-            width "40%"
-            height "15%"
-        }
     }
 }
