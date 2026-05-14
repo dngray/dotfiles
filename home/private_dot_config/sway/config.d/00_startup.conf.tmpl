@@ -10,4 +10,4 @@ exec "nm-applet --indicator"
 exec wlsunset -l {{ (vault "kv/shared/location").data.data.latitude }} -L {{ (vault "kv/shared/location").data.data.longitude }}
 exec inactive-windows-transparency.py -o 0.8
 exec dunst
-exec "foot --server"
+exec alacritty --daemon

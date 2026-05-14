@@ -25,3 +25,4 @@ set -gx ANDROID_SDK_ROOT "$HOME/Android/Sdk"
 
 set -gx PATH "$PATH:$HOME/.local/bin $HOME/.npm-global/bin $ANDROID_SDK_ROOT/platform-tools $HOME/.cargo/bin"
 set -gx VAULT_ADDR "https://vault.den.home.arpa"
+set -gx TERMINAL "alacritty msg create-window"

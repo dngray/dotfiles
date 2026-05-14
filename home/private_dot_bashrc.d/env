@@ -26,4 +26,4 @@ export ANDROID_SDK_ROOT="$HOME/Android/Sdk"
 export PATH="$PATH:$HOME/.local/bin:${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH:$HOME/.npm-global/bin:$ANDROID_SDK_ROOT/platform-tools:$HOME/.cargo/bin"
 
 export VAULT_ADDR="https://vault.den.home.arpa"
-export TERMINAL="/usr/bin/footclient"
+export TERMINAL="alacritty msg create-window"
