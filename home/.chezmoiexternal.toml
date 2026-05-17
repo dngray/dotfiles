@@ -8,10 +8,10 @@
     url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/CascadiaCode.tar.xz"
     checksum.sha512 = "add0cee2e2bbe85568bc108bb1ac4b1a4b87a5cc7c869a225b53fd1de17902ee5710fa0144126b62e902528aec0e2c3a720054d384fa5f94ff0981fee2bd4030"
 
-[".local/share/fonts/fontawesome-free-7.1.0-desktop"]
+[".local/share/fonts/fontawesome-free-7.2.0-desktop"]
     type = "archive"
-    url = "https://use.fontawesome.com/releases/v7.1.0/fontawesome-free-7.1.0-desktop.zip"
-    checksum.sha512 = "d9a3003e388fd3143c011cea7277e7a5b74496a130eaa2b79db43f97eb814d2fc6a1605cc6f4c84cb2148b0fbfbd3ead4d0bb5d9fad765f57640a0d8419271b5"
+    url = "https://use.fontawesome.com/releases/v7.2.0/fontawesome-free-7.2.0-desktop.zip"
+    checksum.sha512 = "7076627d308be285f5bd073d2ba2d96a896286c0f085b6b57d523023a5d085cb7870c1beff31420090f83c182fa5976a7929a17c9aa575060fa87d2948707b2d"
 
 [".local/share/fonts/Lexend[wght].ttf"]
     type = "file"
