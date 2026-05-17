@@ -24,6 +24,7 @@ case "$TOOL" in
   EXTRA_FLAGS+=(
     --userns "keep-id"
     -v "$HOME/.cache/ai-fortress/aider:$JAIL_HOME/.cache"
+    -v "$HOME/.cache/ai-fortress/semble:$JAIL_HOME/.cache/semble"
     -v "$HOME/.config/ai-fortress/aider:$JAIL_HOME/.config"
     -v "$HOME/.local/share/ai-fortress/aider:$JAIL_HOME/.local/share"
     -v "$HOME/.local/state/ai-fortress/aider:$JAIL_HOME/.local/state"
@@ -53,6 +54,7 @@ case "$TOOL" in
     --group-add keep-groups
     -v "$HOME/.cache/ai-fortress/opencode:$JAIL_HOME/.cache"
     -v "$HOME/.local/share/ai-fortress/opencode-volatile:$JAIL_HOME/.local"
+    -v "$HOME/.cache/ai-fortress/semble:$JAIL_HOME/.cache/semble"
     -v "$TARGET_PATH:$JAIL_WORK"
     -w "$JAIL_WORK"
   )
@@ -106,6 +108,7 @@ case "$TOOL" in
     --group-add keep-groups
     -v "$HOME/.cache/ai-fortress/goose:$JAIL_HOME/.cache"
     -v "$HOME/.config/ai-fortress/goose:$JAIL_HOME/.config/goose"
+    -v "$HOME/.cache/ai-fortress/semble:$JAIL_HOME/.cache/semble"
     -v "$TARGET_PATH:$JAIL_WORK"
     -w "$JAIL_WORK"
     -e "GOOSE_PROVIDER=openai"
@@ -150,6 +153,7 @@ COMMON_FLAGS=(
 
 # 5. Persistent Folder Prep
 mkdir -p "$HOME/.cache/ai-fortress/$TOOL" \
+  "$HOME/.cache/ai-fortress/semble" \
   "$HOME/.config/ai-fortress/opencode-tui" \
   "$HOME/.config/ai-fortress/$TOOL" \
   "$HOME/.local/share/ai-fortress/$TOOL" \
