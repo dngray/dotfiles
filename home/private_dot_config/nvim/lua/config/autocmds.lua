@@ -9,7 +9,7 @@
 --
 
 local function augroup(name)
-  return vim.api.nvim_create_augroup("lazyvim_" .. name, { clear = true })
+  return vim.api.nvim_create_augroup("custom_" .. name, { clear = true })
 end
 
 vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
