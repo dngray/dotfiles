@@ -2,6 +2,7 @@ return {
   -- Plugin: saghen/blink.cmp
   -- A plugin for handling completion behavior (built on top of nvim-cmp).
   "saghen/blink.cmp",
+  dependencies = { "folke/snacks.nvim" },
 
   -- Configuration options for the plugin
   opts = function(_, opts)
