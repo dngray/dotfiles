@@ -1,17 +1,33 @@
 return {
-  -- 1. Strip out markdownlint-cli2 from nvim-lint
+  -- 1. Configure rumdl inside nvim-lint
   {
     "mfussenegger/nvim-lint",
-    optional = true,
     opts = {
       linters_by_ft = {
-        markdown = {},
-        ["markdown.mdx"] = {},
+        markdown = { "rumdl" },
+        ["markdown.mdx"] = { "rumdl" },
       },
     },
+    init = function()
+      local lint = require("lint")
+      if lint.linters.rumdl then
+        lint.linters.rumdl.args = {
+          "check",
+          "--config",
+          vim.fn.expand("~/.config/rumdl/rumdl.toml"),
+          "--stdin-filename",
+          function()
+            return vim.api.nvim_buf_get_name(0)
+          end,
+          "--output",
+          "json",
+          "-",
+        }
+      end
+    end,
   },
 
-  -- 2. Let conform.nvim run both markdown-toc and the rumdl formatter via CLI
+  -- 2. Let conform.nvim handle formatting on save safely
   {
     "stevearc/conform.nvim",
     opts = {
@@ -25,16 +41,21 @@ return {
             end
           end,
         },
-        -- Define rumdl explicitly as a CLI formatter with an inline disable override
         ["rumdl-cli"] = {
           command = "rumdl",
-          -- 'fmt' runs the formatter, '--disable MD013' forces line length checking to turn off
-          args = { "fmt", "--disable", "MD013", "$FILENAME" },
-          stdin = false,
+          args = function(_, ctx)
+            local args = { "fmt", "--silent", "--stdin-filename", "$FILENAME", "-" }
+
+            if ctx.filename:find("src/dngray/pg", 1, true) or ctx.filename:find("/pg/") then
+              table.insert(args, 1, vim.fn.expand("~/.config/rumdl/rumdl.toml"))
+              table.insert(args, 1, "--config")
+            end
+            return args
+          end,
+          stdin = true,
         },
       },
       formatters_by_ft = {
-        -- Sequence: First regenerates your TOC, then applies rumdl fixes safely on save
         ["markdown"] = { "markdown-toc", "rumdl-cli" },
         ["markdown.mdx"] = { "markdown-toc", "rumdl-cli" },
       },
