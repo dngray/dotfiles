@@ -1,6 +1,5 @@
 return {
   "nickjvandyke/opencode.nvim",
-  lazy = false,
   keys = {
 
     -- 🤖 Ask (The 'submit = true' makes it actually SEND the code + question)
