@@ -61,6 +61,12 @@ case ":$PATH:" in
 *) [ -d "$CONTAINER_REPO_PATH/bin" ] && export PATH="$CONTAINER_REPO_PATH/bin:$PATH" ;;
 esac
 
+_devcontainer_bin="${XDG_DATA_HOME:-$HOME/.local/share}/devcontainers/bin"
+case ":$PATH:" in
+*":$_devcontainer_bin:"*) ;;
+*) [ -d "$_devcontainer_bin" ] && export PATH="$_devcontainer_bin:$PATH" ;;
+esac
+
 # ==============================================================================
 # 4. INTERACTIVE TERMINAL UTILITIES
 # ==============================================================================
