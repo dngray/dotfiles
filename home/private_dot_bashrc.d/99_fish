@@ -11,4 +11,4 @@
 ## This is a workaround to have fish in terminal but not for the system
 ## loading.
 
-[ -n "$PS1" ] && command -v fish >/dev/null 2>&1 && exec fish
+[ -n "$PS1" ] && [ -z "$BASH_EXEC" ] && command -v fish >/dev/null 2>&1 && exec fish
