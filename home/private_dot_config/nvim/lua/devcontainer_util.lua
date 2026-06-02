@@ -1,13 +1,15 @@
 --- @brief [[
---- Devcontainer helper utilities for Hugo and MkDocs projects.
+--- Devcontainer helper utilities for Hugo, MkDocs, and multi-site projects.
 ---
---- inject_run_args(run_args)  — adds port mappings to devcontainer.json
---- clean_old_containers()     — stops/removes containers for current project
---- resolve_workspace(id)      — inspects container for mount path
---- run_on_container(id, opts) — exec + log + watch for success
---- watch_log(bufnr, opts)     — buffer-attached pattern watcher
---- install_devcontainer_cli() — standalone CLI installer
+--- inject_run_args(run_args)   - adds port mappings to devcontainer.json
+--- clean_old_containers()      - stops/removes containers for current project
+--- resolve_workspace(id)       - inspects container for mount path
+--- run_on_container(id, opts)  - exec + log + watch for success
+--- run_multi(container_id, services) - runs multiple commands, opens logs in tabs
+--- watch_log(bufnr, opts)      - buffer-attached pattern watcher
+--- install_devcontainer_cli()  - standalone CLI installer
 --- @brief ]]
+
 local M = {}
 
 --- Injects runArgs into devcontainer.json, strips JSONC comments, switches to
@@ -38,8 +40,9 @@ function M.inject_run_args(run_args)
   require("devcontainer.config").backup_runtime = "podman"
 end
 
---- Stops and removes devcontainer-cli containers for the current project,
---- matched by the devcontainer.local_folder label.
+--- Stops all running and removes all exited devcontainer-cli containers for
+--- the current project, matched by the devcontainer.local_folder label.
+--- @brief Run before starting a new container to avoid port conflicts.
 function M.clean_old_containers()
   local cwd = vim.uv.cwd()
   vim.fn.system(string.format(
@@ -100,6 +103,33 @@ function M.run_on_container(container_id, opts)
   })
 end
 
+--- Runs multiple commands in the same container. Opens logs as buffers in the
+--- current window (no splits) and attaches watchers to each.
+--- @param container_id string
+--- @param services table[]  list of opts tables as accepted by run_on_container
+--- @return nil
+function M.run_multi(container_id, services)
+  for i, svc in ipairs(services) do
+    local log_file = vim.fn.expand("~/.cache/nvim/" .. svc.log_name)
+    local workspace = svc.workspace or M.resolve_workspace(container_id)
+
+    vim.fn.system(string.format(
+      "podman exec -i -w %s %s %s > %s 2>&1 &",
+      vim.fn.shellescape(workspace),
+      container_id,
+      svc.command,
+      log_file
+    ))
+
+    vim.cmd("edit " .. log_file)
+    M.watch_log(vim.api.nvim_get_current_buf(), {
+      success_pattern = svc.success_pattern,
+      success_msg = svc.success_msg,
+      error_pattern = svc.error_pattern,
+    })
+  end
+end
+
 --- Watch a log buffer for success/error patterns with notifications.
 --- @param bufnr number buffer to watch
 --- @param opts {success_pattern: string, success_msg: string, error_pattern?: string}
@@ -127,6 +157,7 @@ end
 --- Installs the devcontainer CLI standalone binary via the official install
 --- script (bundles its own Node.js, no npm required). Prompts for confirmation,
 --- runs in a terminal split, and notifies on completion.
+--- @brief Idempotent — skips if already installed.
 --- @usage <leader>di
 function M.install_devcontainer_cli()
   local handle = io.popen("which devcontainer 2>/dev/null")
@@ -169,7 +200,7 @@ function M.install_devcontainer_cli()
 
     vim.cmd("botright 10new")
     local bufnr = vim.api.nvim_get_current_buf()
-    local chan = vim.api.nvim_open_term(bufnr, {})
+    vim.api.nvim_open_term(bufnr, {})
     vim.fn.jobstart({ "bash", "-c", install_cmd }, {
       pty = true,
       on_exit = function(_, code)
