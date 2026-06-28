@@ -1,12 +1,6 @@
 # ~/.local/share/chezmoi/home/.chezmoiignore
 
 ../private_dot_etc/**
-.asdf/installs/**
-.asdf/downloads/**
-.asdf/plugins/**
-.asdf/shims/**
-.asdf/repository/**
-.asdf/tmp/**
 
 {{- if not .state.cli_mail }}
 .config/aerc/**
