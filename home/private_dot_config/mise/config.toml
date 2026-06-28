@@ -1,0 +1,8 @@
+# ~/.config/mise/config.toml
+
+[tools]
+chezmoi = "latest"
+deno = "latest"
+golang = "latest"
+rust = "latest"
+uv = "latest"

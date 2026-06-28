@@ -17,10 +17,3 @@
     type = "file"
     url = "https://github.com/google/fonts/raw/refs/heads/main/ofl/lexend/Lexend%5Bwght%5D.ttf"
     checksum.sha512 = "758a3218814a0f012bd2c6cab6b1169b6481f4860be0332b40a6f199281ff348acd672f20e25053902f0788850ba12fca987b68b08baea2e4cbbf277fb5cf273"
-
-[".local/bin/asdf"]
-    type = "archive-file"
-    executable = true
-    url = "https://github.com/asdf-vm/asdf/releases/download/v0.19.0/asdf-v0.19.0-linux-amd64.tar.gz"
-    path = "asdf"
-    checksum.sha512 = "50f8cf830debbb813f57b169db38b2119769e1c1acbb7c3558c2d0cc02af39b24e72c0d6fc45ce87dbe958226aab071771167491d7e8cd1beae225566f6a4c33"

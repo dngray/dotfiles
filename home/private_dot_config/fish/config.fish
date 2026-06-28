@@ -13,6 +13,11 @@ if status is-interactive
         starship init fish | source
     end
 
+    # Modern Runtime Environment Management (Rust-powered asdf replacement)
+    if type -q mise
+        mise activate fish | source
+    end
+
     # Security (Window-specific TTY tracking with headless fallback)
     if tty >/dev/null 2>&1
         set -gx GPG_TTY (tty)

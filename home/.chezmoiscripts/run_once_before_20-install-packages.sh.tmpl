@@ -56,6 +56,7 @@ set -eufo pipefail
   "neovim"
   "llvm"
   "hashicorp/tap/vault"
+  "mise"
 -}}
 
 {{- $rustPkgs := list
@@ -83,9 +84,9 @@ set -eufo pipefail
 {{- $isSecureblue := (eq .chezmoi.osRelease.id "secureblue") }}
 
 {{/* Only load the fedoraAtomic array if we are on vanilla Fedora Sway Atomic */}}
-{{- if and (eq .chezmoi.osRelease.variant "Sway Atomic") (not $isSecureblue) }}
+{{- if and (hasKey .chezmoi.osRelease "variant") (eq .chezmoi.osRelease.variant "Sway Atomic") (not $isSecureblue) }}
   {{- $ostree = concat $ostree $fedoraAtomic }}
-{{- else if and (eq .chezmoi.osRelease.id "fedora") (eq .chezmoi.osRelease.variant "Silverblue") }}
+{{- else if and (eq .chezmoi.osRelease.id "fedora") (hasKey .chezmoi.osRelease "variant") (eq .chezmoi.osRelease.variant "Silverblue") }}
   {{- $ostree = concat $ostree $silverblue }}
 {{- end }}
 

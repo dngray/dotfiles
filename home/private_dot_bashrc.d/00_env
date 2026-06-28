@@ -49,10 +49,10 @@ case ":$PATH:" in
 *) [ -d "$HOME/.cargo/bin" ] && export PATH="$HOME/.cargo/bin:$PATH" ;;
 esac
 
-# ASDF environment manager shims
+# Mise environment fallback shims (For non-interactive background scripts/IDEs)
 case ":$PATH:" in
-*":${ASDF_DATA_DIR:-$HOME/.asdf}/shims:"*) ;;
-*) [ -d "${ASDF_DATA_DIR:-$HOME/.asdf}/shims" ] && export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH" ;;
+*":$HOME/.local/share/mise/shims:"*) ;;
+*) [ -d "$HOME/.local/share/mise/shims" ] && export PATH="$HOME/.local/share/mise/shims:$PATH" ;;
 esac
 
 # Container repository tool path
@@ -73,6 +73,11 @@ esac
 # Only run if the shell is interactive (prevents errors in non-interactive scripts)
 if [ -n "$BASH_VERSION" ] && [ -t 0 ]; then
   set -o vi
+
+  # Dynamically activate mise for interactive Bash sessions
+  if command -v mise >/dev/null 2>&1; then
+    eval "$(mise activate bash)"
+  fi
 fi
 
 # Set Terminal Colors (Catppuccin Theme)
