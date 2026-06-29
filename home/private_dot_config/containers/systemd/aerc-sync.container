@@ -11,6 +11,7 @@ SecurityLabelType=aerc_t
 
 #Environment=SYNC_DEBUG=1
 Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/%U/bus
+Environment=GPGOPT=--lock-never
 
 # ── Read-Write Storage & Socket Mounts ──
 Volume=%h/.local/share/mail:/home/mail-sync/.local/share/mail:rw
