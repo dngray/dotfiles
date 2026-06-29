@@ -8,6 +8,7 @@ ContainerName=aerc-ui
 Pod=aerc-mail.pod
 Image=localhost/aerc-ui:latest
 SecurityLabelType=aerc_t
+Environment=GPGOPT=--lock-never
 
 PodmanArgs=--entrypoint=/bin/sleep
 Exec=infinity
