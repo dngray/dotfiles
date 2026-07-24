@@ -31,6 +31,7 @@ Volume=%h/.config/nvim:/home/aerc/.config/nvim:ro
 Volume=%h/.config/khard:/home/aerc/.config/khard:ro
 Volume=%h/.config/msmtp:/home/aerc/.config/msmtp:ro
 Volume=%h/.config/mutt:/home/aerc/.config/mutt:ro
+Volume=%h/.config/notmuch:/home/aerc/.config/notmuch:ro
 
 # Fix: Mount gopass profiles and encrypted data vault under strict read-only parameters
 Volume=%h/.config/gopass:/home/aerc/.config/gopass:ro
