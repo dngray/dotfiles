@@ -38,8 +38,7 @@ pgp-self-encrypt          = true
 {{-   $account := .account }}
 {{-   $aliases := $account.alias }}
 [nm-{{ $account.shortAccountName }}]
-source                    = notmuch://~/.local/share/mail/{{ $profile }}/
-maildir-store             = ~/.local/share/mail/{{ $profile }}/
+source                    = notmuch://{{ $profile }}/
 query-map                 = ~/.config/aerc/notmuchmap/{{ $profile }}.conf
 default                   = Inbox
 folders-sort              = Inbox
