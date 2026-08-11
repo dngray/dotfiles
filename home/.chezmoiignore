@@ -23,7 +23,7 @@
 .config/git/users/2
 .config/git/users/3
 .config/rclone/rclone.conf
-{{-  if eq .chezmoi.osRelease.name "secureblue" }}
+{{-  if not (eq .chezmoi.osRelease.name "secureblue") }}
 .local/share/applications/org.mozilla.firefox.*
 {{-  end }}
 {{-  if eq .profiles.a "profile11" }}
