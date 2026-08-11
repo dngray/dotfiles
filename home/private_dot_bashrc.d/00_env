@@ -73,11 +73,6 @@ esac
 # Only run if the shell is interactive (prevents errors in non-interactive scripts)
 if [ -n "$BASH_VERSION" ] && [ -t 0 ]; then
   set -o vi
-
-  # Dynamically activate mise for interactive Bash sessions
-  if command -v mise >/dev/null 2>&1; then
-    eval "$(mise activate bash)"
-  fi
 fi
 
 # Set Terminal Colors (Catppuccin Theme)
