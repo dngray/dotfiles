@@ -1,0 +1,104 @@
+# From tokyonight.nvim
+# bg_darker = "#16161e"
+# bg_dark = "#1f2335",
+# bg = "#24283b",
+# bg_highlight = "#292e42",
+# terminal_black = "#414868",
+# fg = "#c0caf5",
+# fg_dark = "#a9b1d6",
+# fg_gutter = "#3b4261",
+# dark3 = "#545c7e",
+# comment = "#565f89",
+# dark5 = "#737aa2",
+# blue0 = "#3d59a1",
+# blue = "#7aa2f7",
+# cyan = "#7dcfff",
+# blue1 = "#2ac3de",
+# blue2 = "#0db9d7",
+# blue5 = "#89ddff",
+# blue6 = "#b4f9f8",
+# blue7 = "#394b70",
+# magenta = "#bb9af7",
+# magenta2 = "#ff007c",
+# purple = "#9d7cd8",
+# orange = "#ff9e64",
+# yellow = "#e0af68",
+# green = "#9ece6a",
+# green1 = "#73daca",
+# green2 = "#41a6b5",
+# teal = "#1abc9c",
+# red = "#f7768e",
+# red1 = "#db4b4b",
+# git = { change = "#6183bb", add = "#449dab", delete = "#914c54" },
+# gitSigns = {
+#   add = "#266d6a",
+#   change = "#536c9e",
+#   delete = "#b2555b",
+# },
+
+# defaults
+error.fg=#16161e
+error.bg=#f7768e
+warning.fg=#e0af68
+success.fg=#9ece6a
+*.default = true
+*.normal = true
+
+# selected elements
+*.selected.bg=#292e42
+
+# completion
+completion_default.fg=#3b4261
+completion_default.bg=#1f2335
+completion_default.selected.fg=#c0caf5
+
+# border
+border.fg=#a9b1d6
+
+# tabline
+tab.bg=#1f2335
+tab.fg=#565f89
+tab.selected.fg=#c0caf5
+tab.selected.bold=true
+tab.selected.italic=true
+
+# headers
+header.fg=#9d7cd8
+
+#dirlist
+dirlist_default.bg=#16161e
+dirlist_unread.fg=#7aa2f7
+
+# msglist
+msglist_unread.fg=#7aa2f7
+msglist_unread.bold=true
+msglist_flagged.fg=#f7768e
+msglist_deleted.fg=#565f89
+msglist_marked.fg=#9d7cd8
+
+# statusline
+statusline_default.fg=#a9b1d6
+statusline_default.bg=#16161e
+
+# colorize
+[viewer]
+url.fg=#7aa2f7
+url.underline=true
+header.fg=#9d7cd8
+signature.fg=#9d7cd8
+diff_meta.fg=#3d59a1
+diff_chunk.fg=#bb9af7
+diff_chunk_func.fg=#ff9e64
+diff_add.fg=#449dab
+diff_del.fg=#914c54
+quote_1.fg=#3d59a1
+quote_2.fg=#1abc9c
+quote_3.fg=#ff9e64
+quote_4.fg=#7aa2f7
+quote_x.fg=#1abc9c
+
+# custom styles
+[user]
+patch.fg=#9d7cd8
+threadPrefix.fg=#914c54
+labels.fg=#565f89

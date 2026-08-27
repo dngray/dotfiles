@@ -1,0 +1,4 @@
+device_config:
+  - options: [rw]
+  - device_file: /dev/nvme*
+    ignore: false

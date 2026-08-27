@@ -1,0 +1,72 @@
+#!/usr/bin/env sh
+
+# Function to update all asdf plugins if a newer version is available
+update() {
+  for plugin in $(asdf plugin list); do
+    # Get the current and latest versions for the plugin
+    current_version=$(asdf current "$plugin" | awk 'NR > 1 {print $2}')
+    latest_version=$(asdf latest "$plugin")
+
+    # Skip the plugin if either version is not available
+    if [ -z "$current_version" ] || [ -z "$latest_version" ]; then
+      echo "Skipping '$plugin' as one of the versions is unavailable."
+      continue
+    fi
+
+    # Output current and latest versions
+    echo "Checking plugin '$plugin': current version is $current_version, latest version is $latest_version"
+
+    # Compare the versions to see if an update is needed
+    comparison_result=$(semver_check "$latest_version" "$current_version")
+    case "$comparison_result" in
+    1)
+      # If update is needed, install the latest version and set it globally
+      echo "An update is available for '$plugin'. Installing version $latest_version..."
+      asdf install "$plugin" "$latest_version" || {
+        echo "Error installing $plugin $latest_version"
+        exit 1
+      }
+      echo "Setting global version of '$plugin' to $latest_version"
+      asdf set "$plugin" "$latest_version" || {
+        echo "Error setting global version for $plugin"
+        exit 1
+      }
+      ;;
+    0)
+      # If the versions are the same, skip update
+      echo "No update needed for '$plugin'."
+      ;;
+    -1)
+      # If the current version is higher (this should ideally never happen unless an error occurs)
+      echo "Warning: '$plugin' has a higher current version than the latest version."
+      ;;
+    *)
+      echo "Unexpected comparison result for '$plugin'."
+      ;;
+    esac
+  done
+}
+
+# Function to compare versions (semver)
+semver_check() {
+  # Use printf to correctly handle newline, sort versions, and find the highest one
+  highest_version=$(printf "%s\n%s" "$1" "$2" | sort -V | tail -n 1)
+
+  # Compare the versions and return appropriate result
+  case "$1" in
+  "$highest_version")
+    if [ "$1" = "$2" ]; then
+      echo 0 # Versions are equal
+    else
+      echo 1 # Latest version is higher than current version
+    fi
+    ;;
+  "$2")
+    echo -1 # Current version is higher than latest version
+    ;;
+  *)
+    echo "Unexpected error in semver_check."
+    ;;
+  esac
+}
+update

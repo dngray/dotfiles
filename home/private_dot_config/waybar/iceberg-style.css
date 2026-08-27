@@ -1,0 +1,57 @@
+
+/* ~/.config/waybar/iceberg-style.css */
+@import url("style.css");
+
+/* Theme Laptop Hardware Widgets using the same Capsule style */
+#backlight,
+#battery,
+#keyboard-state {
+    padding: 0 10px;
+    background-color: alpha(@mauve, 0.3);
+    color: @mauve;
+    border-radius: 10px;
+    margin: 0 2px;
+}
+
+/* Keyboard Caps/Num Lock Tuning */
+#keyboard-state {
+    padding: 0 6px;
+}
+
+#keyboard-state > label {
+    padding: 0 4px;
+}
+
+#keyboard-state > label.locked {
+    background-color: alpha(@base, 0.4);
+    border-radius: 4px;
+}
+
+/* Battery States */
+#battery.charging,
+#battery.plugged {
+    background-color: alpha(@green, 0.3);
+    color: @green;
+}
+
+@keyframes blink {
+    to {
+        background-color: @red;
+        color: @crust;
+    }
+}
+
+#battery.critical:not(.charging) {
+    background-color: alpha(@red, 0.3);
+    color: @red;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: steps(12);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+/* Laptop Hardware Broken Screen Compensation Gap */
+#custom-space {
+    padding-right: 200px;
+}

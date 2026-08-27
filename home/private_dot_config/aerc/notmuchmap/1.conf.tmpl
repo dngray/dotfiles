@@ -1,0 +1,10 @@
+{{- if .state.cli_mail -}}
+{{-   $vaultA := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data -}}
+{{-   $maildirs := list -}}
+{{-   range $account := $vaultA.mail -}}
+{{-     if $account.enabled -}}
+{{-       $maildirs = concat $maildirs (list $account.accountName (printf "%s_archived" $account.accountName)) -}}
+{{-     end -}}
+{{-   end -}}
+{{-   template "notmuch/aerc_notmuchmap.conf" (dict "maildirs" ($maildirs | uniq)) -}}
+{{- end -}}

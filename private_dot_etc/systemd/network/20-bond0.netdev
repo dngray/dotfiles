@@ -1,0 +1,11 @@
+[NetDev]
+Name=bond0
+Kind=bond
+
+[Bond]
+Mode=802.3ad
+MIIMonitorSec=1s
+LACPTransmitRate=fast
+UpDelaySec=2s
+DownDelay=8s
+TransmitHashPolicy=layer2+3

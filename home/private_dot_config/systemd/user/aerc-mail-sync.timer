@@ -1,0 +1,13 @@
+[Unit]
+Description=15-Minute Automation Cadence for Mail Fortress Sync
+Requires=aerc-mail-pod.service
+After=aerc-mail-pod.service
+BindsTo=aerc-mail-pod.service
+
+[Timer]
+OnActiveSec=2min
+OnUnitActiveSec=15min
+AccuracySec=1s
+
+[Install]
+WantedBy=timers.target

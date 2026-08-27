@@ -1,0 +1,10 @@
+[Unit]
+Description=Automated Background Mail Fortress Synchronization Trigger
+After=aerc-mail-pod.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/podman exec aerc-ui /usr/bin/python3 -c 'import socket; s = socket.socket(socket.AF_INET, socket.SOCK_STREAM); s.settimeout(1); s.connect(("127.0.0.1", 12345)); s.sendall(b"sync-inbox"); s.close()'
+
+[Install]
+WantedBy=default.target

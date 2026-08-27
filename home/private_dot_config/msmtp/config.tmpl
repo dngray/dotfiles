@@ -1,0 +1,33 @@
+defaults
+auth login
+tls_starttls off
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+#logfile ~/.config/msmtp/msmtp.log
+{{  range $profile_a := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail }}
+{{- $aliases := ($profile_a.alias) }}
+{{-   if .enabled }}
+account {{ .accountName }}
+host {{ .smtpHost }}
+port {{ .smtpPort }}
+tls {{ if .tls }}on{{ else }}off{{ end }}
+from {{ (index ($aliases) 0) }}
+user {{ .username }}@{{ .hostname }}
+passwordeval "gopass -o mail/{{ .accountName }} mailPassword"
+# dsn_notify success
+{{    end -}}
+{{  end -}}
+
+{{- if .state.private }}
+{{-   range $profile_b := (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail }}
+{{-   $aliases := ($profile_b.alias) }}
+{{-     if .enabled }}
+account {{ .accountName }}
+host {{ .smtpHost }}
+port {{ .smtpPort }}
+tls {{ if .tls }}on{{ else }}off{{ end }}
+from {{ (index ($aliases) 0) }}
+user {{ .username }}@{{ .hostname }}
+passwordeval "gopass -o mail/{{ .accountName }} mailPassword"
+{{      end -}}
+{{    end -}}
+{{  end -}}

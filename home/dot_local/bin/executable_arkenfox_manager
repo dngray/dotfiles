@@ -1,0 +1,184 @@
+#!/usr/bin/env bash
+
+# Exit immediately if a pipeline fails
+set -euo pipefail
+
+# Define the 4 profiles we manage
+PROFILES=("default" "default-no-rfp" "direct" "direct-no-rfp")
+
+# Define all 3 potential platform locations
+POTENTIAL_FIREFOX_DIRS=(
+  "${XDG_CONFIG_HOME:-$HOME/.config}/firefox"
+  "$HOME/.var/app/org.mozilla.firefox/.mozilla/firefox"
+  "$HOME/snap/firefox/common/.mozilla/firefox"
+)
+
+# Script dependency paths
+ARKENFOX_BIN_DIR="$HOME/.local/bin/arkenfox"
+UPDATER_BIN="$ARKENFOX_BIN_DIR/updater.sh"
+CLEANER_BIN="$ARKENFOX_BIN_DIR/prefsCleaner.sh"
+
+# UI feedback configuration
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+show_usage() {
+  echo -e "${BLUE}Usage: $0 [--check | --clean | --update]${NC}"
+  echo "  --check   Triggers upstream updater validation framework (-u)."
+  echo "  --clean   Executes localized prefs.js profile scrubbing framework (-s)."
+  echo "  --update  Downloads fresh arkenfox base files and appends your chezmoi overrides."
+  exit 1
+}
+
+validate_dependencies() {
+  if [ ! -f "$UPDATER_BIN" ] || [ ! -f "$CLEANER_BIN" ]; then
+    echo -e "${RED}Error: Core arkenfox script binaries are missing inside $ARKENFOX_BIN_DIR/${NC}"
+    exit 1
+  fi
+}
+
+# Collects all paths that physically exist on this current machine
+get_active_firefox_dirs() {
+  local active_dirs=()
+  for dir in "${POTENTIAL_FIREFOX_DIRS[@]}"; do
+    if [ -d "$dir" ]; then
+      active_dirs+=("$dir")
+    fi
+  done
+
+  if [ ${#active_dirs[@]} -eq 0 ]; then
+    echo -e "${RED}Error: No valid Firefox profile directories detected on this host.${NC}"
+    exit 1
+  fi
+  echo "${active_dirs[@]}"
+}
+
+assert_firefox_closed() {
+  if pgrep -x "firefox" >/dev/null || pgrep -x "firefox-bin" >/dev/null; then
+    echo -e "${RED}Error: Firefox process detected active on the system!${NC}"
+    echo -e "${RED}Please exit Firefox completely before continuing.${NC}"
+    exit 1
+  fi
+
+  local active_dirs
+  active_dirs=$(get_active_firefox_dirs)
+
+  for base_dir in $active_dirs; do
+    for profile in "${PROFILES[@]}"; do
+      local target_path="$base_dir/$profile"
+      if [ -e "$target_path/lock" ] || [ -e "$target_path/.parentlock" ]; then
+        echo -e "${RED}Error: Profile '$profile' inside $base_dir reports an active lock.${NC}"
+        echo -e "${RED}Ensure Firefox has finished flushing metadata to disk before running this tool.${NC}"
+        exit 1
+      fi
+    done
+  done
+}
+
+run_update() {
+  assert_firefox_closed
+  local active_dirs
+  active_dirs=$(get_active_firefox_dirs)
+
+  # 1. Create a safe sandbox workspace in /tmp to compile Arkenfox once
+  local tmp_workspace
+  tmp_workspace=$(mktemp -d -t arkenfox-sync-XXXXXXXXXX)
+
+  # Clean up the temp workspace automatically when this function finishes
+  trap 'rm -rf "$tmp_workspace"' RETURN
+
+  echo -e "${BLUE}Downloading and building upstream master copy in sandbox...${NC}"
+  # Executes updater.sh exactly once natively inside the workspace folder
+  # -d: Do not self-update updater.sh
+  # -s: Silent run
+  # -o: Suppress override lookups
+  bash "$UPDATER_BIN" -d -s -o -p "$tmp_workspace"
+
+  if [ ! -f "$tmp_workspace/user.js" ]; then
+    echo -e "${RED}Error: Arkenfox failed to generate the core user.js inside sandbox.${NC}"
+    return 1
+  fi
+
+  echo -e "${BLUE}Distributing user.js to active profile spaces...${NC}"
+  for base_dir in $active_dirs; do
+    echo -e "${BLUE}Processing location space: $base_dir${NC}"
+    for profile in "${PROFILES[@]}"; do
+      local target_path="$base_dir/$profile"
+      local override_file="$target_path/user-overrides.js"
+
+      if [ ! -d "$target_path" ]; then
+        continue
+      fi
+
+      echo -e "  Compiling: ${GREEN}$profile${NC}"
+
+      # Copy the master base file
+      cp "$tmp_workspace/user.js" "$target_path/user.js"
+
+      # Append chezmoi's generated override file if it exists
+      if [ -f "$override_file" ]; then
+        echo "" >>"$target_path/user.js"
+        cat "$override_file" >>"$target_path/user.js"
+      fi
+    done
+  done
+
+  echo -e "${GREEN}Base files updated successfully.${NC}"
+
+  # 2. Trigger the cleaner directly right after distribution finishes
+  run_cleaner_internal "$active_dirs"
+}
+
+run_cleaner_internal() {
+  local active_dirs="$1"
+  echo -e "${BLUE}Running profile optimization via prefsCleaner...${NC}"
+  for base_dir in $active_dirs; do
+    for profile in "${PROFILES[@]}"; do
+      local target_path="$base_dir/$profile"
+      if [ ! -d "$target_path" ] || [ ! -f "$target_path/prefs.js" ]; then
+        continue
+      fi
+
+      echo -e "  Cleaning: ${GREEN}$profile${NC}"
+      (
+        cd "$target_path"
+        bash "$CLEANER_BIN" -s -d
+      )
+    done
+  done
+}
+
+# Entrypoint Execution Matrix
+if [ $# -ne 1 ]; then
+  show_usage
+fi
+
+validate_dependencies
+
+case "$1" in
+--update)
+  run_update
+  ;;
+--clean)
+  # Fetch directories manually only if triggered independently
+  active_runtime_dirs=$(get_active_firefox_dirs)
+  run_cleaner_internal "$active_runtime_dirs"
+  ;;
+--check)
+  echo -e "${BLUE}Verifying script states with upstream master repository...${NC}"
+  active_runtime_dirs=$(get_active_firefox_dirs)
+
+  for base_dir in $active_runtime_dirs; do
+    echo -e "\n${BLUE}Target Environment: $base_dir${NC}"
+
+    # Added -s flag to prevent interactive user prompts from locking the execution path
+    bash "$UPDATER_BIN" -u -s -p "$base_dir/default" 2>&1 | grep -E "Available online|Currently using|Error" || true
+  done
+  echo ""
+  ;;
+*)
+  show_usage
+  ;;
+esac

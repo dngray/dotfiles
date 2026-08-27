@@ -1,0 +1,149 @@
+-- imapfilter configuration.
+-- For detailed information type "man 5 imapfilter_config"
+-- Read `man 1 imapfilter` for a complete reference.
+--
+-- Examples:
+-- https://github.com/lefcha/imapfilter/blob/master/samples/config.lua
+-- http://www.npcglib.org/~stathis/blog/2012/07/09/linux-task-sorting-mail-with-imapfilter/
+
+function Main()
+	options.timeout = 120
+	options.subscribe = true
+
+	-- Accounts
+{{- $profile := .profile }}
+{{- $mainUserAccName := .mainUserAcc }}
+{{- if .personal }}
+{{-   $vaultPath := printf "kv/users/%s/mail" $profile }}
+{{-   $mailData := (vault $vaultPath).data.data.mail }}
+
+{{-   range $account := $mailData }}
+{{-     range .imapfilter }}
+{{-       if .enabled }}
+  local password = GetPass({{ $account.accountName | quote }}, {{ $profile | quote }})
+  local {{ $account.accountName }} = IMAP({
+    server = '{{ $account.imapHost }}',
+    username = '{{ $account.username }}@{{ $account.hostname }}',
+    password = password,
+    ssl = 'tls13'
+  })
+{{-       end }}
+{{-     end }}
+{{-   end }}
+
+	-- Move to Main. (Main user is always first)
+{{-   range $account := $mailData }}
+{{-     range $imapfilter := .imapfilter }}
+{{-       if and (hasKey $imapfilter "from") .enabled }}
+  -- Account: {{ $account.accountName }}
+  MoveToMainAcc(
+    {
+      inbox = "{{ index $imapfilter.from "inbox" }}",
+      sent = "{{ index $imapfilter.from "sent" }}",
+      spam = "{{ index $imapfilter.from "spam" }}",
+      trash = "{{ index $imapfilter.from "trash" }}"
+    },
+    {
+      inbox = "{{ index $imapfilter.to "inbox" }}",
+      sent = "{{ index $imapfilter.to "sent" }}",
+      spam = "{{ index $imapfilter.to "spam" }}"
+    },
+    {{ $account.accountName }},
+    {{ $mainUserAccName }}
+  )
+{{-       end }}
+{{-     end }}
+{{-   end }}
+{{- end }}
+end
+
+function GetPass(account, profile)
+	local raw_pass, status, raw_pass
+
+	vault_ret = "vault kv get -format=json kv/users/"
+		.. profile
+		.. "/mail | jq -r --arg queryname "
+		.. account
+		.. " '.data.data.mail[] | select(.accountName == $queryname).password'"
+
+	status, raw_pass = pipe_from(vault_ret)
+  if status == 0 and raw_pass then
+	  -- Cleanly strip the trailing newline character
+	  return string.gsub(raw_pass, "[\r\n]+$", "")
+	else
+		print("Error: Failed to fetch password from Vault for " .. account)
+		return nil
+	end
+end
+
+function MoveToMainAcc(fromPath, toPath, fromAcc, toAcc)
+	if fromAcc["_account"].server == "imap.gmail.com" then
+		if fromAcc[fromPath.inbox]:check_status() > 0 then
+			local inbox_mail = fromAcc[fromPath.inbox]:select_all()
+			local inbox_copy_success = inbox_mail:copy_messages(toAcc[toPath.inbox])
+
+			local sent_mail = fromAcc[fromPath.sent]:select_all()
+			local sent_copy_success = sent_mail:copy_messages(toAcc[toPath.sent])
+
+			local spam_mail = fromAcc[fromPath.spam]:select_all()
+			spam_mail:move_messages(toAcc[toPath.spam])
+
+			-- Only clear the All Mail folder if we were successful in moving our
+			-- Inbox and Sent mail. Note: move_messages is supposed to return
+			-- booleans for copying the messages and then marking them as deleted.
+			-- For some reason the mark for deletion return value is 'nil'.
+			--
+			-- The name of the Trash may change depending on the locale you have set
+			-- in your Gmail account. ⚙ > See all settings > Gmail display language.
+			-- https://mail.google.com/mail/u/0/#settings/general
+			--
+			-- Note: This is not the Language setting found in which shows if you
+			-- select "Change language settings for other Google products":
+			-- https://myaccount.google.com/language
+
+			if inbox_copy_success and sent_copy_success then
+				print("Safe to delete both inbox and sent")
+				local move_inbox = inbox_mail:move_messages(fromAcc[fromPath.trash])
+				local move_sent = sent_mail:move_messages(fromAcc[fromPath.trash])
+
+				if move_inbox and move_sent then
+					print("Emptying bin")
+					local trash_mail = fromAcc[fromPath.trash]:select_all()
+					trash_mail:delete_messages()
+				end
+			end
+		end
+	else
+		if fromAcc[fromPath.inbox]:check_status() >= 0 then
+			local inbox_results = fromAcc[fromPath.inbox]:select_all()
+			inbox_results:move_messages(toAcc[toPath.inbox])
+
+			local sent_results = fromAcc[fromPath.sent]:select_all()
+			sent_results:move_messages(toAcc[toPath.sent])
+
+			local spam_results = fromAcc[fromPath.spam]:select_all()
+			spam_results:move_messages(toAcc[toPath.spam])
+		end
+	end
+end
+
+-- Not needed since 2.6.16+ or
+-- https://github.com/lefcha/imapfilter/commit/6a2e04851206a16abdcc7ae5a6e2854047f9a0a0
+--
+-- Escapes problematic characters in passwords.
+function Sanitize_pwd(pwd)
+	-- Chomp off newline character that is sucked in from Password Store.
+	pwd = string.gsub(pwd, "\n", "")
+
+	-- Escape backslash characters that exist in passwords. Need to escape the
+	-- escape characters at each 'level' where the password string is used
+	-- otherwise escape characters are lost.
+	--
+	-- The slashes are escaped first. If they were escaped later then characters
+	-- escaped later would be escaped again.
+	pwd = string.gsub(pwd, "%\\", "\\\\")
+
+	return pwd
+end
+
+Main()

@@ -1,0 +1,9 @@
+# Swaylock configuration. For detailed information type "man swaylock"
+# Read `man 5 swaylock` for a complete reference.
+
+# Solid black background color
+color=000000
+
+# Explicitly disable any image paths or background scaling
+#image=
+no-fade-in

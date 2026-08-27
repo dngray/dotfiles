@@ -1,0 +1,10 @@
+# ~/.config/containers/systemd/aerc-mail.pod
+[Unit]
+Description=Shared Network and Storage Pod for Aerc Ecosystem
+
+[Pod]
+PodName=aerc-mail
+UserNS=keep-id
+
+[Install]
+WantedBy=default.target
