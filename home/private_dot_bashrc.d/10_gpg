@@ -1,0 +1,13 @@
+# vim: filetype=sh
+# .bashrc.d/10_gpg
+
+# Target interactive sessions with a valid attached terminal
+if [ -t 0 ]; then
+  # Required for local GPG commands and Git commit signing to find the active terminal
+  export GPG_TTY=$(tty)
+
+  # Flush the active TTY mapping to the agent daemon socket for aerc
+  if gpgconf --list-dirs agent-socket >/dev/null 2>&1; then
+    gpg-connect-agent updatestartuptty /bye >/dev/null 2>&1
+  fi
+fi

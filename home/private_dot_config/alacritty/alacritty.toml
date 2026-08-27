@@ -1,0 +1,18 @@
+general.import = [ "catppuccin-mocha.toml" ]
+
+[font]
+size = 14.0
+
+[font.normal]
+family = "MesloLGS Nerd Font Mono"
+
+[font.bold]
+family = "MesloLGS Nerd Font Mono"
+
+[font.italic]
+family = "MesloLGS Nerd Font Mono"
+style = "Italic"
+
+[font.bold_italic]
+family = "MesloLGS Nerd Font Mono"
+style = "Bold Italic"

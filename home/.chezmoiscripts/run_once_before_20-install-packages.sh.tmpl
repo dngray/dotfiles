@@ -1,0 +1,142 @@
+#!/bin/bash
+set -eufo pipefail
+
+{{/* =============================================================================
+1. GLOBAL PACKAGE TOGGLES
+============================================================================= */}}
+{{- $pkg := (vault (printf "kv/users/%s/packages" .profiles.a)).data.data }}
+
+{{/* =============================================================================
+2. PACKAGE DEFINITIONS (DECLARATIVE LAYERS)
+============================================================================= */}}
+
+{{- $baseOstree := list -}}
+
+{{- $fedoraAtomic := list
+  "fish"
+  "fzf"
+  "gstreamer1-plugin-openh264"
+  "gvfs-smb"
+  "mozilla-openh264"
+  "neovim"
+  "qemu"
+  "swtpm"
+  "virt-install"
+  "virt-manager"
+  "wl-clipboard"
+-}}
+
+{{- $silverblue := list
+  "dunst"
+  "network-manager-applet"
+  "python-i3ipc"
+  "sway"
+  "waybar"
+-}}
+
+{{- $flatpaks := list
+  "com.bitwarden.desktop"
+  "io.gitlab.news_flash.NewsFlash"
+  "io.mpv.Mpv"
+  "org.gimp.GIMP"
+  "org.gnome.Loupe"
+  "org.gnome.Papers"
+  "org.inkscape.Inkscape"
+  "org.libreoffice.LibreOffice"
+  "org.torproject.torbrowser-launcher"
+  "im.riot.Riot"
+-}}
+
+{{- $brewTaps := list
+  "hashicorp/tap"
+-}}
+
+{{- $brewPkgs := list
+  "fish"
+  "neovim"
+  "llvm"
+  "hashicorp/tap/vault"
+-}}
+
+{{- $rustPkgs := list
+  "starship"
+  "tree-sitter-cli"
+  "fd-find"
+  "ripgrep"
+  "rumdl"
+  "typos-cli"
+  "bottom"
+  "zellij"
+-}}
+
+{{- $goPkgs := list
+  "github.com/gopasspw/gopass@latest"
+  "github.com/gopasspw/git-credential-gopass@latest"
+-}}
+
+{{/* =============================================================================
+3. OSTREE PACKAGE SELECTION LOGIC
+============================================================================= */}}
+{{- $ostree := $baseOstree }}
+
+{{/* Detect secureblue using its custom OS ID */}}
+{{- $isSecureblue := (eq .chezmoi.osRelease.id "secureblue") }}
+
+{{/* Only load the fedoraAtomic array if we are on vanilla Fedora Sway Atomic */}}
+{{- if and (eq .chezmoi.osRelease.variant "Sway Atomic") (not $isSecureblue) }}
+  {{- $ostree = concat $ostree $fedoraAtomic }}
+{{- else if and (eq .chezmoi.osRelease.id "fedora") (eq .chezmoi.osRelease.variant "Silverblue") }}
+  {{- $ostree = concat $ostree $silverblue }}
+{{- end }}
+
+{{- $ostree = uniq $ostree }}
+
+{{/* =============================================================================
+4. INSTALLATION PHASES
+============================================================================= */}}
+
+{{- if $pkg.flatpak }}
+echo "Installing flatpaks..."
+{{- range $flatpaks }}
+flatpak --user install --noninteractive flathub {{ . }}
+{{- end }}
+{{- end }}
+
+{{- if and $isSecureblue (hasKey $pkg "homebrew") }}
+{{- if $pkg.homebrew }}
+echo "Detected secureblue. Syncing Homebrew environment..."
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+echo "Tapping Homebrew repositories..."
+{{- range $brewTaps }}
+brew tap {{ . }}
+{{- end }}
+
+echo "Installing Homebrew packages..."
+{{- range $brewPkgs }}
+brew install {{ . }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if $pkg.rust_pkgs }}
+echo "Installing Rust tooling..."
+{{- range $rustPkgs }}
+cargo install {{ . }} --locked
+{{- end }}
+cargo install --force yazi-build
+{{- end }}
+
+{{- if and .state.private $pkg.golang_pkgs }}
+echo "Installing Go tooling..."
+{{- range $goPkgs }}
+go install {{ . }}
+{{- end }}
+{{- end }}
+
+{{- if and (or (eq .chezmoi.osRelease.id "fedora") $isSecureblue) $pkg.rpmostree (gt (len $ostree) 0) }}
+echo "Installing rpm-ostree packages..."
+{{- range $ostree }}
+rpm-ostree install --idempotent {{ . }}
+{{- end }}
+{{- end }}

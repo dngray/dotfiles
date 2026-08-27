@@ -1,0 +1,34 @@
+configurations:
+{{- $profilesToScan := list }}
+{{- if and .state.cli_mail (not .state.private) }}
+  {{- $profilesToScan = printf "%s" .profiles.main | list }}
+{{- else if and .state.cli_mail .state.private }}
+  {{- $profilesToScan = list .profiles.a .profiles.b }}
+{{- end }}
+
+{{- range $profName := $profilesToScan }}
+  {{- $vaultData := (vault (printf "kv/users/%s/mail" $profName)).data.data }}
+  {{- $profileId := $vaultData.profile }}
+
+  {{- range $account := $vaultData.mail }}
+    {{- if .enabled }}
+    -
+        host: {{ $account.imapHost }}
+        port: 993
+        tls: true
+        tlsOptions:
+            rejectUnauthorized: true
+            starttls: false
+        username: {{ $account.username }}@{{ $account.hostname }}
+        alias: {{ $account.shortAccountName }}
+        passwordCmd: gopass -o mail/{{ $account.accountName }} mailPassword
+        xoAuth2: false
+        boxes:
+            -
+                mailbox: Inbox
+                # Added single quotes to match your original output exactly
+                onNewMail: 'mbsync {{ $account.accountName }}-inbox'
+                onNewMailPost: "bash -c 'NOTMUCH_PROFILE={{ $profileId }} notmuch new && notify-send -i mail-unread \"New Mail [{{ $account.shortAccountName }}]\" \"Inbox updated via goimapnotify.\"'"
+    {{- end }}
+  {{- end }}
+{{- end }}

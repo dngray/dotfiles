@@ -1,0 +1,11 @@
+{{- range $rclone_hosts := (vault (printf "kv/users/%s/resources" .profiles.main)).data.data.rclone }}
+{{- $host := index ($rclone_hosts) -}}
+[minio]
+type = s3
+provider = Other
+{{ if (hasKey $host "access_key_id") }}access_key_id = {{ $host.access_key_id }}{{ end }}
+{{ if (hasKey $host "secret_access_key") }}secret_access_key = {{ $host.secret_access_key }}{{ end }}
+{{ if (hasKey $host "region") }}region = {{ $host.region }}{{ end }}
+{{ if (hasKey $host "endpoint") }}endpoint = {{ $host.endpoint }}{{ end }}
+acl = public-read
+{{- end }}

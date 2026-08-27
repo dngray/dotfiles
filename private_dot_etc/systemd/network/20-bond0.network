@@ -1,0 +1,10 @@
+[Match]
+Name=bond0
+
+[Network]
+BindCarrier=eno1 eno2
+Description=Unconfigured bond interface
+Bridge=bridge0
+
+[BridgeVLAN]
+VLAN=2-4094

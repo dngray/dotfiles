@@ -1,0 +1,14 @@
+[Match]
+Name=vlan50
+
+[Network]
+Description=VLAN for direct access to gateway
+DHCP=true
+IPv6PrivacyExtensions=kernel
+
+#[Address]
+#Address=192.0.50.253/24
+#DNS=192.0.50.1
+
+#[Route]
+#Gateway=192.0.50.1

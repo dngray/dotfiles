@@ -1,0 +1,22 @@
+{{ if not .state.headless -}}
+#!/usr/bin/env bash
+
+# Exit immediately if a pipeline fails
+set -euo pipefail
+
+MANAGER_BIN="$HOME/.local/bin/arkenfox-manager"
+
+echo "========================================="
+echo "Chezmoi Apply Complete: Syncing Arkenfox"
+echo "========================================="
+
+if [ -f "$MANAGER_BIN" ]; then
+    # 1. Update/compile user.js profile structures
+    "$MANAGER_BIN" --update
+
+    # 2. Flush stale properties from active prefs.js targets
+    "$MANAGER_BIN" --clean
+else
+    echo "Warning: arkenfox-manager orchestration utility not found inside ~/.local/bin/"
+fi
+{{- end }}

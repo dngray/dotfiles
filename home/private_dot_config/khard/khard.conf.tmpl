@@ -1,0 +1,65 @@
+# khard configuration.
+# For detailed information type "man 5 khard.conf"
+# Read `man 1 khard` for a complete reference.
+
+{{ $profile_a := index (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail 0 }}
+[addressbooks]
+{{ range $profile_a.addressbooks }}
+[[{{ .name }}]]
+path = ~/.local/share/address-book/Personal/{{ .remote }}
+{{ end }}
+{{-  if .state.private }}
+{{-  $profile_b := index (vault (printf "kv/users/%s/mail" .profiles.b)).data.data.mail 0 }}
+{{     range $profile_b.addressbooks }}
+[[{{   .name }}]]
+path = ~/.local/share/address-book/{{ .name }}/
+{{-      if gt (len .remote) 0 }}
+{{-       .remote }}
+{{-      else }}
+{{-      $profile_b.accountName }}
+{{       end }}
+{{-    end }}
+{{-  end }}
+
+[general]
+debug = no
+default_action = list
+# These are either strings or comma seperated lists
+editor = nvim, -i, NONE, -u, '~/.config/nvim/email.lua'
+merge_editor = 'nvim -d', -u, '~/.config/nvim/email.lua'
+
+[contact table]
+# display names by first or last name: first_name / last_name / formatted_name
+display = first_name
+# group by address book: yes / no
+group_by_addressbook = no
+# reverse table ordering: yes / no
+reverse = no
+# append nicknames to name column: yes / no
+show_nicknames = no
+# show uid table column: yes / no
+show_uids = yes
+# sort by first or last name: first_name / last_name / formatted_name
+sort = last_name
+# localize dates: yes / no
+localize_dates = yes
+# set a comma separated list of preferred phone number types in descending priority
+# or nothing for non-filtered alphabetical order
+preferred_phone_number_type = pref, cell, home
+# set a comma separated list of preferred email address types in descending priority
+# or nothing for non-filtered alphabetical order
+preferred_email_address_type = pref, work, home
+
+[vcard]
+# extend contacts with your own private objects
+# these objects are stored with a leading "X-" before the object name in the vcard files
+# every object label may only contain letters, digits and the - character
+# example:
+#   private_objects = Jabber, Skype, Twitter
+private_objects = Jabber, Skype, Twitter
+# preferred vcard version: 3.0 / 4.0
+preferred_version = 3.0
+# Look into source vcf files to speed up search queries: yes / no
+search_in_source_files = no
+# skip unparsable vcard files: yes / no
+skip_unparsable = no

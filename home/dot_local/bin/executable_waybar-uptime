@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+import datetime, time
+
+uptime = None
+with open("/proc/uptime", "r") as f:
+    uptime = f.read().split(" ")[0].strip()
+uptime = int(float(uptime))
+uptime = datetime.timedelta(seconds = uptime)
+uptime_d = str(uptime.days)+"d "
+uptime_h = str(uptime.seconds//3600)+"h "
+uptime_m = str((uptime.seconds//60)%60)+"m"
+uptime = uptime_d+uptime_h+uptime_m
+with open("/proc/loadavg", "r") as f:
+    load = f.read()
+    load = load[0:14]
+print("{\"text\": \"% s\",\"tooltip\": \"猪 % s\"}"%(uptime, load))

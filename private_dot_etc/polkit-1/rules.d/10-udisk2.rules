@@ -1,0 +1,27 @@
+//  /etc/polkit-1/rules.d/10-rules.rules
+//  PolKit rules to allow mounting, rebooting and network management without password.
+//  User needs to be in storage, power and users groups.
+
+polkit.addRule(function(action, subject) {
+    if (action.id.match("org.freedesktop.udisks2.") && subject.isInGroup("storage")) {
+        return polkit.Result.YES;
+    }
+});
+
+polkit.addRule(function(action, subject) {
+    if (action.id.match("org.freedesktop.login1.") && subject.isInGroup("power")) {
+        return polkit.Result.YES;
+    }
+});
+
+polkit.addRule(function(action, subject) {
+    if (action.id.match("org.freedesktop.upower.") && subject.isInGroup("power")) {
+        return polkit.Result.YES;
+    }
+});
+
+polkit.addRule(function(action, subject) {
+    if (action.id.match("org.freedesktop.NetworkManager.") && subject.isInGroup("users")) {
+        return polkit.Result.YES;
+    }
+});

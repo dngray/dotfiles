@@ -1,0 +1,18 @@
+On {{dateFormat (.OriginalDate | toLocal ) "2/1/2006 15:04"}}, {{.OriginalFrom | names | join ", "}} wrote:
+{{ if or
+	(eq .OriginalMIMEType "text/html" "multipart/encrypted")
+	(contains (toLower .OriginalText) "<html")
+}}
+	{{- $text := exec `/usr/local/libexec/aerc/filters/html` .OriginalText | replace `\r` `` -}}
+	{{- range split "\n" $text -}}
+		{{- if eq . "References:" }}{{break}}{{end}}
+		{{- if or
+			(eq (len .) 0)
+			(match `^\[.+\]\s*$` .)
+		}}{{continue}}{{end}}
+		{{- printf "%s\n" . | replace `^[\s]+` "" | quote}}
+	{{- end -}}
+{{- else }}
+{{- trimSignature .OriginalText | quote -}}
+{{- end -}}
+{{- .Signature -}}

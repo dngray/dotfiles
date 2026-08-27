@@ -1,0 +1,8 @@
+[Match]
+Name=bridge0
+
+[Network]
+VLAN=vlan50
+
+[BridgeVLAN]
+VLAN=2-4094
