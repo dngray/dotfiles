@@ -1,12 +1,32 @@
 [user]
-{{- $gitUser := index (vault (printf "kv/users/%s/mail" .profile)).data.data.mail .accIdx }}
+{{- $gitUser := index (vault (printf "kv/users/%s/mail" .profile)).data.data.mail (int .accIdx) }}
 	name = {{ $gitUser.realName }}
+
+	{{- if hasKey $gitUser "gitAlias" }}
+	email = {{ $gitUser.gitAlias }}
+	{{- else }}
 	email = {{ index ($gitUser.alias) 0 }}
-	signingkey = {{ if eq (hasKey $gitUser "keyID") true }}{{ $gitUser.keyID }}{{ end }}
+	{{- end }}
+
+	{{- if hasKey $gitUser "keyID" }}
+	signingkey = {{ $gitUser.keyID }}
+	{{- end }}
 [alias]
 	cf = commit -s --fixup
 	cm = commit -s --message
 	ss = commit -s --message snapshot --no-gpg-sign
 [commit]
 	gpgsign = true
+
+{{- if hasKey $gitUser "forges" }}
+{{- range $gitUser.forges }}
+[url "ssh://git@{{ .domain }}/{{ .username }}/"]
+	insteadOf = "https://{{ .domain }}/{{ .username }}/"
+	insteadOf = "git@{{ .domain }}:{{ .username }}/"
+{{- end }}
+
+[core]
+	sshCommand = "ssh {{ range $gitUser.forges }}-i $HOME/.ssh/id_ed25519_{{ .domain }}_{{ .username }} {{ end }}-o IdentitiesOnly=yes"
+{{- end }}
+
 # vim: set filetype=gitconfig:
