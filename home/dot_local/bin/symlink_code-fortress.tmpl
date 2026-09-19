@@ -1,0 +1,1 @@
+{{ .chezmoi.homeDir }}/{{ (vault (printf "kv/users/%s/resources" .profiles.main)).data.data.containers.container_repo_path }}/code-fortress
