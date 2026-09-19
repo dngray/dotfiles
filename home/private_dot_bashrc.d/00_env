@@ -55,12 +55,6 @@ case ":$PATH:" in
 *) [ -d "$HOME/.local/share/mise/shims" ] && export PATH="$HOME/.local/share/mise/shims:$PATH" ;;
 esac
 
-# Container repository tool path
-case ":$PATH:" in
-*":$CONTAINER_REPO_PATH/bin:"*) ;;
-*) [ -d "$CONTAINER_REPO_PATH/bin" ] && export PATH="$CONTAINER_REPO_PATH/bin:$PATH" ;;
-esac
-
 _devcontainer_bin="${XDG_DATA_HOME:-$HOME/.local/share}/devcontainers/bin"
 case ":$PATH:" in
 *":$_devcontainer_bin:"*) ;;
