@@ -27,6 +27,7 @@ alias cdr='cd -P .'
 alias h="history | grep "
 alias f="find . | grep "
 alias p="ps aux | grep "
+alias git='TZ=UTC0 git'
 
 {{ $profile := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.profile }}
 {{- range $v, $profile_a := (vault (printf "kv/users/%s/mail" .profiles.a)).data.data.mail }}

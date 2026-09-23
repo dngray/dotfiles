@@ -10,6 +10,7 @@ if test -f $bash_aliases
 
     # 3. Cleanly override the few items that break in Fish
     alias cdr='cd -P .'
+    alias git='TZ=UTC0 command git'
 
     function h; history | grep $argv; end
     function f; find . | grep $argv; end
