@@ -47,7 +47,7 @@
 	pending = codereview pending
 	submit = codereview submit
 	sync = codereview sync
-	cu = !git commit --date=\"$(date --utc +%Y-%m-%dT%H:%M:%S%z)\"
+  tz-reset = "-c rebase.instructionFormat='%s%nexec GIT_COMMITTER_DATE=\"@%ct\" git commit --amend --no-edit --date=\"@%at\"' rebase -i"
 [color]
 	ui = auto
 [core]
