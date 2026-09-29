@@ -1,0 +1,35 @@
+# vim: filetype=sh
+# ~/.bashrc.d/90_bash_funcs
+#
+# Bash-only helpers. Fish never sources this file -- it has its own h/f/p in
+# ~/.config/fish/conf.d/aliases.fish. Shell-agnostic aliases belong in
+# 80_aliases instead, so that both shells keep the same alias set.
+
+h() {
+  if command -v rg &>/dev/null; then
+    history | rg --smart-case "$*"
+  else
+    history | grep -i "$*"
+  fi
+}
+
+f() {
+  if command -v fd &>/dev/null; then
+    fd "$*"
+  else
+    find . -name "*$*"
+  fi
+}
+
+# No grep/rg in the pipeline: this loop forks only ps, so there is no searching
+# process to filter out of its own output, and every ps aux column is kept.
+p() {
+  local pattern="${*,,}" line found=1
+  while IFS= read -r line; do
+    if [[ ${line,,} == *"$pattern"* ]]; then
+      printf '%s\n' "$line"
+      found=0
+    fi
+  done < <(ps aux)
+  return $found
+}

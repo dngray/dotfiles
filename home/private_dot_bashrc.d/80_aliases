@@ -1,0 +1,31 @@
+# vim: filetype=sh
+# ~/.bashrc.d/80_aliases
+#
+# POSIX aliases ONLY -- shared verbatim by bash and fish.
+# ~/.config/fish/conf.d/aliases.fish sources this file, so fish must be able to
+# parse every line. No functions, no bash-only syntax (no `&>`, no if/fi).
+# Bash-only helpers (h, f, p) live in 90_bash_funcs; vault aliases in
+# 85_aliases_vault.
+
+alias ls='ls --color=auto'
+alias ll='ls -alF'
+alias dir='ls -lah'
+alias la='ls -A'
+alias l='ls -CF'
+alias mkdir='mkdir -p'
+alias grep="grep --color=auto"
+alias fgrep="grep -F --color=auto"
+alias egrep="grep -E --color=auto"
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
+alias vi='nvim'
+alias diff='diff --color=auto'
+alias dmesg='dmesg --color=always'
+alias duH1D1M='du -h -d 1 -t 1M'
+alias fc-list-family='fc-list :outline -f "%{family}\n"'
+alias enabledUnits='systemctl list-unit-files --state=enabled'
+alias runningUnits='systemctl list-units --type=service --state=running'
+alias activeUnits='systemctl list-units --type=service --state=active'
+alias mpv='flatpak run io.mpv.Mpv'
+alias git='env TZ=UTC0 git'
