@@ -18,6 +18,7 @@ Volume=%h/.local/share/mail:/home/mail-sync/.local/share/mail:rw
 Volume=%h/.local/state/vdirsyncer:/home/mail-sync/.local/state/vdirsyncer:rw
 Volume=%h/.local/state/isync:/home/mail-sync/.local/state/isync:rw
 Volume=%h/.gnupg:/home/mail-sync/.gnupg:rw
+Volume=%h/.local/share/pgp.cert.d:/home/mail-sync/.local/share/pgp.cert.d:rw
 Volume=/run/user/%U/bus:/run/user/%U/bus:rw
 Volume=/run/user/%U/gnupg/S.gpg-agent:/home/mail-sync/.gnupg/S.gpg-agent:rw
 Volume=/run/user/%U/gnupg/S.gpg-agent.extra:/home/mail-sync/.gnupg/S.gpg-agent.extra:rw
