@@ -27,6 +27,7 @@ Volume=/run/user/%U/gnupg/S.gpg-agent.extra:/home/aerc/.gnupg/S.gpg-agent.extra:
 Volume=/run/pcscd/pcscd.comm:/run/pcscd/pcscd.comm:rw
 
 # ── Read-Only Configuration & Secrets Mounts ──
+Volume=%h/.config/mailcap:/home/aerc/.config/mailcap:ro
 Volume=%h/.config/aerc:/home/aerc/.config/aerc:ro
 Volume=%h/.config/email-common:/home/aerc/.config/email-common:ro
 Volume=%h/.config/nvim:/home/aerc/.config/nvim:ro
