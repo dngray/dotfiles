@@ -125,7 +125,21 @@ echo "Installing Rust tooling..."
 {{- range $rustPkgs }}
 cargo install {{ . }} --locked
 {{- end }}
+
 cargo install --force yazi-build
+
+echo "Installing Yazi flavors..."
+YAZI_FLAVORS=(
+  "catppuccin-mocha"
+  "catppuccin-macchiato"
+  "catppuccin-frappe"
+  "catppuccin-latte"
+  "tokyo-night"
+)
+
+for flavor in "${YAZI_FLAVORS[@]}"; do
+  ~/.cargo/bin/ya pkg add "yazi-rs/flavors:$flavor"
+done
 {{- end }}
 
 {{- if and .state.private $pkg.golang_pkgs }}
