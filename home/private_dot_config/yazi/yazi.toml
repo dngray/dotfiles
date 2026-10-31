@@ -1,0 +1,21 @@
+[opener]
+imv = [
+    { run = "imv-dir %s", orphan = true, desc = "Open folder with imv-dir" }
+]
+mpv = [
+    { run = "flatpak run io.mpv.Mpv %s", orphan = true, desc = "Open with mpv (Flatpak)" }
+]
+papers = [
+    { run = "flatpak run org.gnome.Papers %s", orphan = true, desc = "Open with GNOME Papers" }
+]
+
+[open]
+prepend_rules = [
+    { mime = "image/*", use = "imv" },
+    { mime = "video/*", use = "mpv" },
+    { mime = "application/pdf", use = "papers" }
+]
+
+[preview]
+image_delay = 50
+wrap        = "yes"
