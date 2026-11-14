@@ -47,6 +47,11 @@ private_dot_etc/**
 .config/waybar/iceberg-config.jsonc
 .config/waybar/iceberg-style.css
 {{- end }}
+
+{{- if not (eq .chezmoi.hostname "iceberg" "icefloe") }}
+{{- end }}
+.config/containers/systemd/aerc*
+.config/containers/systemd/snapclient.container
 {{- end }}
 
 {{-  if ne .chezmoi.osRelease.id "ubuntu" }}
